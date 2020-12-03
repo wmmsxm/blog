@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="docker,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Docker学习(五) 安装Jenkins实现自动化部署项目安装Jenkins玄襄这里为了方便省事，直接使用docker安装Jenkins。 # 下载镜像 docker pull jenkins/jenkins:latest # 准备宿主挂载的文件夹 mkdir /docker mkdir /docker/jenkins  # 此处注意 容器需要宿主挂载文件夹的权限  不设置的话  挂载启动会失败">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker学习(五) 安装Jenkins实现自动化部署">
+<meta property="og:url" content="https://gongzixuanxiang.gitee.io/2019/12/11/docker-five-jenkins/index.html">
+<meta property="og:site_name" content="公子玄襄Hexo博客">
+<meta property="og:description" content="Docker学习(五) 安装Jenkins实现自动化部署项目安装Jenkins玄襄这里为了方便省事，直接使用docker安装Jenkins。 # 下载镜像 docker pull jenkins/jenkins:latest # 准备宿主挂载的文件夹 mkdir /docker mkdir /docker/jenkins  # 此处注意 容器需要宿主挂载文件夹的权限  不设置的话  挂载启动会失败">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-1.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-2.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-2-1.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-3.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-4.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-5.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-6.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-7.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-8.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-9.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-10.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-2.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-3.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-4.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-5.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-8.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-9.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-6.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-7.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins2-7-1.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins3-1.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins3-2.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins3-3.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins3-3-1.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins3-4.png">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins3-5.png">
+<meta property="og:updated_time" content="2020-04-27T03:23:39.221Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker学习(五) 安装Jenkins实现自动化部署">
+<meta name="twitter:description" content="Docker学习(五) 安装Jenkins实现自动化部署项目安装Jenkins玄襄这里为了方便省事，直接使用docker安装Jenkins。 # 下载镜像 docker pull jenkins/jenkins:latest # 准备宿主挂载的文件夹 mkdir /docker mkdir /docker/jenkins  # 此处注意 容器需要宿主挂载文件夹的权限  不设置的话  挂载启动会失败">
+<meta name="twitter:image" content="https://gongzixuanxiang.gitee.io/blog/images/jenkins/jenkins1-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://gongzixuanxiang.gitee.io/2019/12/11/docker-five-jenkins/">
+
+
+
+
+
+  <title>Docker学习(五) 安装Jenkins实现自动化部署 | 公子玄襄Hexo博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">公子玄襄Hexo博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/blog/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gongzixuanxiang.gitee.io/blog/2019/12/11/docker-five-jenkins/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wmm">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="公子玄襄Hexo博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Docker学习(五) 安装Jenkins实现自动化部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-11T09:41:13+08:00">
+                2019-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/后端-服务器/" itemprop="url" rel="index">
+                    <span itemprop="name">后端 - 服务器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/blog/2019/12/11/docker-five-jenkins/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/blog/2019/12/11/docker-five-jenkins/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Docker学习-五-安装Jenkins实现自动化部署项目"><a href="#Docker学习-五-安装Jenkins实现自动化部署项目" class="headerlink" title="Docker学习(五) 安装Jenkins实现自动化部署项目"></a><center>Docker学习(五) 安装Jenkins实现自动化部署项目</center></h2><h3 id="安装Jenkins"><a href="#安装Jenkins" class="headerlink" title="安装Jenkins"></a>安装Jenkins</h3><p>玄襄这里为了方便省事，直接使用docker安装Jenkins。</p>
+<pre><code># 下载镜像
+docker pull jenkins/jenkins:latest</code></pre><p><img src="/blog/images/jenkins/jenkins1-1.png" alt="下载镜像"></p>
+<pre><code># 准备宿主挂载的文件夹
+mkdir /docker
+mkdir /docker/jenkins
+
+# 此处注意 容器需要宿主挂载文件夹的权限  不设置的话  挂载启动会失败
+chown -R 1000 /docker/jenkins</code></pre><p>  <img src="/blog/images/jenkins/jenkins1-2.png" alt="准备"><br>  <img src="/blog/images/jenkins/jenkins1-2-1.png" alt="权限"></p>
+<pre><code># 启动容器
+docker run -d --name=jenkins --privileged=true -p 8081:8080 -p 50000:50000 -v /docker/jenkins:/var/jenkins_home jenkins/jenkins
+
+命令解析：
+  -p 8081:8080  指定宿主端口8081映射容器8080
+  -p 50000:50000 主站进行通信
+  -d 后台运行容器
+  -v /docker/jenkins:/var/jenkins_home 宿主文件映射容器文件
+  --privileged=true  开启特权模式</code></pre><p>  <img src="/blog/images/jenkins/jenkins1-3.png" alt="启动"></p>
+<h3 id="初始化Jenkins"><a href="#初始化Jenkins" class="headerlink" title="初始化Jenkins"></a>初始化Jenkins</h3><p>jenkins容器已经成功启动了，下面就是初始化jenkins。访问地址 是宿主ip + 8081端口即可访问。</p>
+<ol>
+<li><p>打开网站 需要登录<br><img src="/blog/images/jenkins/jenkins1-4.png" alt="登录"></p>
+</li>
+<li><p>密码可以根据网页提示找到文件夹，要注意这里应该是查看宿主文件夹<br>输入命令  vi /docker/jenkins/secrets/initialAdminPassword   复制密码即可<br><img src="/blog/images/jenkins/jenkins1-5.png" alt="密码"></p>
+</li>
+<li><p>登录成功之后，选择安装插件，玄襄这个直接选择推荐的。耐心等待安装完成<br><img src="/blog/images/jenkins/jenkins1-6.png" alt="插件"></p>
+</li>
+<li><p>创建第一个admin用户，也可以直接跳过，继续使用admin进行登录，玄襄这里直接跳过了<br><img src="/blog/images/jenkins/jenkins1-7.png" alt="admin"></p>
+</li>
+<li><p>访问地址修改，玄襄这里是直接在后面添加 jenkins  此处强烈建议(未来的我)  不要设置jenkins，最好不改url<br><img src="/blog/images/jenkins/jenkins1-8.png" alt="url"></p>
+</li>
+<li><p>初始化基本完成，登录系统之后修改admin账号<br><img src="/blog/images/jenkins/jenkins1-9.png" alt="初始化完成"><br><img src="/blog/images/jenkins/jenkins1-10.png" alt="修改admin密码"></p>
+</li>
+</ol>
+<h3 id="添加item项目并运行"><a href="#添加item项目并运行" class="headerlink" title="添加item项目并运行"></a>添加item项目并运行</h3><h4 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h4><p>在运行项目之前，jenkins需要安装相应的插件。在jenkins页面 → 系统管理  →  管理插件 →  可选插件 中搜索<br>插件如下：   </p>
+<pre><code>Maven Integration       用来支持构建maven项目
+Publish Over SSH        用来把构建好的部署包传送到指定服务器的指定位置
+Git安装</code></pre><p>   <img src="/blog/images/jenkins/jenkins2-2.png" alt="插件"><br>    <img src="/blog/images/jenkins/jenkins2-3.png" alt="插件">  </p>
+<h3 id="配置Jenkins"><a href="#配置Jenkins" class="headerlink" title="配置Jenkins"></a>配置Jenkins</h3><p>jenkins需要配置jdk环境，根据个人项目需求 还涉及到 maven git等配置。这里需要解释下，因为jenkins是运行<br>在docker上，所以配置要安装宿主挂碍的文件夹/docker/jenkins下。  </p>
+<ol>
+<li>创建全局文件夹  执行命令 mkdir /docker/jenkins/globalEnv   </li>
+<li>因为玄襄的centos7没有wget， 所以需要下载   yum y install wget  </li>
+</ol>
+<h4 id="maven安装"><a href="#maven安装" class="headerlink" title="maven安装"></a>maven安装</h4><p>maven选择安装3.6.3的，下载安装完之后  需要设置settings的镜像为阿里镜像，添加路径。具体请跟着玄襄一步步执行：  </p>
+<pre><code># 下载maven
+wget  http://mirror.bit.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+
+# 解压文件
+tar -zvxf apache-maven-3.6.3-bin.tar.gz
+
+# 移动文件夹到全局
+mv /apache-maven-3.6.3 /docker/jenkins/globalEnv
+
+# 添加阿里镜像
+vi /docker/jenkins/globalEnv/apache-maven-3.6.3/conf/settings.xml
+  添加下面命令
+...
+  &lt;mirror&gt;  
+      &lt;id&gt;nexus-aliyun&lt;/id&gt;  
+      &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;    
+      &lt;name&gt;Nexus aliyun&lt;/name&gt;  
+      &lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public&lt;/url&gt;  
+  &lt;/mirror&gt;
+....
+
+# 添加到路径
+vi /etc/profile 
+  添加下面命令
+  M2_HOME=/docker/jenkins/globalEnv/apache-maven-3.6.0   
+  export PATH=$M2_HOME/bin:$PATH
+
+# 更新配置文件 
+source /etc/profile</code></pre><h4 id="jdk安装"><a href="#jdk安装" class="headerlink" title="jdk安装"></a>jdk安装</h4><p>jdk安装选择是1.8，因为jdk在官网下载需要登录，所以玄襄直接通过浏览器下载好之后，再上传到虚拟机中的。<br><a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">jdk下载页面</a> 选择相应版本下载即可<br><img src="/blog/images/jenkins/jenkins2-4.png" alt="jdk">  </p>
+<pre><code># 解压文件
+tar -zvxf jdk-8u231-linux-x64.tar.gz
+#移动文件
+mv /jdk-1.8.0_231 /docker/jenkins/globalEnv
+
+# 添加到路径
+vim /etc/profile 
+export JAVA_HOME=/docker/jenkins/globalEnv/jdk1.8.0_231
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$CLASSPATH
+
+# 更新配置文件 
+source /etc/profile</code></pre><p><img src="/blog/images/jenkins/jenkins2-5.png" alt="安装完毕"></p>
+<h4 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h4><p>git安装比较简单，执行下面的命令即可</p>
+<pre><code>yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel asciidoc
+yum install gcc perl-ExtUtils-MakeMaker</code></pre><h4 id="jenkins全局环境配置"><a href="#jenkins全局环境配置" class="headerlink" title="jenkins全局环境配置"></a>jenkins全局环境配置</h4><ol>
+<li><p>首先进行jenkins的系统配置，系统管理  → 系统配置  → 添加Publish over SSH 可参照下图：<br><img src="/blog/images/jenkins/jenkins2-8.png" alt="系统配置"><br><img src="/blog/images/jenkins/jenkins2-9.png" alt="ssh"></p>
+</li>
+<li><p>配置全局工具， 系统管理→ 全局工具配置 → maven配置   → jdk安装  → git配置  → maven安装，具体步骤请看下图：<br><img src="/blog/images/jenkins/jenkins2-6.png" alt="全局工具配置"><br><img src="/blog/images/jenkins/jenkins2-7.png" alt="配置添加"><br><img src="/blog/images/jenkins/jenkins2-7-1.png" alt="继续配置添加"> </p>
+</li>
+</ol>
+<h4 id="远程部署项目"><a href="#远程部署项目" class="headerlink" title="远程部署项目"></a>远程部署项目</h4><ol>
+<li>在首页点击“ 新建任务 ” 创建新项目，在弹出框中 输入项目名称，选择构建项目类型，玄襄构建的是maven项目，<br>然后点击 “ 确定 ”。如下图：<br><img src="/blog/images/jenkins/jenkins3-1.png" alt="创建任务"><br><img src="/blog/images/jenkins/jenkins3-2.png" alt="项目">  </li>
+<li>进入项目配置页面，添加源码管理git仓库，输入git地址  选择git仓库的账户密码， 没有的话，添加即可。<br>然后记得选择分支，玄襄这里执行的是<font color="red">develop</font>分支<br><img src="/blog/images/jenkins/jenkins3-3.png" alt="git"><br><img src="/blog/images/jenkins/jenkins3-3-1.png" alt="git1">  </li>
+<li>在Build这里的 Goals and options  添加命令   package compile -U<br><img src="/blog/images/jenkins/jenkins3-4.png" alt="build"></li>
+<li>注意这里！！！ 这里是最后一步，也是最重要的一步。在build完成之后，要连接远程服务，将编译好的jar包发送过去，<br>然后执行远程服务的启动项目命令。<br>首先选择远程服务 →  设置传输的员文件  →  移除前缀  →  远程服务的文件夹  → 执行命令<br><img src="/blog/images/jenkins/jenkins3-5.png" alt="远程">  </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 切到目录</span><br><span class="line">cd /home/finance</span><br><span class="line"># 显示工作目录    --- 方便查看</span><br><span class="line">pwd</span><br><span class="line"># 检查该项目是否运行， 是则杀掉</span><br><span class="line">ps -ef | grep yobtc-finance-service| grep -v grep | awk &apos;&#123;print $2&#125;&apos; | xargs --no-run-if-empty kill -9</span><br><span class="line"># 休眠10s</span><br><span class="line">sleep 10</span><br><span class="line"># 使环境变量立即生效</span><br><span class="line">source /etc/profile</span><br><span class="line"># 执行项目setsid  实现后台运行</span><br><span class="line">setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &gt; yobtc-finance-service.log &amp;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>保存配置之后，直接点击构建即可。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/docker/" rel="tag"># docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/12/05/docker-four-springboot/" rel="next" title="Docker学习(四) 远程部署springboot项目">
+                <i class="fa fa-chevron-left"></i> Docker学习(四) 远程部署springboot项目
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2020/04/27/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wmm</p>
+              <p class="site-description motion-element" itemprop="description">blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/blog/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker学习-五-安装Jenkins实现自动化部署项目"><span class="nav-number">1.</span> <span class="nav-text">Docker学习(五) 安装Jenkins实现自动化部署项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Jenkins"><span class="nav-number">1.1.</span> <span class="nav-text">安装Jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化Jenkins"><span class="nav-number">1.2.</span> <span class="nav-text">初始化Jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加item项目并运行"><span class="nav-number">1.3.</span> <span class="nav-text">添加item项目并运行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装插件"><span class="nav-number">1.3.1.</span> <span class="nav-text">安装插件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Jenkins"><span class="nav-number">1.4.</span> <span class="nav-text">配置Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#maven安装"><span class="nav-number">1.4.1.</span> <span class="nav-text">maven安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jdk安装"><span class="nav-number">1.4.2.</span> <span class="nav-text">jdk安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装git"><span class="nav-number">1.4.3.</span> <span class="nav-text">安装git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jenkins全局环境配置"><span class="nav-number">1.4.4.</span> <span class="nav-text">jenkins全局环境配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#远程部署项目"><span class="nav-number">1.4.5.</span> <span class="nav-text">远程部署项目</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wmm</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'Iu6x98e1zMPO4cSIQlhE3sjN-9Nh9j0Va',
+        appKey: 'NDCUpH7J86ILsSEp2qSiIs83',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
