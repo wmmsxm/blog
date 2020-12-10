@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Zookeeper,">
+  <meta name="keywords" content="docker,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="zookeeper做一级缓存测试因公司项目需求，准备做一级缓存，然后就想到了zookeeper，都说它性能不错，特地做个测试看下是否可以用于生产。封装完成使用gitee上的sync_cache项目进行测试。 测试前提在服务器上搭建zookeeper集群，最少三个节点。使用sync-cache打包4个项目  分别对应全部节点、每个对应一个不同节点。每个项目都有节点监听和api入口。 测试场景 使用主">
-<meta name="keywords" content="Zookeeper">
+<meta name="description" content="Docker学习(六) 自定义tomcat镜像前期准备1、tomcat: tomcat版本选择的是apache-tomcat-8.5.61，     文件名：apache-tomcat-8.5.61.tar.gz 2、java: java版本选择的是JDK1.8.0_211，     文件名：jdk-8u211-linux-x64.tar.gz以上文件均可在这里下载， 提取码：【tf2u】 Doc">
+<meta name="keywords" content="docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="zookeeper知识点(三)">
-<meta property="og:url" content="https://gongzixuanxiang.gitee.io/2019/11/20/zookeeper-three/index.html">
+<meta property="og:title" content="docker-six-custom-image">
+<meta property="og:url" content="https://gongzixuanxiang.gitee.io/2020/12/10/docker-six-custom-image/index.html">
 <meta property="og:site_name" content="公子玄襄Hexo博客">
-<meta property="og:description" content="zookeeper做一级缓存测试因公司项目需求，准备做一级缓存，然后就想到了zookeeper，都说它性能不错，特地做个测试看下是否可以用于生产。封装完成使用gitee上的sync_cache项目进行测试。 测试前提在服务器上搭建zookeeper集群，最少三个节点。使用sync-cache打包4个项目  分别对应全部节点、每个对应一个不同节点。每个项目都有节点监听和api入口。 测试场景 使用主">
+<meta property="og:description" content="Docker学习(六) 自定义tomcat镜像前期准备1、tomcat: tomcat版本选择的是apache-tomcat-8.5.61，     文件名：apache-tomcat-8.5.61.tar.gz 2、java: java版本选择的是JDK1.8.0_211，     文件名：jdk-8u211-linux-x64.tar.gz以上文件均可在这里下载， 提取码：【tf2u】 Doc">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-27T03:23:39.228Z">
+<meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/docker/docker6-1.png">
+<meta property="og:updated_time" content="2020-12-10T07:27:15.991Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zookeeper知识点(三)">
-<meta name="twitter:description" content="zookeeper做一级缓存测试因公司项目需求，准备做一级缓存，然后就想到了zookeeper，都说它性能不错，特地做个测试看下是否可以用于生产。封装完成使用gitee上的sync_cache项目进行测试。 测试前提在服务器上搭建zookeeper集群，最少三个节点。使用sync-cache打包4个项目  分别对应全部节点、每个对应一个不同节点。每个项目都有节点监听和api入口。 测试场景 使用主">
+<meta name="twitter:title" content="docker-six-custom-image">
+<meta name="twitter:description" content="Docker学习(六) 自定义tomcat镜像前期准备1、tomcat: tomcat版本选择的是apache-tomcat-8.5.61，     文件名：apache-tomcat-8.5.61.tar.gz 2、java: java版本选择的是JDK1.8.0_211，     文件名：jdk-8u211-linux-x64.tar.gz以上文件均可在这里下载， 提取码：【tf2u】 Doc">
+<meta name="twitter:image" content="https://gongzixuanxiang.gitee.io/blog/images/docker/docker6-1.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://gongzixuanxiang.gitee.io/2019/11/20/zookeeper-three/">
+  <link rel="canonical" href="https://gongzixuanxiang.gitee.io/2020/12/10/docker-six-custom-image/">
 
 
 
 
 
-  <title>zookeeper知识点(三) | 公子玄襄Hexo博客</title>
+  <title>docker-six-custom-image | 公子玄襄Hexo博客</title>
   
 
 
@@ -288,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://gongzixuanxiang.gitee.io/blog/2019/11/20/zookeeper-three/">
+    <link itemprop="mainEntityOfPage" href="https://gongzixuanxiang.gitee.io/blog/2020/12/10/docker-six-custom-image/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wmm">
@@ -305,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">zookeeper知识点(三)</h1>
+          <h1 class="post-title" itemprop="name headline">docker-six-custom-image</h1>
         
 
         <div class="post-meta">
@@ -317,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-20T09:25:10+08:00">
-                2019-11-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-10T14:09:32+08:00">
+                2020-12-10
               </time>
             
 
@@ -340,8 +342,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blog/categories/后端-协调服务/" itemprop="url" rel="index">
-                    <span itemprop="name">后端 - 协调服务</span>
+                  <a href="/blog/categories/后端-服务器/" itemprop="url" rel="index">
+                    <span itemprop="name">后端 - 服务器</span>
                   </a>
                 </span>
 
@@ -358,8 +360,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/blog/2019/11/20/zookeeper-three/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/blog/2019/11/20/zookeeper-three/" itemprop="commentCount"></span>
+                <a href="/blog/2020/12/10/docker-six-custom-image/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/blog/2020/12/10/docker-six-custom-image/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -387,14 +389,53 @@
       
 
       
-        <h3 id="zookeeper做一级缓存测试"><a href="#zookeeper做一级缓存测试" class="headerlink" title="zookeeper做一级缓存测试"></a>zookeeper做一级缓存测试</h3><p>因公司项目需求，准备做一级缓存，然后就想到了zookeeper，都说它性能不错，特地做个测试看下是否可以用于生产。<br>封装完成使用gitee上的sync_cache项目进行测试。</p>
-<h4 id="测试前提"><a href="#测试前提" class="headerlink" title="测试前提"></a>测试前提</h4><p>在服务器上搭建zookeeper集群，最少三个节点。使用sync-cache打包4个项目  分别对应全部节点、每个对应一个不同节点。每个项目都有节点监听和<br>api入口。</p>
-<h4 id="测试场景"><a href="#测试场景" class="headerlink" title="测试场景"></a>测试场景</h4><ul>
-<li>使用主项目存储比较小的节点数据，测试其他项目的同步时间<br>测试结果： 主节点 使用1ms ;其他两个节点使用2ms</li>
-<li>使用主项目存储不断循环变大的节点数据，测试其他项目的同步时间<br>测试结果：  15KB的数据  每个节点相差2ms    就是 主节点2ms    follower1 是4ms   follower2 是6ms。</li>
-</ul>
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>上述测试不一定完全符合zookeeper的性能，但是也能看出zookeeper不适合做大数据存储。大项目的时候，在消息同步这块就要垮掉，无法做到一致性（因为有半数机制存在，没有同步完，主节点就已经默认结束了）。<br>如果非要做一级缓存的话，zookeeper比较适合做热门数据的缓存，数量小的情景.</p>
+        <h2 id="Docker学习-六-自定义tomcat镜像"><a href="#Docker学习-六-自定义tomcat镜像" class="headerlink" title="Docker学习(六) 自定义tomcat镜像"></a><center>Docker学习(六) 自定义tomcat镜像</center></h2><h3 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h3><pre><code>1、tomcat: tomcat版本选择的是apache-tomcat-8.5.61，
+    文件名：apache-tomcat-8.5.61.tar.gz
+2、java: java版本选择的是JDK1.8.0_211，
+    文件名：jdk-8u211-linux-x64.tar.gz</code></pre><p>以上文件均可在<a href="https://pan.baidu.com/s/14-8cf3OLXi841bc_OkpoGA" target="_blank" rel="noopener">这里</a>下载， 提取码：【tf2u】<br><img src="/blog/images/docker/docker6-1.png" alt="文件"></p>
+<h3 id="Dockerfile文件"><a href="#Dockerfile文件" class="headerlink" title="Dockerfile文件"></a>Dockerfile文件</h3><pre><code># centos在这里作为tomcat的基础镜像
+FROM centos     
+MAINTAINER wmm
+#（这个环境变量用来表示该镜像模板的最后更新时间）
+ENV REFRESHED_AT 2020-12-10  
 
+# 切换镜像目录，进入/usr目录
+WORKDIR /usr
+# 在/usr/下创建jdk目录,用来存放jdk文件
+RUN mkdir jdk
+# 在/usr/下创建tomcat目录，用来存放tomcat
+RUN mkdir tomcat
+
+# 将宿主机的jdk目录下的文件拷至镜像的/usr/jdk目录下
+ADD jdk-8u211-linux-x64.tar.gz /usr/jdk/
+# 将宿主机的tomcat目录下的文件拷至镜像的/usr/tomcat目录下
+ADD apache-tomcat-8.5.61.tar.gz /usr/tomcat/
+
+# 给权限
+RUN chmod -R 777 /usr/tomcat/
+RUN chmod -R 777 /usr/jdk/
+
+# 设置环境变量
+ENV JAVA_HOME=/usr/jdk/jdk1.8.0_211
+ENV JRE_HOME=$JAVA_HOME/jre
+ENV CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH
+ENV PATH=/sbin:$JAVA_HOME/bin:$PATH
+
+# 设置时间区域
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp; echo &apos;Asia/Shanghai&apos; &gt;/etc/timezone
+
+# 公开端口
+EXPOSE 8080
+# 设置启动命令
+ENTRYPOINT [&quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&quot;,&quot;run&quot;]</code></pre><h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><pre><code>1、将apache-tomcat-8.5.61.tar.gz、jdk-8u211-linux-x64.tar.gz、Dockerfile放在同一级目录
+2、命令进入该目录，执行 docker build -t yuzhi/tomcat .
+3、执行完后，使用命令docker images 查看镜像列表。</code></pre><h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><pre><code>docker run -d -p 8080:8080 --name wmm_tomcat yuzhi/tomcat:latest</code></pre><h3 id="具体执行步骤"><a href="#具体执行步骤" class="headerlink" title="具体执行步骤"></a>具体执行步骤</h3><pre><code>1、进入需要组装镜像的路径
+2、执行命令  docker build -t 镜像名:版本号  .            # 也可以直接是镜像名  这样版本默认是latest
+3、docker images                                           # 查看镜像   即可以看到创建的镜像
+4、docker run -d -p 映射端口:容器的端口 --name 自定义容器名称 镜像名:版本号   
+例如： docker run -d -p 8080:8080 --name wmm_tomcat yuzhi/tomcat:latest
+5、docker logs -f --tail=200 容器名称                   # 查看日志
+6、docker exec -it 容器名称 /bin/bash                    # 进入容器</code></pre>
       
     </div>
     
@@ -411,7 +452,7 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Zookeeper/" rel="tag"># Zookeeper</a>
+            <a href="/blog/tags/docker/" rel="tag"># docker</a>
           
         </div>
       
@@ -424,8 +465,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/11/20/zookeeper-two/" rel="next" title="zookeeper知识点(二)">
-                <i class="fa fa-chevron-left"></i> zookeeper知识点(二)
+              <a href="/blog/2020/04/27/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
               </a>
             
           </div>
@@ -433,10 +474,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2019/11/22/elasticsearh-rest-client/" rel="prev" title="elasticsearh-rest-client">
-                elasticsearh-rest-client <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -571,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper做一级缓存测试"><span class="nav-number">1.</span> <span class="nav-text">zookeeper做一级缓存测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试前提"><span class="nav-number">1.1.</span> <span class="nav-text">测试前提</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试场景"><span class="nav-number">1.2.</span> <span class="nav-text">测试场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结论"><span class="nav-number">1.3.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker学习-六-自定义tomcat镜像"><span class="nav-number">1.</span> <span class="nav-text">Docker学习(六) 自定义tomcat镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前期准备"><span class="nav-number">1.1.</span> <span class="nav-text">前期准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile文件"><span class="nav-number">1.2.</span> <span class="nav-text">Dockerfile文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打包"><span class="nav-number">1.3.</span> <span class="nav-text">打包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行"><span class="nav-number">1.4.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体执行步骤"><span class="nav-number">1.5.</span> <span class="nav-text">具体执行步骤</span></a></li></ol></li></ol></div>
             
 
           </div>
