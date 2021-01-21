@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/elasticsearch/esset-3.png">
 <meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/elasticsearch/esset-4.png">
 <meta property="og:image" content="https://gongzixuanxiang.gitee.io/blog/images/elasticsearch/esset-5.png">
-<meta property="og:updated_time" content="2021-01-21T03:03:35.787Z">
+<meta property="og:updated_time" content="2021-01-21T03:04:37.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="elasticsearch-setup">
 <meta name="twitter:description" content="elasticsearch 安装教程elasticsearch安装使用版本是7.8.1, 鉴于封装rest_client的版本最高支持8，向下兼容的； 8之后api接口路径调整,可以选择6,7，考虑到项目稳定和技术支持这里选择版本7.为了方便下载，可以点击这里进行下载； 提取码：c5gy废话不多说开始进入安装步骤： 前言：elasticsearch安装需要配置java环境，篇幅有限，就不介绍怎么安">
@@ -394,7 +394,7 @@
 
       
         <h3 id="elasticsearch-安装教程"><a href="#elasticsearch-安装教程" class="headerlink" title="elasticsearch 安装教程"></a>elasticsearch 安装教程</h3><pre><code>elasticsearch安装使用版本是7.8.1, 鉴于封装rest_client的版本最高支持8，向下兼容的； 8之后api接口路径调整,可以选择6,7，考虑到项目稳定和技术支持这里选择版本7.</code></pre><p>为了方便下载，可以点击<a href="https://pan.baidu.com/s/1auq9JPJmT3x_yQD0TANgsw" target="_blank" rel="noopener">这里</a>进行下载； 提取码：c5gy<br>废话不多说开始进入安装步骤：</p>
-<p>前言：<br>elasticsearch安装需要配置java环境，篇幅有限，就不介绍怎么安装java了，只需要配置JAVA_HOME环境变量即可。*<font color="#dd0000">注意必须是java8以上的版本</font>* </p>
+<p>前言：<br>elasticsearch安装需要配置java环境，篇幅有限，就不介绍怎么安装java了，只需要配置JAVA_HOME环境变量即可。<font color="#dd0000">注意必须是java8以上的版本</font></p>
 <p>1、将下载的文件解压，将里面的elasticsearch-7.8.1文件夹放到相应目录， 注意目录不能有空格例如<font color="#dd0000">d:/Program Files/</font>  <img src="/blog/images/elasticsearch/esset-1.png" alt="文件"></p>
 <p>2、进入elasticsearch/bin目录，双击执行elasticsearch.bat<img src="/blog/images/elasticsearch/esset-2.png" alt="命令"><br>执行完毕之后，打开浏览器，输入 <a href="http://localhost:9200" target="_blank" rel="noopener">http://localhost:9200</a> ，显式以下画面，说明ES安装成功。<br><img src="/blog/images/elasticsearch/esset-3.png" alt="命令"></p>
 <h3 id="安装elasticsearch服务"><a href="#安装elasticsearch服务" class="headerlink" title="安装elasticsearch服务"></a>安装elasticsearch服务</h3><p>因为上述方法在关闭命令窗口后，elasticsearch会退出关闭，所以安装服务进行启动更合理<br>1、修改elasticsearch-env.bat文件，将内容</p>
