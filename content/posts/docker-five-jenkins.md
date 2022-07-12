@@ -11,7 +11,7 @@ draft: false
 
     # 下载镜像
     docker pull jenkins/jenkins:latest
-![下载镜像](/images/jenkins/jenkins1-1.png)
+![下载镜像](/blog/images/jenkins/jenkins1-1.png)
 
     # 准备宿主挂载的文件夹
     mkdir /docker
@@ -19,8 +19,8 @@ draft: false
 
     # 此处注意 容器需要宿主挂载文件夹的权限  不设置的话  挂载启动会失败
     chown -R 1000 /docker/jenkins
-  ![准备](/images/jenkins/jenkins1-2.png)  
-  ![权限](/images/jenkins/jenkins1-2-1.png)
+  ![准备](/blog/images/jenkins/jenkins1-2.png)  
+  ![权限](/blog/images/jenkins/jenkins1-2-1.png)
 
     # 启动容器
     docker run -d --name=jenkins --privileged=true -p 8081:8080 -p 50000:50000 -v /docker/jenkins:/var/jenkins_home jenkins/jenkins
@@ -31,28 +31,28 @@ draft: false
       -d 后台运行容器
       -v /docker/jenkins:/var/jenkins_home 宿主文件映射容器文件
       --privileged=true  开启特权模式
-  ![启动](/images/jenkins/jenkins1-3.png)
+  ![启动](/blog/images/jenkins/jenkins1-3.png)
 
 ### 初始化Jenkins
 jenkins容器已经成功启动了，下面就是初始化jenkins。访问地址 是宿主ip + 8081端口即可访问。
 1. 打开网站 需要登录  
-![登录](/images/jenkins/jenkins1-4.png)
+![登录](/blog/images/jenkins/jenkins1-4.png)
 2. 密码可以根据网页提示找到文件夹，要注意这里应该是查看宿主文件夹   
  输入命令  vi /docker/jenkins/secrets/initialAdminPassword   复制密码即可  
- ![密码](/images/jenkins/jenkins1-5.png)
+ ![密码](/blog/images/jenkins/jenkins1-5.png)
 
 3. 登录成功之后，选择安装插件，玄襄这个直接选择推荐的。耐心等待安装完成  
-![插件](/images/jenkins/jenkins1-6.png)
+![插件](/blog/images/jenkins/jenkins1-6.png)
 
 4. 创建第一个admin用户，也可以直接跳过，继续使用admin进行登录，玄襄这里直接跳过了  
-![admin](/images/jenkins/jenkins1-7.png)
+![admin](/blog/images/jenkins/jenkins1-7.png)
 
 5. 访问地址修改，玄襄这里是直接在后面添加 jenkins  此处强烈建议(未来的我)  不要设置jenkins，最好不改url
-![url](/images/jenkins/jenkins1-8.png)
+![url](/blog/images/jenkins/jenkins1-8.png)
 
 6. 初始化基本完成，登录系统之后修改admin账号  
-![初始化完成](/images/jenkins/jenkins1-9.png)  
-![修改admin密码](/images/jenkins/jenkins1-10.png)
+![初始化完成](/blog/images/jenkins/jenkins1-9.png)  
+![修改admin密码](/blog/images/jenkins/jenkins1-10.png)
 
 ### 添加item项目并运行
 #### 安装插件
@@ -62,8 +62,8 @@ jenkins容器已经成功启动了，下面就是初始化jenkins。访问地址
       Maven Integration       用来支持构建maven项目
       Publish Over SSH        用来把构建好的部署包传送到指定服务器的指定位置
       Git安装
-   ![插件](/images/jenkins/jenkins2-2.png)   
-    ![插件](/images/jenkins/jenkins2-3.png)  
+   ![插件](/blog/images/jenkins/jenkins2-2.png)   
+    ![插件](/blog/images/jenkins/jenkins2-3.png)  
 
 
 ### 配置Jenkins   
@@ -110,7 +110,7 @@ maven选择安装3.6.3的，下载安装完之后  需要设置settings的镜像
 #### jdk安装
 jdk安装选择是1.8，因为jdk在官网下载需要登录，所以玄襄直接通过浏览器下载好之后，再上传到虚拟机中的。
 [jdk下载页面](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) 选择相应版本下载即可
-![jdk](/images/jenkins/jenkins2-4.png)  
+![jdk](/blog/images/jenkins/jenkins2-4.png)  
 
     # 解压文件
     tar -zvxf jdk-8u231-linux-x64.tar.gz
@@ -125,7 +125,7 @@ jdk安装选择是1.8，因为jdk在官网下载需要登录，所以玄襄直�
 
     # 更新配置文件 
     source /etc/profile
-![安装完毕](/images/jenkins/jenkins2-5.png)
+![安装完毕](/blog/images/jenkins/jenkins2-5.png)
 
 
 #### 安装git
@@ -137,30 +137,30 @@ git安装比较简单，执行下面的命令即可
 
 #### jenkins全局环境配置
 1. 首先进行jenkins的系统配置，系统管理  → 系统配置  → 添加Publish over SSH 可参照下图：
-![系统配置](/images/jenkins/jenkins2-8.png)  
-![ssh](/images/jenkins/jenkins2-9.png)
+![系统配置](/blog/images/jenkins/jenkins2-8.png)  
+![ssh](/blog/images/jenkins/jenkins2-9.png)
 
 2. 配置全局工具， 系统管理→ 全局工具配置 → maven配置   → jdk安装  → git配置  → maven安装，具体步骤请看下图：  
-![全局工具配置](/images/jenkins/jenkins2-6.png)  
-![配置添加](/images/jenkins/jenkins2-7.png)   
-![继续配置添加](/images/jenkins/jenkins2-7-1.png) 
+![全局工具配置](/blog/images/jenkins/jenkins2-6.png)  
+![配置添加](/blog/images/jenkins/jenkins2-7.png)   
+![继续配置添加](/blog/images/jenkins/jenkins2-7-1.png) 
 
 
 #### 远程部署项目
 1. 在首页点击“ 新建任务 ” 创建新项目，在弹出框中 输入项目名称，选择构建项目类型，玄襄构建的是maven项目，
 然后点击 “ 确定 ”。如下图：  
-![创建任务](/images/jenkins/jenkins3-1.png)    
-![项目](/images/jenkins/jenkins3-2.png)  
+![创建任务](/blog/images/jenkins/jenkins3-1.png)    
+![项目](/blog/images/jenkins/jenkins3-2.png)  
 2. 进入项目配置页面，添加源码管理git仓库，输入git地址  选择git仓库的账户密码， 没有的话，添加即可。
 然后记得选择分支，玄襄这里执行的是<font color="red">develop</font>分支  
-![git](/images/jenkins/jenkins3-3.png)  
-![git1](/images/jenkins/jenkins3-3-1.png)  
+![git](/blog/images/jenkins/jenkins3-3.png)  
+![git1](/blog/images/jenkins/jenkins3-3-1.png)  
 3. 在Build这里的 Goals and options  添加命令   package compile -U  
-![build](/images/jenkins/jenkins3-4.png)
+![build](/blog/images/jenkins/jenkins3-4.png)
 4. 注意这里！！！ 这里是最后一步，也是最重要的一步。在build完成之后，要连接远程服务，将编译好的jar包发送过去，
 然后执行远程服务的启动项目命令。  
 首先选择远程服务 →  设置传输的员文件  →  移除前缀  →  远程服务的文件夹  → 执行命令   
-![远程](/images/jenkins/jenkins3-5.png)  
+![远程](/blog/images/jenkins/jenkins3-5.png)  
 
 ```
 # 切到目录

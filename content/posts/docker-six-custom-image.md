@@ -12,7 +12,7 @@ draft: false
     2、java: java版本选择的是JDK1.8.0_211，
         文件名：jdk-8u211-linux-x64.tar.gz
 以上文件均可在[这里](https://pan.baidu.com/s/14-8cf3OLXi841bc_OkpoGA)下载， 提取码：【tf2u】  
-![文件](/images/docker/docker6-1.png)
+![文件](/blog/images/docker/docker6-1.png)
 
 ### Dockerfile文件
     # centos在这里作为tomcat的基础镜像

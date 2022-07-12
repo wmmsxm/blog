@@ -17,11 +17,11 @@ draft: false
 elasticsearch安装需要配置java环境，篇幅有限，就不介绍怎么安装java了，只需要配置JAVA_HOME环境变量即可。<font color="#dd0000">注意必须是java8以上的版本</font>
 
 
-1、将下载的文件解压，将里面的elasticsearch-7.8.1文件夹放到相应目录， 注意目录不能有空格例如<font color="#dd0000">d:/Program Files/</font>  ![文件](/images/elasticsearch/esset-1.png)
+1、将下载的文件解压，将里面的elasticsearch-7.8.1文件夹放到相应目录， 注意目录不能有空格例如<font color="#dd0000">d:/Program Files/</font>  ![文件](/blog/images/elasticsearch/esset-1.png)
 
-2、进入elasticsearch/bin目录，双击执行elasticsearch.bat![命令](/images/elasticsearch/esset-2.png)
+2、进入elasticsearch/bin目录，双击执行elasticsearch.bat![命令](/blog/images/elasticsearch/esset-2.png)
 执行完毕之后，打开浏览器，输入 http://localhost:9200 ，显式以下画面，说明ES安装成功。
-![命令](/images/elasticsearch/esset-3.png)
+![命令](/blog/images/elasticsearch/esset-3.png)
 
 
 ### 安装elasticsearch服务
@@ -45,8 +45,8 @@ set JAVA_TYPE=bundled jdk
 ```
 
 1、打开DOS命令行界面，切换到elasticSearch的bin目录，执行以下命令：  
-```.\elasticsearch-service.bat install ```  ![命令](/images/elasticsearch/esset-4.png)
+```.\elasticsearch-service.bat install ```  ![命令](/blog/images/elasticsearch/esset-4.png)
 
-2、打开任务管理器，选择服务,输入e筛选elasticsearch服务![服务](/images/elasticsearch/esset-5.png), 右键启动即可
+2、打开任务管理器，选择服务,输入e筛选elasticsearch服务![服务](/blog/images/elasticsearch/esset-5.png), 右键启动即可
 
 

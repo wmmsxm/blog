@@ -7,10 +7,10 @@ categories: ["docker","docker-desktop"]
 ---
 ## <center>Docker_Desktop学习(一) 环境安装</center>
 ### windows安装docker_desktop
-1、我们先去[官网下载安装包](https://www.docker.com/products/docker-desktop)![dd1](/images/docker_desktop/dd1_1.png)  
-2、打开安装包加载一会后一般会弹出两个选项,在较旧的Windows10或之前的系统会出现如下所示的相关提示。我们把第一个选上,第二个根据需求选择即可。![dd2](/images/docker_desktop/dd1_2.png)   
-3、如下图,这里推荐使用WSL2。使用WSL2(基于Windows的Linux子系统),如果我们不适用,就会使用Hyper-v虚拟机运行,不过相比于虚拟机,子系统在性能方面更加出色。![dd3](/images/docker_desktop/dd1_3.png)在我们选择使用WSL2之后,并且我们也确定打开了如下图所示的Windows功能(如果没有打开,请先百度如何打开wsl。)![dd5](/images/docker_desktop/dd1_5.png)  
-3.1、如果之后安装完成后发生报错可能是WSL2版本比较老,需要更新导致的。![dd4](/images/docker_desktop/dd1_4.png)  需要我们自己手动更新一下,我们根据提示去微软官网下载最新版的wsl2安装后即可正常打开。[更新包下载链接](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)  
+1、我们先去[官网下载安装包](https://www.docker.com/products/docker-desktop)![dd1](/blog/images/docker_desktop/dd1_1.png)  
+2、打开安装包加载一会后一般会弹出两个选项,在较旧的Windows10或之前的系统会出现如下所示的相关提示。我们把第一个选上,第二个根据需求选择即可。![dd2](/blog/images/docker_desktop/dd1_2.png)   
+3、如下图,这里推荐使用WSL2。使用WSL2(基于Windows的Linux子系统),如果我们不适用,就会使用Hyper-v虚拟机运行,不过相比于虚拟机,子系统在性能方面更加出色。![dd3](/blog/images/docker_desktop/dd1_3.png)在我们选择使用WSL2之后,并且我们也确定打开了如下图所示的Windows功能(如果没有打开,请先百度如何打开wsl。)![dd5](/blog/images/docker_desktop/dd1_5.png)  
+3.1、如果之后安装完成后发生报错可能是WSL2版本比较老,需要更新导致的。![dd4](/blog/images/docker_desktop/dd1_4.png)  需要我们自己手动更新一下,我们根据提示去微软官网下载最新版的wsl2安装后即可正常打开。[更新包下载链接](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)  
 ### docekr_desktop换源   
 在docker_desktop中选择setting,然后选择Docker Engine在其中输入以下源
 ```
@@ -41,7 +41,7 @@ docker images
 | CREATED | 镜像创建日期(不是获取该镜像的日期) |
 | SIZE | 镜像大小 |  
   
-![dd6](/images/docker_desktop/dd1_6.png)
+![dd6](/blog/images/docker_desktop/dd1_6.png)
 
 ##### 镜像拉取
 ```
@@ -112,7 +112,7 @@ docker ps -s
 | PORTS | 映射的端口 |
 | NAMES | 容器的名称 |  
   
-![dd7](/images/docker_desktop/dd1_7.png)
+![dd7](/blog/images/docker_desktop/dd1_7.png)
 
 
 

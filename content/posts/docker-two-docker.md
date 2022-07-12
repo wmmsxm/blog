@@ -8,7 +8,7 @@ draft: false
 ## <center>Docker学习(二) Docker安装</center>
 ### Docker安装前提准备
 为了操作方便，玄襄这里直接使用root用户执行。docker支持Centos系统的内核版本要高于3.10，首先检查内核，使用uname -r 命令
-![内核版本](/images/docker/docker2-1.png)  
+![内核版本](/blog/images/docker/docker2-1.png)  
 Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运行18.06.x及以上版本)。
 
 ```
@@ -47,7 +47,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
     6、docker版本       docker version
     7、docker开启启动   systemctl enable docker
 
-![docker版本](/images/docker/docker2-2.png)
+![docker版本](/blog/images/docker/docker2-2.png)
 
 
 ### 删除本地文件

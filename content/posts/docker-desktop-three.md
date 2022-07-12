@@ -14,15 +14,15 @@ draft: false
 kubectl create -f kubernetes-dashboard.yaml
 ```
 
-![dd3-1](/images/docker_desktop/dd3_1.png)
+![dd3-1](/blog/images/docker_desktop/dd3_1.png)
 ### 检查kubernetes-dashboard应用状态
     kubectl get pod -n kubernetes-dashboard  
-![dd3-3](/images/docker_desktop/dd3_3.png)
+![dd3-3](/blog/images/docker_desktop/dd3_3.png)
   
 
 ### 使用代理访问dashboard  
 使用代理命令`kubectl proxy`， 默认端口是8001，可以使用 `-p xxx`指定端口，比如`kubectl proxy -p 8112`,  
-![dd3-2](/images/docker_desktop/dd3_2.png)  
+![dd3-2](/blog/images/docker_desktop/dd3_2.png)  
 然后在通过[http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login)访问dashboard  
 
 ### token访问

@@ -25,7 +25,7 @@ draft: false
         2、yarn global add create-umi --prefix "D:\Program Files\nodejs\node_global_modules"  
 
         下载完的create-umi执行失败，系统无法识别，如下所示
-![错误](/images/react/20191023141701.png)
+![错误](/blog/images/react/20191023141701.png)
         
   	这是因为create-umi.cmd里面的盘符前有符号转义，内容如下：
 	@"%~dp0\C:\Users\wmm\AppData\Local\Yarn\Data\global\node_modules\.bin\create-umi.cmd"   %*

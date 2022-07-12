@@ -7,7 +7,7 @@ draft: false
 ---
 ## <center>Docker_Desktop学习(二) Kubernetes</center>
 ### docker_desktop安装Kubernetes  
-使用docker desktop安装kubernetes，打开settings，选择Kubernetes, Enable Kubernetes前打钩，然后点击右下角 Apply & Restart,耐心等待即可。![dd2-1](/images/docker_desktop/dd2_1.png)  
+使用docker desktop安装kubernetes，打开settings，选择Kubernetes, Enable Kubernetes前打钩，然后点击右下角 Apply & Restart,耐心等待即可。![dd2-1](/blog/images/docker_desktop/dd2_1.png)  
 等待一段时间后，如果成功即可；未成功则使用下面的方法安装
 ### 使用k8s-for-docker-desktop方式安装
 
@@ -18,13 +18,13 @@ draft: false
     cd k8s-for-docker-desktop
 
 
-![dd2-2](/images/docker_desktop/dd2_2.png)  
+![dd2-2](/blog/images/docker_desktop/dd2_2.png)  
 2、 然后cmd命令窗口，执行命令`.\load_images.ps1`， 等待下载镜像  
-3、 回到docker desktop的settings中kubernetes，点击"Reset Kubernetes Cluster",清空docker desktop的kubernetes的缓存。  ![dd2-3](/images/docker_desktop/dd2_3.png)  
+3、 回到docker desktop的settings中kubernetes，点击"Reset Kubernetes Cluster",清空docker desktop的kubernetes的缓存。  ![dd2-3](/blog/images/docker_desktop/dd2_3.png)  
 4、 重新点击Enable Kubernetes前打钩，然后点击右下角 Apply & Restart。等待重启之后即可安装成功。  
 
 ### kubectl基础命令  
-![dd2-4](/images/docker_desktop/dd2_4.png)  
+![dd2-4](/blog/images/docker_desktop/dd2_4.png)  
 基础命令包括 create、delete、get、run、expose、set、explain、edit  
 #### create 命令：根据文件或者输入来创建资源
 
