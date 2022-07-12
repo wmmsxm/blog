@@ -21,7 +21,7 @@ jobs:
           extended: true #不需要extended版本就可以注释
 
       - name: Build github # 我的Hugo配置baseurl为GitHub Pages路径，使用hugo命令默认为GitHub Pages生成静态网站
-        run: hugo -b /blog
+        run: hugo --baseUrl="/blog"
 
       - name: Deploypage # 部署到GitHub Pages分支
         uses: peaceiris/actions-gh-pages@v3
@@ -30,9 +30,6 @@ jobs:
           external_repository: wmmsxm/blog
           publish_branch: gh-pages  # default: gh-pages
           publish_dir: ./public
-
-      - name: Build gitee # 指定baseurl为giee Pages的url生成Gitee网站静态文件；
-        run: hugo -b /blog
   
   sync: #同步到gitee仓库
     needs: deploy
