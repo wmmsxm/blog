@@ -4,13 +4,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">公子玄襄BLOG</title>
     <subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle>
-    <updated>2022-07-12T14:56:45&#43;08:00</updated>
-    <id>https://example.com/</id>
-    <link rel="alternate" type="text/html" href="https://example.com/" />
-    <link rel="self" type="application/atom&#43;xml" href="https://example.com/atom.xml" />
+    <updated>2022-07-12T15:29:21&#43;08:00</updated>
+    <id>/blog/</id>
+    <link rel="alternate" type="text/html" href="/blog/" />
+    <link rel="self" type="application/atom&#43;xml" href="/blog/atom.xml" />
     <author>
             <name>wmmsxm</name>
-            <uri>https://example.com/</uri>
+            <uri>/</uri>
             
                 <email>wmmsxm@163.com</email>
             </author>
@@ -18,8 +18,8 @@
     <generator uri="https://gohugo.io/" version="0.101.0">Hugo</generator>
         <entry>
             <title type="text">Docker_Desktop学习(三) Kubernetes-Dashboard安装</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-desktop-three/" />
-            <id>https://example.com/posts/docker-desktop-three/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-three/" />
+            <id>/blog/posts/docker-desktop-three/</id>
             <updated>2022-07-12T13:35:36&#43;08:00</updated>
             <published>2021-12-04T13:35:05&#43;08:00</published>
             <author>
@@ -36,14 +36,14 @@
 &lt;p&gt;如果发现链接失效，可以访问&lt;a href=&#34;https://github.com/kubernetes/dashboard&#34;&gt;https://github.com/kubernetes/dashboard&lt;/a&gt;,查找最新的链接。&lt;br&gt;
 或者将yaml内容存到本地，使用下面命令：&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubectl create -f kubernetes-dashboard.yaml
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker_desktop/dd3_1.png&#34; alt=&#34;dd3-1&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;/blog/images/docker_desktop/dd3_1.png&#34; alt=&#34;dd3-1&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;检查kubernetes-dashboard应用状态&#34;&gt;检查kubernetes-dashboard应用状态&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;kubectl get pod -n kubernetes-dashboard  
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker_desktop/dd3_3.png&#34; alt=&#34;dd3-3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/docker_desktop/dd3_3.png&#34; alt=&#34;dd3-3&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;使用代理访问dashboard&#34;&gt;使用代理访问dashboard&lt;/h3&gt;
 &lt;p&gt;使用代理命令&lt;code&gt;kubectl proxy&lt;/code&gt;， 默认端口是8001，可以使用 &lt;code&gt;-p xxx&lt;/code&gt;指定端口，比如&lt;code&gt;kubectl proxy -p 8112&lt;/code&gt;,&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/docker_desktop/dd3_2.png&#34; alt=&#34;dd3-2&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/docker_desktop/dd3_2.png&#34; alt=&#34;dd3-2&#34;&gt;&lt;br&gt;
 然后在通过&lt;a href=&#34;http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login&#34;&gt;http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login&lt;/a&gt;访问dashboard&lt;/p&gt;
 &lt;h3 id=&#34;token访问&#34;&gt;token访问&lt;/h3&gt;
 &lt;p&gt;首次访问时会阻拦，继续访问需要选择验证方式，会有kubeconfig和令牌两种方式，我们选择令牌token。&lt;/p&gt;
@@ -61,13 +61,13 @@
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker-desktop/" term="docker-desktop" label="docker-desktop" />
+                                <category scheme="/blog/categories/docker-desktop/" term="docker-desktop" label="docker-desktop" />
                             
                         
                     
@@ -77,7 +77,7 @@
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker-desktop/" term="docker-desktop" label="docker-desktop" />
+                                <category scheme="/blog/tags/docker-desktop/" term="docker-desktop" label="docker-desktop" />
                             
                         
                     
@@ -87,8 +87,8 @@
     
         <entry>
             <title type="text">Docker_Desktop学习(二) Kubernetes</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-desktop-two/" />
-            <id>https://example.com/posts/docker-desktop-two/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-two/" />
+            <id>/blog/posts/docker-desktop-two/</id>
             <updated>2022-07-12T13:35:36&#43;08:00</updated>
             <published>2021-12-03T14:24:09&#43;08:00</published>
             <author>
@@ -100,19 +100,19 @@
             
                 <content type="html">&lt;h2 id=&#34;centerdocker_desktop学习二-kubernetescenter&#34;&gt;&lt;center&gt;Docker_Desktop学习(二) Kubernetes&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;docker_desktop安装kubernetes&#34;&gt;docker_desktop安装Kubernetes&lt;/h3&gt;
-&lt;p&gt;使用docker desktop安装kubernetes，打开settings，选择Kubernetes, Enable Kubernetes前打钩，然后点击右下角 Apply &amp;amp; Restart,耐心等待即可。&lt;img src=&#34;https://example.com/images/docker_desktop/dd2_1.png&#34; alt=&#34;dd2-1&#34;&gt;&lt;br&gt;
+&lt;p&gt;使用docker desktop安装kubernetes，打开settings，选择Kubernetes, Enable Kubernetes前打钩，然后点击右下角 Apply &amp;amp; Restart,耐心等待即可。&lt;img src=&#34;/blog/images/docker_desktop/dd2_1.png&#34; alt=&#34;dd2-1&#34;&gt;&lt;br&gt;
 等待一段时间后，如果成功即可；未成功则使用下面的方法安装&lt;/p&gt;
 &lt;h3 id=&#34;使用k8s-for-docker-desktop方式安装&#34;&gt;使用k8s-for-docker-desktop方式安装&lt;/h3&gt;
 &lt;p&gt;1、git下载k8s-for-docker-desktop&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;git clone https://github.com/AliyunContainerService/k8s-for-docker-desktop.git
 cd k8s-for-docker-desktop
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker_desktop/dd2_2.png&#34; alt=&#34;dd2-2&#34;&gt;&lt;br&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/docker_desktop/dd2_2.png&#34; alt=&#34;dd2-2&#34;&gt;&lt;br&gt;
 2、 然后cmd命令窗口，执行命令&lt;code&gt;.\load_images.ps1&lt;/code&gt;， 等待下载镜像&lt;br&gt;
-3、 回到docker desktop的settings中kubernetes，点击&amp;quot;Reset Kubernetes Cluster&amp;quot;,清空docker desktop的kubernetes的缓存。  &lt;img src=&#34;https://example.com/images/docker_desktop/dd2_3.png&#34; alt=&#34;dd2-3&#34;&gt;&lt;br&gt;
+3、 回到docker desktop的settings中kubernetes，点击&amp;quot;Reset Kubernetes Cluster&amp;quot;,清空docker desktop的kubernetes的缓存。  &lt;img src=&#34;/blog/images/docker_desktop/dd2_3.png&#34; alt=&#34;dd2-3&#34;&gt;&lt;br&gt;
 4、 重新点击Enable Kubernetes前打钩，然后点击右下角 Apply &amp;amp; Restart。等待重启之后即可安装成功。&lt;/p&gt;
 &lt;h3 id=&#34;kubectl基础命令&#34;&gt;kubectl基础命令&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker_desktop/dd2_4.png&#34; alt=&#34;dd2-4&#34;&gt;&lt;br&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/docker_desktop/dd2_4.png&#34; alt=&#34;dd2-4&#34;&gt;&lt;br&gt;
 基础命令包括 create、delete、get、run、expose、set、explain、edit&lt;/p&gt;
 &lt;h4 id=&#34;create-命令根据文件或者输入来创建资源&#34;&gt;create 命令：根据文件或者输入来创建资源&lt;/h4&gt;
 &lt;pre&gt;&lt;code&gt;# 创建Deployment和Service资源
@@ -284,13 +284,13 @@ kubectl rollout restart {your_deployment_name}
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker-desktop/" term="docker-desktop" label="docker-desktop" />
+                                <category scheme="/blog/categories/docker-desktop/" term="docker-desktop" label="docker-desktop" />
                             
                         
                     
@@ -300,7 +300,7 @@ kubectl rollout restart {your_deployment_name}
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker-desktop/" term="docker-desktop" label="docker-desktop" />
+                                <category scheme="/blog/tags/docker-desktop/" term="docker-desktop" label="docker-desktop" />
                             
                         
                     
@@ -310,8 +310,8 @@ kubectl rollout restart {your_deployment_name}
     
         <entry>
             <title type="text">Docker_Desktop学习(一) 环境安装</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-desktop-one/" />
-            <id>https://example.com/posts/docker-desktop-one/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-one/" />
+            <id>/blog/posts/docker-desktop-one/</id>
             <updated>2022-07-12T13:34:54&#43;08:00</updated>
             <published>2021-12-03T10:11:26&#43;08:00</published>
             <author>
@@ -323,10 +323,10 @@ kubectl rollout restart {your_deployment_name}
             
                 <content type="html">&lt;h2 id=&#34;centerdocker_desktop学习一-环境安装center&#34;&gt;&lt;center&gt;Docker_Desktop学习(一) 环境安装&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;windows安装docker_desktop&#34;&gt;windows安装docker_desktop&lt;/h3&gt;
-&lt;p&gt;1、我们先去&lt;a href=&#34;https://www.docker.com/products/docker-desktop&#34;&gt;官网下载安装包&lt;/a&gt;&lt;img src=&#34;https://example.com/images/docker_desktop/dd1_1.png&#34; alt=&#34;dd1&#34;&gt;&lt;br&gt;
-2、打开安装包加载一会后一般会弹出两个选项,在较旧的Windows10或之前的系统会出现如下所示的相关提示。我们把第一个选上,第二个根据需求选择即可。&lt;img src=&#34;https://example.com/images/docker_desktop/dd1_2.png&#34; alt=&#34;dd2&#34;&gt;&lt;br&gt;
-3、如下图,这里推荐使用WSL2。使用WSL2(基于Windows的Linux子系统),如果我们不适用,就会使用Hyper-v虚拟机运行,不过相比于虚拟机,子系统在性能方面更加出色。&lt;img src=&#34;https://example.com/images/docker_desktop/dd1_3.png&#34; alt=&#34;dd3&#34;&gt;在我们选择使用WSL2之后,并且我们也确定打开了如下图所示的Windows功能(如果没有打开,请先百度如何打开wsl。)&lt;img src=&#34;https://example.com/images/docker_desktop/dd1_5.png&#34; alt=&#34;dd5&#34;&gt;&lt;br&gt;
-3.1、如果之后安装完成后发生报错可能是WSL2版本比较老,需要更新导致的。&lt;img src=&#34;https://example.com/images/docker_desktop/dd1_4.png&#34; alt=&#34;dd4&#34;&gt;  需要我们自己手动更新一下,我们根据提示去微软官网下载最新版的wsl2安装后即可正常打开。&lt;a href=&#34;https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi&#34;&gt;更新包下载链接&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;1、我们先去&lt;a href=&#34;https://www.docker.com/products/docker-desktop&#34;&gt;官网下载安装包&lt;/a&gt;&lt;img src=&#34;/blog/images/docker_desktop/dd1_1.png&#34; alt=&#34;dd1&#34;&gt;&lt;br&gt;
+2、打开安装包加载一会后一般会弹出两个选项,在较旧的Windows10或之前的系统会出现如下所示的相关提示。我们把第一个选上,第二个根据需求选择即可。&lt;img src=&#34;/blog/images/docker_desktop/dd1_2.png&#34; alt=&#34;dd2&#34;&gt;&lt;br&gt;
+3、如下图,这里推荐使用WSL2。使用WSL2(基于Windows的Linux子系统),如果我们不适用,就会使用Hyper-v虚拟机运行,不过相比于虚拟机,子系统在性能方面更加出色。&lt;img src=&#34;/blog/images/docker_desktop/dd1_3.png&#34; alt=&#34;dd3&#34;&gt;在我们选择使用WSL2之后,并且我们也确定打开了如下图所示的Windows功能(如果没有打开,请先百度如何打开wsl。)&lt;img src=&#34;/blog/images/docker_desktop/dd1_5.png&#34; alt=&#34;dd5&#34;&gt;&lt;br&gt;
+3.1、如果之后安装完成后发生报错可能是WSL2版本比较老,需要更新导致的。&lt;img src=&#34;/blog/images/docker_desktop/dd1_4.png&#34; alt=&#34;dd4&#34;&gt;  需要我们自己手动更新一下,我们根据提示去微软官网下载最新版的wsl2安装后即可正常打开。&lt;a href=&#34;https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi&#34;&gt;更新包下载链接&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;docekr_desktop换源&#34;&gt;docekr_desktop换源&lt;/h3&gt;
 &lt;p&gt;在docker_desktop中选择setting,然后选择Docker Engine在其中输入以下源&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;{
@@ -373,7 +373,7 @@ docker images
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker_desktop/dd1_6.png&#34; alt=&#34;dd6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/docker_desktop/dd1_6.png&#34; alt=&#34;dd6&#34;&gt;&lt;/p&gt;
 &lt;h5 id=&#34;镜像拉取&#34;&gt;镜像拉取&lt;/h5&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#镜像拉取
 docker pull 镜像名称
@@ -486,7 +486,7 @@ docker ps -s
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker_desktop/dd1_7.png&#34; alt=&#34;dd7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/docker_desktop/dd1_7.png&#34; alt=&#34;dd7&#34;&gt;&lt;/p&gt;
 &lt;h5 id=&#34;启动和关闭容器&#34;&gt;启动和关闭容器&lt;/h5&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 停止容器
 docker container stop 容器名或者容器id
@@ -569,13 +569,13 @@ docker rm mysql
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker-desktop/" term="docker-desktop" label="docker-desktop" />
+                                <category scheme="/blog/categories/docker-desktop/" term="docker-desktop" label="docker-desktop" />
                             
                         
                     
@@ -585,7 +585,7 @@ docker rm mysql
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker-desktop/" term="docker-desktop" label="docker-desktop" />
+                                <category scheme="/blog/tags/docker-desktop/" term="docker-desktop" label="docker-desktop" />
                             
                         
                     
@@ -595,8 +595,8 @@ docker rm mysql
     
         <entry>
             <title type="text">elasticsearch 安装教程</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/elasticsearch-setup/" />
-            <id>https://example.com/posts/elasticsearch-setup/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-setup/" />
+            <id>/blog/posts/elasticsearch-setup/</id>
             <updated>2022-07-12T11:41:37&#43;08:00</updated>
             <published>2021-01-21T10:56:59&#43;08:00</published>
             <author>
@@ -613,10 +613,10 @@ docker rm mysql
 废话不多说开始进入安装步骤：&lt;/p&gt;
 &lt;p&gt;前言：&lt;br&gt;
 elasticsearch安装需要配置java环境，篇幅有限，就不介绍怎么安装java了，只需要配置JAVA_HOME环境变量即可。&lt;font color=&#34;#dd0000&#34;&gt;注意必须是java8以上的版本&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;1、将下载的文件解压，将里面的elasticsearch-7.8.1文件夹放到相应目录， 注意目录不能有空格例如&lt;font color=&#34;#dd0000&#34;&gt;d:/Program Files/&lt;/font&gt;  &lt;img src=&#34;https://example.com/images/elasticsearch/esset-1.png&#34; alt=&#34;文件&#34;&gt;&lt;/p&gt;
-&lt;p&gt;2、进入elasticsearch/bin目录，双击执行elasticsearch.bat&lt;img src=&#34;https://example.com/images/elasticsearch/esset-2.png&#34; alt=&#34;命令&#34;&gt;
+&lt;p&gt;1、将下载的文件解压，将里面的elasticsearch-7.8.1文件夹放到相应目录， 注意目录不能有空格例如&lt;font color=&#34;#dd0000&#34;&gt;d:/Program Files/&lt;/font&gt;  &lt;img src=&#34;/blog/images/elasticsearch/esset-1.png&#34; alt=&#34;文件&#34;&gt;&lt;/p&gt;
+&lt;p&gt;2、进入elasticsearch/bin目录，双击执行elasticsearch.bat&lt;img src=&#34;/blog/images/elasticsearch/esset-2.png&#34; alt=&#34;命令&#34;&gt;
 执行完毕之后，打开浏览器，输入 http://localhost:9200 ，显式以下画面，说明ES安装成功。
-&lt;img src=&#34;https://example.com/images/elasticsearch/esset-3.png&#34; alt=&#34;命令&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/elasticsearch/esset-3.png&#34; alt=&#34;命令&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;安装elasticsearch服务&#34;&gt;安装elasticsearch服务&lt;/h3&gt;
 &lt;p&gt;因为上述方法在关闭命令窗口后，elasticsearch会退出关闭，所以安装服务进行启动更合理&lt;br&gt;
 1、修改elasticsearch-env.bat文件，将内容&lt;/p&gt;
@@ -633,8 +633,8 @@ elasticsearch安装需要配置java环境，篇幅有限，就不介绍怎么安
 set JAVA_HOME=&amp;#34;%ES_HOME%\jdk&amp;#34;
 set JAVA_TYPE=bundled jdk
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;1、打开DOS命令行界面，切换到elasticSearch的bin目录，执行以下命令：&lt;br&gt;
-&lt;code&gt;.\elasticsearch-service.bat install &lt;/code&gt;  &lt;img src=&#34;https://example.com/images/elasticsearch/esset-4.png&#34; alt=&#34;命令&#34;&gt;&lt;/p&gt;
-&lt;p&gt;2、打开任务管理器，选择服务,输入e筛选elasticsearch服务&lt;img src=&#34;https://example.com/images/elasticsearch/esset-5.png&#34; alt=&#34;服务&#34;&gt;, 右键启动即可&lt;/p&gt;
+&lt;code&gt;.\elasticsearch-service.bat install &lt;/code&gt;  &lt;img src=&#34;/blog/images/elasticsearch/esset-4.png&#34; alt=&#34;命令&#34;&gt;&lt;/p&gt;
+&lt;p&gt;2、打开任务管理器，选择服务,输入e筛选elasticsearch服务&lt;img src=&#34;/blog/images/elasticsearch/esset-5.png&#34; alt=&#34;服务&#34;&gt;, 右键启动即可&lt;/p&gt;
 </content>
             
             
@@ -647,7 +647,7 @@ set JAVA_TYPE=bundled jdk
                             
                             
                             
-                                <category scheme="https://example.com/categories/elasticsearch/" term="elasticsearch" label="elasticsearch" />
+                                <category scheme="/blog/categories/elasticsearch/" term="elasticsearch" label="elasticsearch" />
                             
                         
                     
@@ -657,7 +657,7 @@ set JAVA_TYPE=bundled jdk
                             
                             
                             
-                                <category scheme="https://example.com/tags/elasticsearch/" term="elasticsearch" label="elasticsearch" />
+                                <category scheme="/blog/tags/elasticsearch/" term="elasticsearch" label="elasticsearch" />
                             
                         
                     
@@ -667,8 +667,8 @@ set JAVA_TYPE=bundled jdk
     
         <entry>
             <title type="text">Docker学习(六) 自定义tomcat镜像</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-six-custom-image/" />
-            <id>https://example.com/posts/docker-six-custom-image/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-six-custom-image/" />
+            <id>/blog/posts/docker-six-custom-image/</id>
             <updated>2022-07-12T13:36:32&#43;08:00</updated>
             <published>2020-12-10T14:09:32&#43;08:00</published>
             <author>
@@ -686,7 +686,7 @@ set JAVA_TYPE=bundled jdk
     文件名：jdk-8u211-linux-x64.tar.gz
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;以上文件均可在&lt;a href=&#34;https://pan.baidu.com/s/14-8cf3OLXi841bc_OkpoGA&#34;&gt;这里&lt;/a&gt;下载， 提取码：【tf2u】&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/docker/docker6-1.png&#34; alt=&#34;文件&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/docker/docker6-1.png&#34; alt=&#34;文件&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;dockerfile文件&#34;&gt;Dockerfile文件&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;# centos在这里作为tomcat的基础镜像
 FROM centos     
@@ -752,13 +752,13 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/learn/" term="learn" label="learn" />
+                                <category scheme="/blog/categories/learn/" term="learn" label="learn" />
                             
                         
                     
@@ -768,7 +768,7 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/tags/docker/" term="docker" label="docker" />
                             
                         
                     
@@ -778,8 +778,8 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
     
         <entry>
             <title type="text">Docker学习(五) 安装Jenkins实现自动化部署</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-five-jenkins/" />
-            <id>https://example.com/posts/docker-five-jenkins/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-five-jenkins/" />
+            <id>/blog/posts/docker-five-jenkins/</id>
             <updated>2022-07-12T13:36:32&#43;08:00</updated>
             <published>2019-12-11T09:41:13&#43;08:00</published>
             <author>
@@ -795,7 +795,7 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
 &lt;pre&gt;&lt;code&gt;# 下载镜像
 docker pull jenkins/jenkins:latest
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-1.png&#34; alt=&#34;下载镜像&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/jenkins/jenkins1-1.png&#34; alt=&#34;下载镜像&#34;&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;# 准备宿主挂载的文件夹
 mkdir /docker
 mkdir /docker/jenkins
@@ -803,8 +803,8 @@ mkdir /docker/jenkins
 # 此处注意 容器需要宿主挂载文件夹的权限  不设置的话  挂载启动会失败
 chown -R 1000 /docker/jenkins
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-2.png&#34; alt=&#34;准备&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-2-1.png&#34; alt=&#34;权限&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/jenkins/jenkins1-2.png&#34; alt=&#34;准备&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-2-1.png&#34; alt=&#34;权限&#34;&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;# 启动容器
 docker run -d --name=jenkins --privileged=true -p 8081:8080 -p 50000:50000 -v /docker/jenkins:/var/jenkins_home jenkins/jenkins
 
@@ -815,35 +815,35 @@ docker run -d --name=jenkins --privileged=true -p 8081:8080 -p 50000:50000 -v /d
   -v /docker/jenkins:/var/jenkins_home 宿主文件映射容器文件
   --privileged=true  开启特权模式
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-3.png&#34; alt=&#34;启动&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/jenkins/jenkins1-3.png&#34; alt=&#34;启动&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;初始化jenkins&#34;&gt;初始化Jenkins&lt;/h3&gt;
 &lt;p&gt;jenkins容器已经成功启动了，下面就是初始化jenkins。访问地址 是宿主ip + 8081端口即可访问。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;打开网站 需要登录&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-4.png&#34; alt=&#34;登录&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-4.png&#34; alt=&#34;登录&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;密码可以根据网页提示找到文件夹，要注意这里应该是查看宿主文件夹&lt;br&gt;
 输入命令  vi /docker/jenkins/secrets/initialAdminPassword   复制密码即可&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-5.png&#34; alt=&#34;密码&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-5.png&#34; alt=&#34;密码&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;登录成功之后，选择安装插件，玄襄这个直接选择推荐的。耐心等待安装完成&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-6.png&#34; alt=&#34;插件&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-6.png&#34; alt=&#34;插件&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;创建第一个admin用户，也可以直接跳过，继续使用admin进行登录，玄襄这里直接跳过了&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-7.png&#34; alt=&#34;admin&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-7.png&#34; alt=&#34;admin&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;访问地址修改，玄襄这里是直接在后面添加 jenkins  此处强烈建议(未来的我)  不要设置jenkins，最好不改url
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-8.png&#34; alt=&#34;url&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-8.png&#34; alt=&#34;url&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;初始化基本完成，登录系统之后修改admin账号&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-9.png&#34; alt=&#34;初始化完成&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins1-10.png&#34; alt=&#34;修改admin密码&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-9.png&#34; alt=&#34;初始化完成&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins1-10.png&#34; alt=&#34;修改admin密码&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;添加item项目并运行&#34;&gt;添加item项目并运行&lt;/h3&gt;
@@ -854,8 +854,8 @@ docker run -d --name=jenkins --privileged=true -p 8081:8080 -p 50000:50000 -v /d
   Publish Over SSH        用来把构建好的部署包传送到指定服务器的指定位置
   Git安装
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-2.png&#34; alt=&#34;插件&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-3.png&#34; alt=&#34;插件&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/jenkins/jenkins2-2.png&#34; alt=&#34;插件&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins2-3.png&#34; alt=&#34;插件&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;配置jenkins&#34;&gt;配置Jenkins&lt;/h3&gt;
 &lt;p&gt;jenkins需要配置jdk环境，根据个人项目需求 还涉及到 maven git等配置。这里需要解释下，因为jenkins是运行
 在docker上，所以配置要安装宿主挂碍的文件夹/docker/jenkins下。&lt;/p&gt;
@@ -898,7 +898,7 @@ source /etc/profile
 &lt;h4 id=&#34;jdk安装&#34;&gt;jdk安装&lt;/h4&gt;
 &lt;p&gt;jdk安装选择是1.8，因为jdk在官网下载需要登录，所以玄襄直接通过浏览器下载好之后，再上传到虚拟机中的。
 &lt;a href=&#34;https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&#34;&gt;jdk下载页面&lt;/a&gt; 选择相应版本下载即可
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-4.png&#34; alt=&#34;jdk&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins2-4.png&#34; alt=&#34;jdk&#34;&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;# 解压文件
 tar -zvxf jdk-8u231-linux-x64.tar.gz
 #移动文件
@@ -913,7 +913,7 @@ export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$CLASSPATH
 # 更新配置文件 
 source /etc/profile
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-5.png&#34; alt=&#34;安装完毕&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/jenkins/jenkins2-5.png&#34; alt=&#34;安装完毕&#34;&gt;&lt;/p&gt;
 &lt;h4 id=&#34;安装git&#34;&gt;安装git&lt;/h4&gt;
 &lt;p&gt;git安装比较简单，执行下面的命令即可&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel asciidoc
@@ -923,32 +923,32 @@ yum install gcc perl-ExtUtils-MakeMaker
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;首先进行jenkins的系统配置，系统管理  → 系统配置  → 添加Publish over SSH 可参照下图：
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-8.png&#34; alt=&#34;系统配置&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-9.png&#34; alt=&#34;ssh&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins2-8.png&#34; alt=&#34;系统配置&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins2-9.png&#34; alt=&#34;ssh&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;配置全局工具， 系统管理→ 全局工具配置 → maven配置   → jdk安装  → git配置  → maven安装，具体步骤请看下图：&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-6.png&#34; alt=&#34;全局工具配置&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-7.png&#34; alt=&#34;配置添加&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins2-7-1.png&#34; alt=&#34;继续配置添加&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins2-6.png&#34; alt=&#34;全局工具配置&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins2-7.png&#34; alt=&#34;配置添加&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins2-7-1.png&#34; alt=&#34;继续配置添加&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h4 id=&#34;远程部署项目&#34;&gt;远程部署项目&lt;/h4&gt;
 &lt;ol&gt;
 &lt;li&gt;在首页点击“ 新建任务 ” 创建新项目，在弹出框中 输入项目名称，选择构建项目类型，玄襄构建的是maven项目，
 然后点击 “ 确定 ”。如下图：&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins3-1.png&#34; alt=&#34;创建任务&#34;&gt; &lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins3-2.png&#34; alt=&#34;项目&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins3-1.png&#34; alt=&#34;创建任务&#34;&gt; &lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins3-2.png&#34; alt=&#34;项目&#34;&gt;&lt;/li&gt;
 &lt;li&gt;进入项目配置页面，添加源码管理git仓库，输入git地址  选择git仓库的账户密码， 没有的话，添加即可。
 然后记得选择分支，玄襄这里执行的是&lt;font color=&#34;red&#34;&gt;develop&lt;/font&gt;分支&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins3-3.png&#34; alt=&#34;git&#34;&gt;&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins3-3-1.png&#34; alt=&#34;git1&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins3-3.png&#34; alt=&#34;git&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins3-3-1.png&#34; alt=&#34;git1&#34;&gt;&lt;/li&gt;
 &lt;li&gt;在Build这里的 Goals and options  添加命令   package compile -U&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins3-4.png&#34; alt=&#34;build&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins3-4.png&#34; alt=&#34;build&#34;&gt;&lt;/li&gt;
 &lt;li&gt;注意这里！！！ 这里是最后一步，也是最重要的一步。在build完成之后，要连接远程服务，将编译好的jar包发送过去，
 然后执行远程服务的启动项目命令。&lt;br&gt;
 首先选择远程服务 →  设置传输的员文件  →  移除前缀  →  远程服务的文件夹  → 执行命令&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/jenkins/jenkins3-5.png&#34; alt=&#34;远程&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;/blog/images/jenkins/jenkins3-5.png&#34; alt=&#34;远程&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 切到目录
 cd /home/finance
@@ -977,13 +977,13 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/learn/" term="learn" label="learn" />
+                                <category scheme="/blog/categories/learn/" term="learn" label="learn" />
                             
                         
                     
@@ -993,7 +993,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/tags/docker/" term="docker" label="docker" />
                             
                         
                     
@@ -1003,8 +1003,8 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
     
         <entry>
             <title type="text">Docker学习(四) 远程部署springboot项目</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-four-springboot/" />
-            <id>https://example.com/posts/docker-four-springboot/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-four-springboot/" />
+            <id>/blog/posts/docker-four-springboot/</id>
             <updated>2022-07-12T13:36:32&#43;08:00</updated>
             <published>2019-12-05T09:10:20&#43;08:00</published>
             <author>
@@ -1025,7 +1025,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
 3. 在ExecStart=/usr/bin/dockerd-current 后面添加 -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock -H tcp://0.0.0.0:7654 
 解析： 2375为主管理端口，unix://var/run/docker.sock用于本地管理，7654是备用端口
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker/docker4-1.png&#34; alt=&#34;开发端口&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/docker/docker4-1.png&#34; alt=&#34;开发端口&#34;&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;# 将管理地址写入/etc/profile
 4. echo &#39;export DOCKER_HOST=tcp://0.0.0.0:2375&#39; &amp;gt;&amp;gt; /etc/profile
 5. source /etc/profile
@@ -1040,12 +1040,12 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;idea安装dokcer插件&lt;br&gt;
-打开idea的settings，选择Plugins，搜索插件Docker，安装图片中的插件&lt;img src=&#34;https://example.com/images/docker/docker4-2.png&#34; alt=&#34;插件&#34;&gt;&lt;/p&gt;
+打开idea的settings，选择Plugins，搜索插件Docker，安装图片中的插件&lt;img src=&#34;/blog/images/docker/docker4-2.png&#34; alt=&#34;插件&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;连接远程docker地址&lt;br&gt;
-安装完插件之后，添加远程docker的远程地址&lt;img src=&#34;https://example.com/images/docker/docker4-3.png&#34; alt=&#34;远程&#34;&gt;&lt;br&gt;
-在idea的services工具进行连接docker&lt;img src=&#34;https://example.com/images/docker/docker4-4.png&#34; alt=&#34;连接&#34;&gt;&lt;/p&gt;
+安装完插件之后，添加远程docker的远程地址&lt;img src=&#34;/blog/images/docker/docker4-3.png&#34; alt=&#34;远程&#34;&gt;&lt;br&gt;
+在idea的services工具进行连接docker&lt;img src=&#34;/blog/images/docker/docker4-4.png&#34; alt=&#34;连接&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;创建DockerFile文件
@@ -1072,11 +1072,11 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
   ENTRYPOINT [&amp;#34;java&amp;#34;, &amp;#34;-Djava.security.egd=file:/dev/./urandom&amp;#34;, &amp;#34;-jar&amp;#34;,&amp;#34;app.jar&amp;#34;]  
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;4&#34;&gt;
 &lt;li&gt;镜像启动&lt;br&gt;
-使用maven打包项目，然后打开dockerfile文件，点击下面图标&lt;img src=&#34;https://example.com/images/docker/docker4-5.png&#34; alt=&#34;图标&#34;&gt;&lt;br&gt;
-选择编辑运行环境 如下图&lt;img src=&#34;https://example.com/images/docker/docker4-6.png&#34; alt=&#34;运行环境&#34;&gt;&lt;br&gt;
+使用maven打包项目，然后打开dockerfile文件，点击下面图标&lt;img src=&#34;/blog/images/docker/docker4-5.png&#34; alt=&#34;图标&#34;&gt;&lt;br&gt;
+选择编辑运行环境 如下图&lt;img src=&#34;/blog/images/docker/docker4-6.png&#34; alt=&#34;运行环境&#34;&gt;&lt;br&gt;
 重新点击上一部的小图标，点击运行即可。&lt;br&gt;
 此时远程docker可以通过命令 docker ps -s 看到正在运行的项目
-&lt;img src=&#34;https://example.com/images/docker/docker4-7.png&#34; alt=&#34;启动&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;/blog/images/docker/docker4-7.png&#34; alt=&#34;启动&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </content>
             
@@ -1090,13 +1090,13 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/learn/" term="learn" label="learn" />
+                                <category scheme="/blog/categories/learn/" term="learn" label="learn" />
                             
                         
                     
@@ -1106,7 +1106,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/tags/docker/" term="docker" label="docker" />
                             
                         
                     
@@ -1116,8 +1116,8 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
     
         <entry>
             <title type="text">Docker学习(三) Docker安装mysql</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-three-mysql/" />
-            <id>https://example.com/posts/docker-three-mysql/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-three-mysql/" />
+            <id>/blog/posts/docker-three-mysql/</id>
             <updated>2022-07-12T13:36:32&#43;08:00</updated>
             <published>2019-12-04T11:17:31&#43;08:00</published>
             <author>
@@ -1132,9 +1132,9 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
 &lt;p&gt;Docker安装mysql比较方便，主要是以下步骤：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;确认安装mysql的版本 访问Mysql的版本库，点击&lt;a href=&#34;https://hub.docker.com/_/mysql?tab=tags&#34;&gt;这里&lt;/a&gt; 查看版本
-&lt;img src=&#34;https://example.com/images/docker/docker3-1.png&#34; alt=&#34;版本&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;/blog/images/docker/docker3-1.png&#34; alt=&#34;版本&#34;&gt;&lt;/li&gt;
 &lt;li&gt;选择版本后，复制后面的命令  拉取mysql镜像  docker pull mysql:latest
-&lt;img src=&#34;https://example.com/images/docker/docker3-2.png&#34; alt=&#34;mysql&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;/blog/images/docker/docker3-2.png&#34; alt=&#34;mysql&#34;&gt;&lt;/li&gt;
 &lt;li&gt;根据mysql镜像启动mysql容器&lt;br&gt;
 docker run --name mysql --privileged=true -v /docker/mysql/data:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql&lt;br&gt;
 参数说明：&lt;br&gt;
@@ -1148,7 +1148,7 @@ run           运行一个容器&lt;br&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;mysql服务停止和重启&#34;&gt;mysql服务停止和重启&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;docker查看正在运行的容器   $ docker ps -s                &lt;img src=&#34;https://example.com/images/docker/docker3-3.png&#34; alt=&#34;正在运行的容器&#34;&gt;&lt;/li&gt;
+&lt;li&gt;docker查看正在运行的容器   $ docker ps -s                &lt;img src=&#34;/blog/images/docker/docker3-3.png&#34; alt=&#34;正在运行的容器&#34;&gt;&lt;/li&gt;
 &lt;li&gt;docker停止运行的容器       $ docker stop 5fa83e71137d        5fa83e71137d 是容器id&lt;/li&gt;
 &lt;li&gt;docker启动容器            $ docker start 5fa83e71137d&lt;/li&gt;
 &lt;/ol&gt;
@@ -1164,13 +1164,13 @@ run           运行一个容器&lt;br&gt;
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/learn/" term="learn" label="learn" />
+                                <category scheme="/blog/categories/learn/" term="learn" label="learn" />
                             
                         
                     
@@ -1180,7 +1180,7 @@ run           运行一个容器&lt;br&gt;
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/tags/docker/" term="docker" label="docker" />
                             
                         
                     
@@ -1190,8 +1190,8 @@ run           运行一个容器&lt;br&gt;
     
         <entry>
             <title type="text">Docker学习(二) Docker安装</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-two-docker/" />
-            <id>https://example.com/posts/docker-two-docker/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-two-docker/" />
+            <id>/blog/posts/docker-two-docker/</id>
             <updated>2022-07-12T13:36:32&#43;08:00</updated>
             <published>2019-12-03T15:31:56&#43;08:00</published>
             <author>
@@ -1204,7 +1204,7 @@ run           运行一个容器&lt;br&gt;
                 <content type="html">&lt;h2 id=&#34;centerdocker学习二-docker安装center&#34;&gt;&lt;center&gt;Docker学习(二) Docker安装&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;docker安装前提准备&#34;&gt;Docker安装前提准备&lt;/h3&gt;
 &lt;p&gt;为了操作方便，玄襄这里直接使用root用户执行。docker支持Centos系统的内核版本要高于3.10，首先检查内核，使用uname -r 命令
-&lt;img src=&#34;https://example.com/images/docker/docker2-1.png&#34; alt=&#34;内核版本&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;/blog/images/docker/docker2-1.png&#34; alt=&#34;内核版本&#34;&gt;&lt;br&gt;
 Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运行18.06.x及以上版本)。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  # 更新最新yum内核
   yum update -y
@@ -1233,7 +1233,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
 6、docker版本       docker version
 7、docker开启启动   systemctl enable docker
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/docker/docker2-2.png&#34; alt=&#34;docker版本&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/docker/docker2-2.png&#34; alt=&#34;docker版本&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;删除本地文件&#34;&gt;删除本地文件&lt;/h3&gt;
 &lt;p&gt;注意，docker 的本地文件，包括镜像(images), 容器(containers), 存储卷(volumes)等，都需要手工删除。默认目录存储在 &lt;font color=#DC143C&gt;/var/lib/docker。&lt;/font&gt;&lt;/p&gt;
 </content>
@@ -1248,13 +1248,13 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/learn/" term="learn" label="learn" />
+                                <category scheme="/blog/categories/learn/" term="learn" label="learn" />
                             
                         
                     
@@ -1264,7 +1264,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/tags/docker/" term="docker" label="docker" />
                             
                         
                     
@@ -1274,8 +1274,8 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
     
         <entry>
             <title type="text">Docker学习(一) Centos7环境</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/docker-one-centos/" />
-            <id>https://example.com/posts/docker-one-centos/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/docker-one-centos/" />
+            <id>/blog/posts/docker-one-centos/</id>
             <updated>2022-07-12T13:36:32&#43;08:00</updated>
             <published>2019-12-03T10:11:50&#43;08:00</published>
             <author>
@@ -1290,7 +1290,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
 &lt;p&gt;玄襄的电脑是windows系统，所以为了模拟线上环境，使用VMware虚拟机创建Centos系统。 玄襄使用的是VMware15 pro版本&lt;br&gt;
 为了方便下载，在&lt;a href=&#34;https://pan.baidu.com/s/1VZ4Vg8b5F3TB8wozQ54j8w&#34;&gt;这里&lt;/a&gt;提供了下载链接，网盘密码是【7k58】，有需要的可以下载。
 文件如下：
-&lt;img src=&#34;https://example.com/images/docker/docker1.png&#34; alt=&#34;vmware&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/docker/docker1.png&#34; alt=&#34;vmware&#34;&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装vmware，选择安装位置，中间有可能需要重启，一路下一步直到安装完成。&lt;/li&gt;
 &lt;li&gt;安装完之后，打开注册机KeyGen.exe生成key，然后打开vmware应用，把key复制到需要填写的许可证秘钥即可，点击确定破解完成。&lt;/li&gt;
@@ -1299,29 +1299,29 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
 &lt;p&gt;玄襄使用的是Centos7，废话不多说，下载地址在&lt;a href=&#34;https://pan.baidu.com/s/1GoyC5kRicueZ2x_7VggvHg&#34;&gt;这里&lt;/a&gt;，密码【ogv0】。
 下载完之后，就可以直接创建虚拟机了。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;点击vmware的文件选项，选择【创建虚拟机】&lt;img src=&#34;https://example.com/images/docker/docker1-1.png&#34; alt=&#34;创建虚拟机&#34;&gt;，弹出如下向导：&lt;img src=&#34;https://example.com/images/docker/docker1-2.png&#34; alt=&#34;安装向导&#34;&gt;直接选择【典型(推荐)】即可，点击下一步；&lt;/li&gt;
-&lt;li&gt;&lt;img src=&#34;https://example.com/images/docker/docker1-3.png&#34; alt=&#34;稍后安装系统&#34;&gt; 此处现在稍后安装系统，点击下一步；&lt;/li&gt;
+&lt;li&gt;点击vmware的文件选项，选择【创建虚拟机】&lt;img src=&#34;/blog/images/docker/docker1-1.png&#34; alt=&#34;创建虚拟机&#34;&gt;，弹出如下向导：&lt;img src=&#34;/blog/images/docker/docker1-2.png&#34; alt=&#34;安装向导&#34;&gt;直接选择【典型(推荐)】即可，点击下一步；&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;/blog/images/docker/docker1-3.png&#34; alt=&#34;稍后安装系统&#34;&gt; 此处现在稍后安装系统，点击下一步；&lt;/li&gt;
 &lt;li&gt;选择【Linux】操作系统，版本选择【Centos7 64位】，点击下一步；&lt;/li&gt;
 &lt;li&gt;【虚拟机名称】和【位置】  根据自己的情况设置即可，点击下一步；&lt;/li&gt;
-&lt;li&gt;&lt;img src=&#34;https://example.com/images/docker/docker1-4.png&#34; alt=&#34;磁盘大小&#34;&gt; 磁盘大小一般设置20GB, 选择【将虚拟磁盘拆分成多个文件】，点击下一步；&lt;/li&gt;
-&lt;li&gt;&lt;img src=&#34;https://example.com/images/docker/docker1-5.png&#34; alt=&#34;自定义硬盘&#34;&gt; 选择【自定义硬件】，在【硬件】窗口中选择 【新CD/DVD】,修改右侧的【连接】，使用ISO映像文件，选择本地下载好的镜像文件即可。
-&lt;img src=&#34;https://example.com/images/docker/docker1-6.png&#34; alt=&#34;硬件&#34;&gt;点击关闭， 最后点击完成。&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;/blog/images/docker/docker1-4.png&#34; alt=&#34;磁盘大小&#34;&gt; 磁盘大小一般设置20GB, 选择【将虚拟磁盘拆分成多个文件】，点击下一步；&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;/blog/images/docker/docker1-5.png&#34; alt=&#34;自定义硬盘&#34;&gt; 选择【自定义硬件】，在【硬件】窗口中选择 【新CD/DVD】,修改右侧的【连接】，使用ISO映像文件，选择本地下载好的镜像文件即可。
+&lt;img src=&#34;/blog/images/docker/docker1-6.png&#34; alt=&#34;硬件&#34;&gt;点击关闭， 最后点击完成。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;centos7系统安装&#34;&gt;Centos7系统安装&lt;/h3&gt;
-&lt;p&gt;在上一步创建完虚拟机之后，vmware左侧【我的计算机】菜单会出现创建好的虚拟机。&lt;img src=&#34;https://example.com/images/centos/centos1-1.png&#34; alt=&#34;开始&#34;&gt;
+&lt;p&gt;在上一步创建完虚拟机之后，vmware左侧【我的计算机】菜单会出现创建好的虚拟机。&lt;img src=&#34;/blog/images/centos/centos1-1.png&#34; alt=&#34;开始&#34;&gt;
 点击【开启此虚拟机】进行系统安装初始化。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;开启之后  首先我们选择第二个选项 检查并安装Centos7，一堆命令行之后，会出现初始化界面&lt;img src=&#34;https://example.com/images/centos/centos1-2.png&#34; alt=&#34;初始化&#34;&gt;，推荐默认english，直接continue即可；&lt;/li&gt;
-&lt;li&gt;&lt;img src=&#34;https://example.com/images/centos/centos1-3.png&#34; alt=&#34;安装信息摘要&#34;&gt; 出现叹号的地方，需要我们点击进行进行确认，然后点击完成即可。&lt;img src=&#34;https://example.com/images/centos/centos1-4.png&#34; alt=&#34;目标位置&#34;&gt;，点击开始安装；&lt;/li&gt;
-&lt;li&gt;配置界面需要设置下root密码（简单的密码，需要点击2次完成才能设置成功），安装进度条安装完毕后，点击重启即可。&lt;img src=&#34;https://example.com/images/centos/centos1-5.png&#34; alt=&#34;设置密码&#34;&gt;&lt;/li&gt;
+&lt;li&gt;开启之后  首先我们选择第二个选项 检查并安装Centos7，一堆命令行之后，会出现初始化界面&lt;img src=&#34;/blog/images/centos/centos1-2.png&#34; alt=&#34;初始化&#34;&gt;，推荐默认english，直接continue即可；&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;/blog/images/centos/centos1-3.png&#34; alt=&#34;安装信息摘要&#34;&gt; 出现叹号的地方，需要我们点击进行进行确认，然后点击完成即可。&lt;img src=&#34;/blog/images/centos/centos1-4.png&#34; alt=&#34;目标位置&#34;&gt;，点击开始安装；&lt;/li&gt;
+&lt;li&gt;配置界面需要设置下root密码（简单的密码，需要点击2次完成才能设置成功），安装进度条安装完毕后，点击重启即可。&lt;img src=&#34;/blog/images/centos/centos1-5.png&#34; alt=&#34;设置密码&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;centos7网络设置&#34;&gt;Centos7网络设置&lt;/h3&gt;
-&lt;p&gt;在新装的Centos系统中，网络基本都是不通的，使用root和密码登录系统之后，使用 ping &lt;a href=&#34;https://www.baidu.com&#34;&gt;www.baidu.com&lt;/a&gt;会出现如图情况 &lt;img src=&#34;https://example.com/images/centos/centos1-6.png&#34; alt=&#34;ping&#34;&gt;
+&lt;p&gt;在新装的Centos系统中，网络基本都是不通的，使用root和密码登录系统之后，使用 ping &lt;a href=&#34;https://www.baidu.com&#34;&gt;www.baidu.com&lt;/a&gt;会出现如图情况 &lt;img src=&#34;/blog/images/centos/centos1-6.png&#34; alt=&#34;ping&#34;&gt;
 需要我们重新设置网络&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;使用 ip addr 会发现 eno16777736(文件名可能不一样)，下一步要找到这个文件&lt;img src=&#34;https://example.com/images/centos/centos1-7.png&#34; alt=&#34;eno&#34;&gt;&lt;/li&gt;
+&lt;li&gt;使用 ip addr 会发现 eno16777736(文件名可能不一样)，下一步要找到这个文件&lt;img src=&#34;/blog/images/centos/centos1-7.png&#34; alt=&#34;eno&#34;&gt;&lt;/li&gt;
 &lt;li&gt;使用 cd /etc/sysconfig/network-scripts/  进入文件中， 使用 dir 命令可以看到 ifcfg-eno16777736 文件&lt;/li&gt;
-&lt;li&gt;使用 vi ifcfg-eno16777736  查看内容 按 【i】 进入编辑模式， 将ONBOOT=no改成ONBOOT=yes， 按【esc】退出编辑模式， 使用【:wq】保存并退出vi。 &lt;img src=&#34;https://example.com/images/centos/centos1-8.png&#34; alt=&#34;内容&#34;&gt;&lt;/li&gt;
+&lt;li&gt;使用 vi ifcfg-eno16777736  查看内容 按 【i】 进入编辑模式， 将ONBOOT=no改成ONBOOT=yes， 按【esc】退出编辑模式， 使用【:wq】保存并退出vi。 &lt;img src=&#34;/blog/images/centos/centos1-8.png&#34; alt=&#34;内容&#34;&gt;&lt;/li&gt;
 &lt;li&gt;使用 service network restart 重启网络服务即可。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;配置阿里源&#34;&gt;配置阿里源&lt;/h3&gt;
@@ -1337,7 +1337,7 @@ yum makecache&lt;/li&gt;
 &lt;li&gt;验证是否成功，安装net-tools&lt;br&gt;
 yum -y -install net-tools&lt;br&gt;
 ifconfig&lt;br&gt;
-成功后会出现以下结果：&lt;img src=&#34;https://example.com/images/centos/centos1-9.png&#34; alt=&#34;ifconfig&#34;&gt;&lt;/li&gt;
+成功后会出现以下结果：&lt;img src=&#34;/blog/images/centos/centos1-9.png&#34; alt=&#34;ifconfig&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </content>
             
@@ -1351,13 +1351,13 @@ ifconfig&lt;br&gt;
                             
                             
                             
-                                <category scheme="https://example.com/categories/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/categories/docker/" term="docker" label="docker" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/categories/learn/" term="learn" label="learn" />
+                                <category scheme="/blog/categories/learn/" term="learn" label="learn" />
                             
                         
                     
@@ -1367,7 +1367,7 @@ ifconfig&lt;br&gt;
                             
                             
                             
-                                <category scheme="https://example.com/tags/docker/" term="docker" label="docker" />
+                                <category scheme="/blog/tags/docker/" term="docker" label="docker" />
                             
                         
                     
@@ -1377,8 +1377,8 @@ ifconfig&lt;br&gt;
     
         <entry>
             <title type="text">elasticsearh-rest-client</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/elasticsearh-rest-client/" />
-            <id>https://example.com/posts/elasticsearh-rest-client/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/elasticsearh-rest-client/" />
+            <id>/blog/posts/elasticsearh-rest-client/</id>
             <updated>2022-07-12T11:26:40&#43;08:00</updated>
             <published>2019-11-22T10:51:38&#43;08:00</published>
             <author>
@@ -1458,7 +1458,7 @@ public class EsConfig {
 &lt;li&gt;
 &lt;p&gt;封装基层语法
 低级客户端的命令都需要进行拼接，所以本人就封装了一下底层，并添加了一个简单的方法封装工具。源代码在&lt;a href=&#34;https://gitee.com/wmmsxm/yuzhi_tools.git&#34; title=&#34;源代码&#34;&gt;gitee&lt;/a&gt;上。
-&lt;a href=&#34;https://example.com/images/elasticsearch/es-2.png&#34;&gt;!工具结构&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&#34;/blog/images/elasticsearch/es-2.png&#34;&gt;!工具结构&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;案例
@@ -1473,7 +1473,7 @@ public class EsConfig {
 &lt;p&gt;这个异常的原因主要是httpClient中的IOReactor被关闭了，原因有很多。出现异常后，再次访问时，就可以正常访问。&lt;br&gt;
 查了百度和谷歌，基本上没有能完全解决这个问题的，有的说是内存原因，有的则是减少client链接，或者使用新线程创建client。&lt;br&gt;
 本人的解决方式  在restClient.performRequest(request)处捕捉IO异常，再次请求；超过2次(可配)，返回null，异常打印。方式如下图：&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/elasticsearch/es-1.png&#34; alt=&#34;异常处理&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/elasticsearch/es-1.png&#34; alt=&#34;异常处理&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 </content>
@@ -1488,7 +1488,7 @@ public class EsConfig {
                             
                             
                             
-                                <category scheme="https://example.com/categories/elasticsearch/" term="elasticsearch" label="elasticsearch" />
+                                <category scheme="/blog/categories/elasticsearch/" term="elasticsearch" label="elasticsearch" />
                             
                         
                     
@@ -1498,7 +1498,7 @@ public class EsConfig {
                             
                             
                             
-                                <category scheme="https://example.com/tags/elasticsearch/" term="elasticsearch" label="elasticsearch" />
+                                <category scheme="/blog/tags/elasticsearch/" term="elasticsearch" label="elasticsearch" />
                             
                         
                     
@@ -1508,8 +1508,8 @@ public class EsConfig {
     
         <entry>
             <title type="text">zookeeper知识点(二)</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/zookeeper-two/" />
-            <id>https://example.com/posts/zookeeper-two/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-two/" />
+            <id>/blog/posts/zookeeper-two/</id>
             <updated>2022-07-12T11:26:49&#43;08:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
@@ -1594,7 +1594,7 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
                             
                             
                             
-                                <category scheme="https://example.com/categories/zookeeper/" term="Zookeeper" label="Zookeeper" />
+                                <category scheme="/blog/categories/zookeeper/" term="Zookeeper" label="Zookeeper" />
                             
                         
                     
@@ -1604,7 +1604,7 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
                             
                             
                             
-                                <category scheme="https://example.com/tags/zookeeper/" term="Zookeeper" label="Zookeeper" />
+                                <category scheme="/blog/tags/zookeeper/" term="Zookeeper" label="Zookeeper" />
                             
                         
                     
@@ -1614,8 +1614,8 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
     
         <entry>
             <title type="text">zookeeper知识点(三)</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/zookeeper-three/" />
-            <id>https://example.com/posts/zookeeper-three/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-three/" />
+            <id>/blog/posts/zookeeper-three/</id>
             <updated>2022-07-12T11:26:43&#43;08:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
@@ -1653,7 +1653,7 @@ api入口。&lt;/p&gt;
                             
                             
                             
-                                <category scheme="https://example.com/categories/zookeeper/" term="Zookeeper" label="Zookeeper" />
+                                <category scheme="/blog/categories/zookeeper/" term="Zookeeper" label="Zookeeper" />
                             
                         
                     
@@ -1663,7 +1663,7 @@ api入口。&lt;/p&gt;
                             
                             
                             
-                                <category scheme="https://example.com/tags/zookeeper/" term="Zookeeper" label="Zookeeper" />
+                                <category scheme="/blog/tags/zookeeper/" term="Zookeeper" label="Zookeeper" />
                             
                         
                     
@@ -1673,8 +1673,8 @@ api入口。&lt;/p&gt;
     
         <entry>
             <title type="text">elasticsearch-bulk</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/elasticsearch-bulk/" />
-            <id>https://example.com/posts/elasticsearch-bulk/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-bulk/" />
+            <id>/blog/posts/elasticsearch-bulk/</id>
             <updated>2022-07-12T11:26:40&#43;08:00</updated>
             <published>2019-11-18T10:56:59&#43;08:00</published>
             <author>
@@ -1739,7 +1739,7 @@ high level rest client
                             
                             
                             
-                                <category scheme="https://example.com/categories/elasticsearch/" term="elasticsearch" label="elasticsearch" />
+                                <category scheme="/blog/categories/elasticsearch/" term="elasticsearch" label="elasticsearch" />
                             
                         
                     
@@ -1749,7 +1749,7 @@ high level rest client
                             
                             
                             
-                                <category scheme="https://example.com/tags/elasticsearch/" term="elasticsearch" label="elasticsearch" />
+                                <category scheme="/blog/tags/elasticsearch/" term="elasticsearch" label="elasticsearch" />
                             
                         
                     
@@ -1759,8 +1759,8 @@ high level rest client
     
         <entry>
             <title type="text">umi搭建dva</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/umi-dva/" />
-            <id>https://example.com/posts/umi-dva/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/umi-dva/" />
+            <id>/blog/posts/umi-dva/</id>
             <updated>2022-07-12T11:41:37&#43;08:00</updated>
             <published>2019-10-22T18:00:35&#43;08:00</published>
             <author>
@@ -1785,7 +1785,7 @@ high level rest client
 
     下载完的create-umi执行失败，系统无法识别，如下所示
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/react/20191023141701.png&#34; alt=&#34;错误&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/blog/images/react/20191023141701.png&#34; alt=&#34;错误&#34;&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;这是因为create-umi.cmd里面的盘符前有符号转义，内容如下：
 @&amp;quot;%~dp0\C:\Users\wmm\AppData\Local\Yarn\Data\global\node_modules\.bin\create-umi.cmd&amp;quot;   %*
 
@@ -1830,7 +1830,7 @@ high level rest client
                             
                             
                             
-                                <category scheme="https://example.com/categories/react/" term="react" label="react" />
+                                <category scheme="/blog/categories/react/" term="react" label="react" />
                             
                         
                     
@@ -1840,13 +1840,13 @@ high level rest client
                             
                             
                             
-                                <category scheme="https://example.com/tags/react/" term="react" label="react" />
+                                <category scheme="/blog/tags/react/" term="react" label="react" />
                             
                         
                             
                             
                             
-                                <category scheme="https://example.com/tags/umi/" term="umi" label="umi" />
+                                <category scheme="/blog/tags/umi/" term="umi" label="umi" />
                             
                         
                     
@@ -1856,8 +1856,8 @@ high level rest client
     
         <entry>
             <title type="text">redis集群</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/redis%E9%9B%86%E7%BE%A4/" />
-            <id>https://example.com/posts/redis%E9%9B%86%E7%BE%A4/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/redis%E9%9B%86%E7%BE%A4/" />
+            <id>/blog/posts/redis%E9%9B%86%E7%BE%A4/</id>
             <updated>2022-07-12T11:26:40&#43;08:00</updated>
             <published>2019-10-17T09:02:40&#43;08:00</published>
             <author>
@@ -1887,14 +1887,14 @@ rubygems版本：2.7.6
 &lt;li&gt;
 &lt;p&gt;redis安装&lt;/p&gt;
 &lt;p&gt;下载的redis文件进行解压，最好是放在新的文件夹中，方便集群使用和管理。&lt;br&gt;
-&lt;img src=&#34;https://example.com/images/redis/20191017094637.png&#34; alt=&#34;文件&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/redis/20191017094637.png&#34; alt=&#34;文件&#34;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;配置三主三从集群&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;因为集群最少是6个节点，所以这里配置三主三从，将上面的redis文件夹复制5份，我这边端口修改是6479,6480,6481,6482,6483,6484。如下所示：
-&lt;img src=&#34;https://example.com/images/redis/20191017095130.png&#34; alt=&#34;三主三从&#34;&gt;
+&lt;img src=&#34;/blog/images/redis/20191017095130.png&#34; alt=&#34;三主三从&#34;&gt;
 其中每一个文件夹都相当于一个redis。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
@@ -1949,7 +1949,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
                             
                             
                             
-                                <category scheme="https://example.com/categories/redis/" term="redis" label="redis" />
+                                <category scheme="/blog/categories/redis/" term="redis" label="redis" />
                             
                         
                     
@@ -1959,7 +1959,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
                             
                             
                             
-                                <category scheme="https://example.com/tags/redis/" term="redis" label="redis" />
+                                <category scheme="/blog/tags/redis/" term="redis" label="redis" />
                             
                         
                     
@@ -1969,8 +1969,8 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
     
         <entry>
             <title type="text">zookeeper知识点(一)</title>
-            <link rel="alternate" type="text/html" href="https://example.com/posts/zookeeper-one/" />
-            <id>https://example.com/posts/zookeeper-one/</id>
+            <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-one/" />
+            <id>/blog/posts/zookeeper-one/</id>
             <updated>2022-07-12T11:26:40&#43;08:00</updated>
             <published>2019-08-09T19:43:03&#43;08:00</published>
             <author>
@@ -1998,7 +1998,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
 &lt;/ol&gt;
 &lt;h4 id=&#34;zookeeper结构&#34;&gt;zookeeper结构&lt;/h4&gt;
 &lt;p&gt;zookeeper会维护一个具有层次关系的数据结构，类似于文件系统的层级树状结构。
-&lt;img src=&#34;https://example.com/images/zookeeper/965360-20180418191100883-2107625307.png&#34; alt=&#34;数据模型&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;/blog/images/zookeeper/965360-20180418191100883-2107625307.png&#34; alt=&#34;数据模型&#34;&gt;&lt;/p&gt;
 </content>
             
             
@@ -2011,7 +2011,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
                             
                             
                             
-                                <category scheme="https://example.com/categories/zookeeper/" term="Zookeeper" label="Zookeeper" />
+                                <category scheme="/blog/categories/zookeeper/" term="Zookeeper" label="Zookeeper" />
                             
                         
                     
@@ -2021,7 +2021,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
                             
                             
                             
-                                <category scheme="https://example.com/tags/zookeeper/" term="Zookeeper" label="Zookeeper" />
+                                <category scheme="/blog/tags/zookeeper/" term="Zookeeper" label="Zookeeper" />
                             
                         
                     
