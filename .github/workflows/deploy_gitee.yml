@@ -27,7 +27,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.ACCESS_TOKEN }}
-          external_repository: wmmsxm/blog.github.io
+          external_repository: wmmsxm/blog
           publish_branch: gh-pages  # default: gh-pages
           publish_dir: ./public
           
