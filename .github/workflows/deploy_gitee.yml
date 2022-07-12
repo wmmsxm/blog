@@ -21,7 +21,7 @@ jobs:
           extended: true #不需要extended版本就可以注释
 
       - name: Build github # 我的Hugo配置baseurl为GitHub Pages路径，使用hugo命令默认为GitHub Pages生成静态网站
-        run: hugo --baseUrl="/blog"
+        run: hugo -b "/blog"
 
       - name: Deploypage # 部署到GitHub Pages分支
         uses: peaceiris/actions-gh-pages@v3
