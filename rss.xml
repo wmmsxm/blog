@@ -23,7 +23,7 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Sat, 30 Jul 2022 02:19:04 &#43;0000</lastBuildDate>
+        <lastBuildDate>Sat, 30 Jul 2022 02:29:37 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
@@ -132,7 +132,8 @@ systemctl disable firewalld
 tar xzvf tidb-community-server-v6.1.0-linux-amd64.tar.gz
 sh tidb-community-server-v6.1.0-linux-amd64/local_install.sh
 source /home/tidb/.bash_profile
-&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;配置初始化参数文件topologyyaml&#34;&gt;配置初始化参数文件topology.yaml&lt;/h4&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;/blog/blog/images/tidb/offline_setup1.png&#34; alt=&#34;解压&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;配置初始化参数文件topologyyaml&#34;&gt;配置初始化参数文件topology.yaml&lt;/h4&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#执行命令
 vi topology.yaml
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;topology.yaml的内容如下：&lt;/p&gt;
