@@ -94,7 +94,7 @@ tar xzvf tidb-community-server-v6.1.0-linux-amd64.tar.gz
 sh tidb-community-server-v6.1.0-linux-amd64/local_install.sh
 source /home/tidb/.bash_profile
 ```  
-
+![解压](/blog/images/tidb/offline_setup1.png)
 #### 配置初始化参数文件topology.yaml
 
 ````
