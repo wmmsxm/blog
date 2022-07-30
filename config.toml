@@ -1,7 +1,7 @@
 ##########################################
 # 站点配置
 
-baseURL = "/blog"
+baseURL = "https://example.com/"
 title = "公子玄襄BLOG"
 languageCode = "zh-CN"
 hasCJKLanguage = true
