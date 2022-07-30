@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">公子玄襄BLOG</title>
     <subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle>
-    <updated>2022-07-12T10:05:29&#43;00:00</updated>
+    <updated>2022-07-30T02:19:04&#43;00:00</updated>
     <id>/blog/</id>
     <link rel="alternate" type="text/html" href="/blog/" />
     <link rel="self" type="application/atom&#43;xml" href="/blog/atom.xml" />
@@ -17,10 +17,371 @@
     <rights>Copyright © 2022 WuMengMeng</rights>
     <generator uri="https://gohugo.io/" version="0.90.1">Hugo</generator>
         <entry>
+            <title type="text">Tidb Offline Setup</title>
+            <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-offline-setup/" />
+            <id>/blog/posts/tidb/tidb-offline-setup/</id>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
+            <published>2022-07-13T08:41:51&#43;08:00</published>
+            <author>
+                    <name>wmmsxm</name>
+                    <uri>https://io-oi.me/</uri>
+                    <email>wmmsxm@163.com</email>
+                    </author>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">离线安装部署 TiDB，单机模拟集群环境 TiDB介绍 什么是TiDB TiDB 是 PingCAP 公司自主设计、研发的开源分布式关系型数据库，……</summary>
+            
+                <content type="html">&lt;h1 id=&#34;center离线安装部署-tidb单机模拟集群环境center&#34;&gt;&lt;center&gt;离线安装部署 TiDB，单机模拟集群环境&lt;/center&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;tidb介绍&#34;&gt;TiDB介绍&lt;/h2&gt;
+&lt;h3 id=&#34;什么是tidb&#34;&gt;什么是TiDB&lt;/h3&gt;
+&lt;p&gt;TiDB 是 PingCAP 公司自主设计、研发的开源分布式关系型数据库，是一款同时支持在线事务处理与在线分析处理 (Hybrid Transactional and Analytical Processing, HTAP）的融合型分布式数据库产品，具备水平扩容或者缩容、金融级高可用、实时 HTAP、云原生的分布式数据库、兼容 MySQL 5.7 协议和 MySQL 生态等重要特性。目标是为用户提供一站式 OLTP (Online Transactional Processing)、OLAP (Online Analytical Processing)、HTAP 解决方案。TiDB 适合高可用、强一致要求较高、数据规模较大等各种应用场景。&lt;/p&gt;
+&lt;h3 id=&#34;tidb五大核心特性&#34;&gt;TiDB五大核心特性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一键水平扩容或者缩容&lt;br&gt;
+得益于 TiDB 存储计算分离的架构的设计，可按需对计算、存储分别进行在线扩容或者缩容，扩容或者缩容过程中对应用运维人员透明。&lt;/li&gt;
+&lt;li&gt;金融级高可用&lt;br&gt;
+数据采用多副本存储，数据副本通过 Multi-Raft 协议同步事务日志，多数派写入成功事务才能提交，确保数据强一致性且少数副本发生故障时不影响数据的可用性。可按需配置副本地理位置、副本数量等策略满足不同容灾级别的要求。&lt;/li&gt;
+&lt;li&gt;实时 HTAP&lt;br&gt;
+提供行存储引擎 TiKV、列存储引擎 TiFlash 两款存储引擎，TiFlash 通过 Multi-Raft Learner 协议实时从 TiKV 复制数据，确保行存储引擎 TiKV 和列存储引擎 TiFlash 之间的数据强一致。TiKV、TiFlash 可按需部署在不同的机器，解决 HTAP 资源隔离的问题。&lt;/li&gt;
+&lt;li&gt;云原生的分布式数据库&lt;br&gt;
+专为云而设计的分布式数据库，通过 TiDB Operator 可在公有云、私有云、混合云中实现部署工具化、自动化。&lt;/li&gt;
+&lt;li&gt;兼容 MySQL 5.7 协议和 MySQL 生态&lt;br&gt;
+兼容 MySQL 5.7 协议、MySQL 常用的功能、MySQL 生态，应用无需或者修改少量代码即可从 MySQL 迁移到 TiDB。提供丰富的数据迁移工具帮助应用便捷完成数据迁移。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tidb离线安装部署&#34;&gt;TiDB离线安装部署&lt;/h2&gt;
+&lt;h3 id=&#34;一前期准备&#34;&gt;一、前期准备&lt;/h3&gt;
+&lt;h4 id=&#34;wmware虚拟环境&#34;&gt;wmware虚拟环境&lt;/h4&gt;
+&lt;p&gt;使用vmware部署3个节点服务器，分别是master,node1,node2;使用&lt;a href=&#34;https://mirrors.aliyun.com/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-2009.iso?spm=a2c6h.25603864.0.0.74092d1cWv24j8&#34;&gt;CentOS7镜像&lt;/a&gt;,&lt;/p&gt;
+&lt;h4 id=&#34;创建普通用户--每个节点&#34;&gt;创建普通用户--每个节点&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;groupadd tidb 
+useradd tidb -g tidb 
+passwd tidb 
+输入密码
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;sudo免密&#34;&gt;sudo免密&lt;/h4&gt;
+&lt;p&gt;在每个节点执行如下命令来配置 sudo 免密&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vi /etc/sudoers
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最后一行输入：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tidb ALL=(ALL) NOPASSWD: ALL  
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;font color=&#39;red&#39; size=2&gt;&lt;em&gt;注意最后需要空一行&lt;/em&gt;&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&#34;验证sudo免密&#34;&gt;验证sudo免密&lt;/h4&gt;
+&lt;p&gt;登录中控机master，切换到tidb用户&lt;br&gt;
+ssh 到其他目标节点&lt;br&gt;
+以192.168.174.129节点为例，其他节点也需要验证&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;su - tidb 
+ssh 192.168.174.129  
+输入密码
+sudo -su root
+不需要密码切换到`root`用户，表示`sudo`免密成功
+eixt   //退出ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;关闭防火墙&#34;&gt;关闭防火墙&lt;/h4&gt;
+&lt;p&gt;每个节点都需要关闭系统的防火墙&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# root账号下执行以下命令
+# 防火墙状态
+systemctl status firewalld
+# 临时关闭防火墙
+systemctl stop firewalld
+# 永久关闭防火墙
+systemctl disable firewalld
+
+&lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;ip&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;备注&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;功能&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;192.168.174.128&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;中控机master&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;无&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;192.168.174.129&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;node1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;PD,DB,KV,TIFLASH,MONITOR,GRAFANA,ALERTMANAGER&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;192.168.174.130&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;node2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;PD,DB,KV,TIFLASH&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;192.168.174.131&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;node3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;PD,DB,KV,TIFLASH&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id=&#34;tidb离线包下载&#34;&gt;tidb离线包下载&lt;/h4&gt;
+&lt;p&gt;使用社区版离线进行部署，软件包可以在&lt;a href=&#34;https://pingcap.com/zh/product-community&#34;&gt;官网&lt;/a&gt;下载。将下载的tidb-community-server-v6.1.0-linux-amd64.tar.gz放在中控机master的tidb账号下的/home/tidb文件目录&lt;/p&gt;
+&lt;h3 id=&#34;二安装部署&#34;&gt;二、安装部署&lt;/h3&gt;
+&lt;h4 id=&#34;解压执行&#34;&gt;解压执行&lt;/h4&gt;
+&lt;p&gt;下面命令在中控机master执行&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;su - tidb
+tar xzvf tidb-community-server-v6.1.0-linux-amd64.tar.gz
+sh tidb-community-server-v6.1.0-linux-amd64/local_install.sh
+source /home/tidb/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;配置初始化参数文件topologyyaml&#34;&gt;配置初始化参数文件topology.yaml&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#执行命令
+vi topology.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;topology.yaml的内容如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;global:
+  user: &amp;quot;tidb&amp;quot;
+  ssh_port: 22
+  deploy_dir: &amp;quot;/tidb-deploy&amp;quot;
+  data_dir: &amp;quot;/tidb-data&amp;quot;
+
+monitored:
+ node_exporter_port: 9100
+ blackbox_exporter_port: 9115
+
+server_configs:
+ tidb:
+   log.slow-threshold: 300
+ tikv:
+   readpool.storage.use-unified-pool: false
+   readpool.coprocessor.use-unified-pool: true
+ pd:
+   replication.enable-placement-rules: true
+   replication.location-labels: [&amp;quot;host&amp;quot;]
+ tiflash:
+   logger.level: &amp;quot;info&amp;quot;
+
+pd_servers:
+  - host: 192.168.174.129
+  - host: 192.168.174.130
+  - host: 192.168.174.131
+tidb_servers:
+  - host: 192.168.174.129
+  - host: 192.168.174.130
+  - host: 192.168.174.131
+tikv_servers:
+  - host: 192.168.174.129
+    config:
+      server.labels: { host: &amp;quot;192.168.174.129&amp;quot; }
+  - host: 192.168.174.130
+    config:
+      server.labels: { host: &amp;quot;192.168.174.130&amp;quot; }
+  - host: 192.168.174.131
+    config:
+      server.labels: { host: &amp;quot;192.168.174.131&amp;quot; }
+tiflash_servers:
+  - host: 192.168.174.129
+    data_dir: /data1/tiflash/data
+  - host: 192.168.174.130
+    data_dir: /data1/tiflash/data
+  - host: 192.168.174.131
+    data_dir: /data1/tiflash/data
+monitoring_servers:
+  - host: 192.168.174.129
+grafana_servers:
+  - host: 192.168.174.129
+alertmanager_servers:
+  - host: 192.168.174.129
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;安装部署启动&#34;&gt;安装部署、启动&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;#  部署
+tiup cluster deploy tidb-vmware v6.1.0 topology.yaml --user tidb -p
+输入 y 然后 `tidb` 用户密码密码  
+# 这个过程有点漫长，需要耐心等待
+
+# 初始启动命令 
+tiup cluster start tidb-vmware  --init
+
+# 查询tidb状态
+tiup cluster display tidb-vmware
+
+# 启动命令 
+tiup cluster start tidb-vmware
+
+# 重启pd
+tiup cluster reload tidb-vmware -R pd
+
+# 删除集群
+tiup cluster destroy tidb-vmware --force
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;部署输出如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[tidb@localhost ~]$ tiup cluster deploy tidb-vmware v6.1.0 topology.yaml --user tidb -p
+tiup is checking updates for component cluster ...
+A new version of cluster is available:
+   The latest version:         v1.10.2
+   Local installed version:    
+   Update current component:   tiup update cluster
+   Update all components:      tiup update --all
+
+The component `cluster` version  is not installed; downloading from repository.
+Starting component `cluster`: /home/tidb/.tiup/components/cluster/v1.10.2/tiup-cluster deploy tidb-vmware v6.1.0 topology.yaml --user tidb -p
+Input SSH password: 
+
+
+
++ Detect CPU Arch Name
+  - Detecting node 192.168.174.129 Arch info ... Done
+  - Detecting node 192.168.174.130 Arch info ... Done
+  - Detecting node 192.168.174.131 Arch info ... Done
+
+
+
++ Detect CPU OS Name
+  - Detecting node 192.168.174.129 OS info ... Done
+  - Detecting node 192.168.174.130 OS info ... Done
+  - Detecting node 192.168.174.131 OS info ... Done
+Please confirm your topology:
+Cluster type:    tidb
+Cluster name:    tidb-vmware
+Cluster version: v6.1.0
+Role          Host             Ports                            OS/Arch       Directories
+----          ----             -----                            -------       -----------
+pd            192.168.174.129  2379/2380                        linux/x86_64  /tidb-deploy/pd-2379,/tidb-data/pd-2379
+tikv          192.168.174.130  20160/20180                      linux/x86_64  /tidb-deploy/tikv-20160,/tidb-data/tikv-20160
+tikv          192.168.174.131  20160/20180                      linux/x86_64  /tidb-deploy/tikv-20160,/tidb-data/tikv-20160
+tidb          192.168.174.130  4000/10080                       linux/x86_64  /tidb-deploy/tidb-4000
+tidb          192.168.174.131  4000/10080                       linux/x86_64  /tidb-deploy/tidb-4000
+tiflash       192.168.174.129  9000/8123/3930/20170/20292/8234  linux/x86_64  /tidb-deploy/tiflash-9000,/data1/tiflash/data
+tiflash       192.168.174.130  9000/8123/3930/20170/20292/8234  linux/x86_64  /tidb-deploy/tiflash-9000,/data1/tiflash/data
+tiflash       192.168.174.131  9000/8123/3930/20170/20292/8234  linux/x86_64  /tidb-deploy/tiflash-9000,/data1/tiflash/data
+prometheus    192.168.174.129  9090/12020                       linux/x86_64  /tidb-deploy/prometheus-9090,/tidb-data/prometheus-9090
+grafana       192.168.174.129  3000                             linux/x86_64  /tidb-deploy/grafana-3000
+alertmanager  192.168.174.129  9093/9094                        linux/x86_64  /tidb-deploy/alertmanager-9093,/tidb-data/alertmanager-9093
+Attention:
+    1. If the topology is not what you expected, check your yaml file.
+    2. Please confirm there is no port/directory conflicts in same host.
+Do you want to continue? [y/N]: (default=N) y
++ Generate SSH keys ... Done
++ Download TiDB components
+  - Download pd:v6.1.0 (linux/amd64) ... Done
+  - Download tikv:v6.1.0 (linux/amd64) ... Done
+  - Download tidb:v6.1.0 (linux/amd64) ... Done
+  - Download tiflash:v6.1.0 (linux/amd64) ... Done
+  - Download prometheus:v6.1.0 (linux/amd64) ... Done
+  - Download grafana:v6.1.0 (linux/amd64) ... Done
+  - Download alertmanager: (linux/amd64) ... Done
+  - Download node_exporter: (linux/amd64) ... Done
+  - Download blackbox_exporter: (linux/amd64) ... Done
++ Initialize target host environments
+  - Prepare 192.168.174.129:22 ... Done
+  - Prepare 192.168.174.130:22 ... Done
+  - Prepare 192.168.174.131:22 ... Done
++ Deploy TiDB instance
+  - Copy pd -&amp;gt; 192.168.174.129 ... Done
+  - Copy tikv -&amp;gt; 192.168.174.130 ... Done
+  - Copy tikv -&amp;gt; 192.168.174.131 ... Done
+  - Copy tidb -&amp;gt; 192.168.174.130 ... Done
+  - Copy tidb -&amp;gt; 192.168.174.131 ... Done
+  - Copy tiflash -&amp;gt; 192.168.174.129 ... Done
+  - Copy tiflash -&amp;gt; 192.168.174.130 ... Done
+  - Copy tiflash -&amp;gt; 192.168.174.131 ... Done
+  - Copy prometheus -&amp;gt; 192.168.174.129 ... Done
+  - Copy grafana -&amp;gt; 192.168.174.129 ... Done
+  - Copy alertmanager -&amp;gt; 192.168.174.129 ... Done
+  - Deploy node_exporter -&amp;gt; 192.168.174.129 ... Done
+  - Deploy node_exporter -&amp;gt; 192.168.174.130 ... Done
+  - Deploy node_exporter -&amp;gt; 192.168.174.131 ... Done
+  - Deploy blackbox_exporter -&amp;gt; 192.168.174.129 ... Done
+  - Deploy blackbox_exporter -&amp;gt; 192.168.174.130 ... Done
+  - Deploy blackbox_exporter -&amp;gt; 192.168.174.131 ... Done
++ Copy certificate to remote host
++ Init instance configs
+  - Generate config pd -&amp;gt; 192.168.174.129:2379 ... Done
+  - Generate config tikv -&amp;gt; 192.168.174.130:20160 ... Done
+  - Generate config tikv -&amp;gt; 192.168.174.131:20160 ... Done
+  - Generate config tidb -&amp;gt; 192.168.174.130:4000 ... Done
+  - Generate config tidb -&amp;gt; 192.168.174.131:4000 ... Done
+  - Generate config tiflash -&amp;gt; 192.168.174.129:9000 ... Done
+  - Generate config tiflash -&amp;gt; 192.168.174.130:9000 ... Done
+  - Generate config tiflash -&amp;gt; 192.168.174.131:9000 ... Done
+  - Generate config prometheus -&amp;gt; 192.168.174.129:9090 ... Done
+  - Generate config grafana -&amp;gt; 192.168.174.129:3000 ... Done
+  - Generate config alertmanager -&amp;gt; 192.168.174.129:9093 ... Done
++ Init monitor configs
+  - Generate config node_exporter -&amp;gt; 192.168.174.129 ... Done
+  - Generate config node_exporter -&amp;gt; 192.168.174.130 ... Done
+  - Generate config node_exporter -&amp;gt; 192.168.174.131 ... Done
+  - Generate config blackbox_exporter -&amp;gt; 192.168.174.131 ... Done
+  - Generate config blackbox_exporter -&amp;gt; 192.168.174.129 ... Done
+  - Generate config blackbox_exporter -&amp;gt; 192.168.174.130 ... Done
+Enabling component pd
+	Enabling instance 192.168.174.129:2379
+	Enable instance 192.168.174.129:2379 success
+Enabling component tikv
+	Enabling instance 192.168.174.131:20160
+	Enabling instance 192.168.174.130:20160
+	Enable instance 192.168.174.130:20160 success
+	Enable instance 192.168.174.131:20160 success
+Enabling component tidb
+	Enabling instance 192.168.174.131:4000
+	Enabling instance 192.168.174.130:4000
+	Enable instance 192.168.174.131:4000 success
+	Enable instance 192.168.174.130:4000 success
+Enabling component tiflash
+	Enabling instance 192.168.174.131:9000
+	Enabling instance 192.168.174.129:9000
+	Enabling instance 192.168.174.130:9000
+	Enable instance 192.168.174.129:9000 success
+	Enable instance 192.168.174.131:9000 success
+	Enable instance 192.168.174.130:9000 success
+Enabling component prometheus
+	Enabling instance 192.168.174.129:9090
+	Enable instance 192.168.174.129:9090 success
+Enabling component grafana
+	Enabling instance 192.168.174.129:3000
+	Enable instance 192.168.174.129:3000 success
+Enabling component alertmanager
+	Enabling instance 192.168.174.129:9093
+	Enable instance 192.168.174.129:9093 success
+Enabling component node_exporter
+	Enabling instance 192.168.174.131
+	Enabling instance 192.168.174.129
+	Enabling instance 192.168.174.130
+	Enable 192.168.174.130 success
+	Enable 192.168.174.131 success
+	Enable 192.168.174.129 success
+Enabling component blackbox_exporter
+	Enabling instance 192.168.174.131
+	Enabling instance 192.168.174.129
+	Enabling instance 192.168.174.130
+	Enable 192.168.174.129 success
+	Enable 192.168.174.131 success
+	Enable 192.168.174.130 success
+Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiup cluster start tidb-vmware --init`
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;部署成功后，可以访问&lt;a href=&#34;http://192.168.174.129:2379/dashboard&#34;&gt;http://192.168.174.129:2379/dashboard&lt;/a&gt;查看节点信息&lt;/p&gt;
+</content>
+            
+            
+            
+            
+            
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="/blog/categories/tidb/" term="TiDB" label="TiDB" />
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="/blog/tags/tidb/" term="TiDB" label="TiDB" />
+                            
+                        
+                    
+                
+            
+        </entry>
+    
+        <entry>
             <title type="text">Docker_Desktop学习(三) Kubernetes-Dashboard安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-three/" />
             <id>/blog/posts/docker-desktop-three/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2021-12-04T13:35:05&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -89,7 +450,7 @@
             <title type="text">Docker_Desktop学习(二) Kubernetes</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-two/" />
             <id>/blog/posts/docker-desktop-two/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2021-12-03T14:24:09&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -312,7 +673,7 @@ kubectl rollout restart {your_deployment_name}
             <title type="text">Docker_Desktop学习(一) 环境安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-one/" />
             <id>/blog/posts/docker-desktop-one/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2021-12-03T10:11:26&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -598,7 +959,7 @@ docker rm mysql
             <title type="text">elasticsearch 安装教程</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-setup/" />
             <id>/blog/posts/elasticsearch-setup/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2021-01-21T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -670,7 +1031,7 @@ set JAVA_TYPE=bundled jdk
             <title type="text">Docker学习(六) 自定义tomcat镜像</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-six-custom-image/" />
             <id>/blog/posts/docker-six-custom-image/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2020-12-10T14:09:32&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -781,7 +1142,7 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
             <title type="text">Docker学习(五) 安装Jenkins实现自动化部署</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-five-jenkins/" />
             <id>/blog/posts/docker-five-jenkins/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-12-11T09:41:13&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1006,7 +1367,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(四) 远程部署springboot项目</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-four-springboot/" />
             <id>/blog/posts/docker-four-springboot/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-12-05T09:10:20&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1119,7 +1480,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(三) Docker安装mysql</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-three-mysql/" />
             <id>/blog/posts/docker-three-mysql/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-12-04T11:17:31&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1193,7 +1554,7 @@ run           运行一个容器&lt;br&gt;
             <title type="text">Docker学习(二) Docker安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-two-docker/" />
             <id>/blog/posts/docker-two-docker/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-12-03T15:31:56&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1278,7 +1639,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
             <title type="text">Docker学习(一) Centos7环境</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-one-centos/" />
             <id>/blog/posts/docker-one-centos/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-12-03T10:11:50&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1381,7 +1742,7 @@ ifconfig&lt;br&gt;
             <title type="text">elasticsearh-rest-client</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearh-rest-client/" />
             <id>/blog/posts/elasticsearh-rest-client/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-11-22T10:51:38&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1512,7 +1873,7 @@ public class EsConfig {
             <title type="text">zookeeper知识点(三)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-three/" />
             <id>/blog/posts/zookeeper-three/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1571,7 +1932,7 @@ api入口。&lt;/p&gt;
             <title type="text">zookeeper知识点(二)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-two/" />
             <id>/blog/posts/zookeeper-two/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1677,7 +2038,7 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
             <title type="text">elasticsearch-bulk</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-bulk/" />
             <id>/blog/posts/elasticsearch-bulk/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-11-18T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1763,7 +2124,7 @@ high level rest client
             <title type="text">umi搭建dva</title>
             <link rel="alternate" type="text/html" href="/blog/posts/umi-dva/" />
             <id>/blog/posts/umi-dva/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-10-22T18:00:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1860,7 +2221,7 @@ high level rest client
             <title type="text">redis集群</title>
             <link rel="alternate" type="text/html" href="/blog/posts/redis%E9%9B%86%E7%BE%A4/" />
             <id>/blog/posts/redis%E9%9B%86%E7%BE%A4/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-10-17T09:02:40&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1973,7 +2334,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
             <title type="text">zookeeper知识点(一)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-one/" />
             <id>/blog/posts/zookeeper-one/</id>
-            <updated>2022-07-12T10:05:28&#43;00:00</updated>
+            <updated>2022-07-30T02:19:01&#43;00:00</updated>
             <published>2019-08-09T19:43:03&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
