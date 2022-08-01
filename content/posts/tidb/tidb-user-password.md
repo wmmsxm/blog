@@ -3,7 +3,7 @@ title: "TiDB建库建用户及授权"
 date: 2022-08-01T16:01:08+08:00
 tags: ["TiDB"]
 categories: ["TiDB"]
-draft: true
+draft: false
 ---
 # <center>TiDB建库建用户及授权</center>
 ## TiDB初始化账号
