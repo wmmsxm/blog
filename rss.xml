@@ -23,10 +23,71 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Mon, 01 Aug 2022 08:17:21 &#43;0000</lastBuildDate>
+        <lastBuildDate>Mon, 01 Aug 2022 08:30:47 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
+        
+            <item>
+                <title>TiDB建库建用户及授权</title>
+                <link>/blog/posts/tidb/tidb-user-password/</link>
+                <guid isPermaLink="true">/blog/posts/tidb/tidb-user-password/</guid>
+                <pubDate>Mon, 01 Aug 2022 16:01:08 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h1 id=&#34;centertidb建库建用户及授权center&#34;&gt;&lt;center&gt;TiDB建库建用户及授权&lt;/center&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;tidb初始化账号&#34;&gt;TiDB初始化账号&lt;/h2&gt;
+&lt;p&gt;TiDB部署完之后，会生成一个密码，可以用来登录数据库并进行修改&lt;img src=&#34;/blog/blog/images/tidb/user_password1.png&#34; alt=&#34;图片&#34;&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;密码验证长度修改&#34;&gt;密码验证长度修改&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;set global validate_password_length=3;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;root授权远程访问&#34;&gt;root授权远程访问&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ALTER USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;123456&#39;; 
+grant all privileges on *.* to &#39;root&#39;@&#39;%&#39; identified by &#39;123456&#39;;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;创建用户&#34;&gt;创建用户&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# localhost   密码123456
+CREATE USER &#39;tidb&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;123456&#39;; 
+
+# %   密码123456   可以指定ip
+CREATE USER &#39;tidb&#39;@&#39;%&#39; IDENTIFIED BY &#39;123456&#39;; 
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;授权&#34;&gt;授权&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# tidb.* 指 数据库tidb; 全部授权使用 *.*
+grant all privileges on tidb.* to &#39;tidb&#39;@&#39;localhost&#39; identified by &#39;123456&#39;;
+
+
+grant all privileges on tidb.* to &#39;tidb&#39;@&#39;%&#39; identified by &#39;123456&#39;;
+
+&lt;/code&gt;&lt;/pre&gt;</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>Tidb Offline Setup</title>
