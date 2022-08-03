@@ -23,10 +23,174 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Mon, 01 Aug 2022 08:30:47 &#43;0000</lastBuildDate>
+        <lastBuildDate>Wed, 03 Aug 2022 02:19:17 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
+        
+            <item>
+                <title>Tidb探究 Mysql迁入TiDB</title>
+                <link>/blog/posts/tidb/tidb-mysql-to-tidb/</link>
+                <guid isPermaLink="true">/blog/posts/tidb/tidb-mysql-to-tidb/</guid>
+                <pubDate>Mon, 01 Aug 2022 17:32:01 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h1 id=&#34;centertidb探究-mysql迁入tidbcenter&#34;&gt;&lt;center&gt;Tidb探究 Mysql迁入TiDB&lt;/center&gt;&lt;/h1&gt;
+&lt;p&gt;TiDB是一个分布式关系型数据库，可以无缝对接 MySQL。考虑到产品数据量大的情况下，单机MySQL可能无法支撑，而无缝切换到TiDB集群也比较方便。&lt;br&gt;
+使用Dumpling工具导出MySQL数据库数据，并使用TiDB Lightning将数据迁移到TiDB集群的流程。&lt;/p&gt;
+&lt;h3 id=&#34;1迁移工具下载&#34;&gt;1、迁移工具下载&lt;/h3&gt;
+&lt;p&gt;TiDB-community-toolkit软件包可以在&lt;a href=&#34;https://pingcap.com/zh/product-community&#34;&gt;官网&lt;/a&gt;下载。将下载的tidb-community-toolkit-v6.1.0-linux-amd64.tar.gz放在中控机master的tidb账号下的/home/tidb文件目录。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 解压文件
+tar -xzf tidb-toolkit-v4.0.0-linux-amd64.tar.gz
+cd ./tidb-toolkit-v4.0.0-linux-amd64
+tar -xzf ./dumpling-v6.1.0-linux-amd64.tar.gz 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;进入该文件夹，可以看到对应工具&lt;img src=&#34;/blog/blog/images/tidb/toolkit1.png&#34; alt=&#34;工具&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;2mysql数据备份&#34;&gt;2、MySQL数据备份&lt;/h3&gt;
+&lt;p&gt;Dumpling和tidb-lightning就是一对导出、导入工具，其中Dumpling跟MySQL的mysqldump功能是一样的。&lt;br&gt;
+建议使用Dumpling，原因是用它导出的数据时，会自动创建 xxx-schema-create.sql建库文件，而且建表和插入SQL文件分开，不用额外操作，配套用tidb-lightning执行导入，不容易出错。&lt;br&gt;
+在工具文件夹下，用Dumpling工具连接目标数据库导出，命令如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;./dumpling -h 172.16.1.71 -P 30306 -u root -p 123456 -t 16 -F256MiB -B ry-cloud --filetype sql  -o /tidb-data/mydumpersql/ -r 200000 
+# 执行时间过程，请耐心等待
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;参数说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;主要选项&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-V 或 --version&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;输出 Dumpling 版本并直接退出&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-B 或 --database&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;导出指定的数据库&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-T 或 --tables-list&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;导出指定数据表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-f 或 --filter&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;导出能匹配模式的表&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;--case-sensitive&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;table-filter 是否大小写敏感&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-t 或 --threads&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;备份执行的线程数，默认4个线程&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-r 或 --rows&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;将 table 划分成 row 行数据，一般针对大表操作并发生成多个文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-L 或 --logfile&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;日志输出地址，为空时会输出到控制台&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-F 或 --filesize&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;将 table 数据划分出来的文件大小，需指明单位（如 128B, 64KiB, 32MiB, 1.5GiB）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-o 或 --output&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;导出本地文件路径或外部存储 URL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;--filetype&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;导出文件类型（csv/sql）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-p 或 --password&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;连接的数据库主机的密码&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;-P 或 --port&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;连接的数据库主机的端口&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;注意：最后一个 outputdir 的值，后面导入的时候需要使用。&lt;/p&gt;
+&lt;h3 id=&#34;3tidb-lightning导入数据&#34;&gt;3、tidb-lightning导入数据&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;进入tidb-toolkit-v4.0.0-linux-amd64文件夹，解压TiDB Lightning安装包&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tar -xzf ./tidb-lightning-v6.1.0-linux-amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;配置 tidb-lightning.toml
+在/home/tidb/tidb-toolkit-v4.0.0-linux-amd64文件夹下添加文件tidb-lightning.toml&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[lightning]
+# 日志
+level = &amp;quot;info&amp;quot;
+file = &amp;quot;tidb-lightning.log&amp;quot;
+
+[tikv-importer]
+# 选择使用的导入模式
+backend = &amp;quot;local&amp;quot;
+# 设置排序的键值对的临时存放地址，目标路径需要是一个空目录，不存在就新建文件夹  
+sorted-kv-dir = &amp;quot;/mnt/ssd/sorted-kv-dir&amp;quot;
+
+[mydumper]
+# 源数据目录。
+data-source-dir = &amp;quot;/tidb-data/mydumpersql&amp;quot;
+
+# 配置通配符规则，默认规则会过滤 mysql、sys、INFORMATION_SCHEMA、PERFORMANCE_SCHEMA、METRICS_SCHEMA、INSPECTION_SCHEMA 系统数据库下的所有表
+# 若不配置该项，导入系统表时会出现“找不到 schema”的异常
+filter = [&#39;*.*&#39;, &#39;!mysql.*&#39;, &#39;!sys.*&#39;, &#39;!INFORMATION_SCHEMA.*&#39;, &#39;!PERFORMANCE_SCHEMA.*&#39;, &#39;!METRICS_SCHEMA.*&#39;, &#39;!INSPECTION_SCHEMA.*&#39;]
+[tidb]
+# 目标集群的信息
+host = &amp;quot;172.16.1.73&amp;quot;
+port = 4000
+user = &amp;quot;root&amp;quot;
+password = &amp;quot;123456&amp;quot;
+# 表架构信息在从 TiDB 的“状态端口”获取。
+status-port = 10080
+# 集群 pd 的地址
+pd-addr = &amp;quot;172.16.1.73:2379&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;开始还原&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 在/home/tidb/tidb-toolkit-v4.0.0-linux-amd64目录下执行下面命令：
+./tidb-lightning -config tidb-lightning.toml
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;等待一段时间后，输出如下信息即还原完成。如有问题，可在当前目录下查看tidb-lightning.log
+&lt;img src=&#34;/blog/blog/images/tidb/toolkit2.png&#34; alt=&#34;输出&#34;&gt;&lt;/p&gt;
+</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>TiDB建库建用户及授权</title>
@@ -417,7 +581,28 @@ Enabling component blackbox_exporter
 	Enable 192.168.174.130 success
 Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiup cluster start tidb-vmware --init`
 
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;部署成功后，可以访问&lt;a href=&#34;http://192.168.174.129:2379/dashboard&#34;&gt;http://192.168.174.129:2379/dashboard&lt;/a&gt;查看节点信息&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;部署成功后，可以访问如下地址： &lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;服务器&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;地址&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;pd-dashboard&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;http://192.168.174.129:2379/dashboard&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;账号密码为tidb账户密码。默认账号root，密码在控制台输出；可依据下一篇文章修改密码。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;grafana&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;http://192.168.174.129:3000/&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;账号密码初始均为admin，登录后更改自己的密码。 监控自动关联Prometheus&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 </description>
                 
                 
