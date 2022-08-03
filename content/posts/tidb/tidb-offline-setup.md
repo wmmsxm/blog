@@ -331,4 +331,8 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
 
 ````
 
-部署成功后，可以访问[http://192.168.174.129:2379/dashboard](http://192.168.174.129:2379/dashboard)查看节点信息
+部署成功后，可以访问如下地址：  
+服务器|地址|说明
+:--:|:--:|:--:
+pd-dashboard|http://192.168.174.129:2379/dashboard|账号密码为tidb账户密码。默认账号root，密码在控制台输出；可依据下一篇文章修改密码。  
+grafana|http://192.168.174.129:3000/| 账号密码初始均为admin，登录后更改自己的密码。 监控自动关联Prometheus
