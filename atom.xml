@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">公子玄襄BLOG</title>
     <subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle>
-    <updated>2022-08-03T02:19:17&#43;00:00</updated>
+    <updated>2022-08-05T02:09:30&#43;00:00</updated>
     <id>/blog/</id>
     <link rel="alternate" type="text/html" href="/blog/" />
     <link rel="self" type="application/atom&#43;xml" href="/blog/atom.xml" />
@@ -17,10 +17,258 @@
     <rights>Copyright © 2022 WuMengMeng</rights>
     <generator uri="https://gohugo.io/" version="0.90.1">Hugo</generator>
         <entry>
+            <title type="text">Modbus RTU与Modbus TCP的区别</title>
+            <link rel="alternate" type="text/html" href="/blog/posts/modbus/tcp-rtu/" />
+            <id>/blog/posts/modbus/tcp-rtu/</id>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <published>2022-08-05T08:54:30&#43;08:00</published>
+            <author>
+                    <name>wmmsxm</name>
+                    <uri>https://io-oi.me/</uri>
+                    <email>wmmsxm@163.com</email>
+                    </author>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Modbus RTU与Modbus TCP的区别 Modbus简介 Modbus通信协议具有多个变种，支持串口（主要是RS-485总……</summary>
+            
+                <content type="html">&lt;h1 id=&#34;centermodbus-rtu与modbus-tcp的区别center&#34;&gt;&lt;center&gt;Modbus RTU与Modbus TCP的区别&lt;/center&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;modbus简介&#34;&gt;Modbus简介&lt;/h2&gt;
+&lt;p&gt;  Modbus通信协议具有多个变种，支持串口（主要是RS-485总线），以太网多个版本，其中最著名的是Modbus RTU,Modbus ASCII和Modbus TCP三种。
+在工业现场一般都是采用Modbus RTU协议，一般而言，大家说的基于串口通信的Modbus通信协议都是指Modbus RTU通信协议。与Modbus RTU协议相比较，Modbus TCP协议则是在RTU协议上加一个MBAP报文头，并且由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码的，所以就常用一句比较通俗的话来说：Modbus TCP协议就是Modbus RTU协议在前面加上五个0以及一个6，然后去掉两个CRC校验码字节就OK。&lt;/p&gt;
+&lt;h2 id=&#34;modbus功能码&#34;&gt;Modbus功能码&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;功能码&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;含义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x01&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;读线圈&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x02&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;读离散量输入&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x03&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;读保持寄存器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x04&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;读输入寄存器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x05&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;写单个线圈&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x06&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;写单个保持寄存器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x10&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;写多个保持寄存器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;0x0F&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;写多个线圈&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;modbus-rtu&#34;&gt;Modbus RTU&lt;/h2&gt;
+&lt;p&gt;  RTU协议中的指令由地址码(一个字节），功能码（一个字节），起始地址（两个字节），数据（N个字节），校验码（两个字节）五个部分组成。数据由数据长度（两个字节，表示的是寄存器个数，假定为M）和数据正文（M乘以2个字节）组成。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 读（0x03），从寄存器地址01 8E 开始读，读4个寄存器00 04
+发：01 03 01 8E 00 04 25 DE  
+# 08表示数据长度  ，00 01 00 01 00 01 00 01读到的数据
+回：01 03 08 00 01 00 01 00 01 00 01 28 D7 
+
+ 
+# 写（0x10），从寄存器地址 00 20开始写，写一个寄存器 00 01，写入值 00 00
+发：00 10 00 20 00 01 02 00 00 AC A0
+回：00 10 00 20 00 01 01 D2
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;modbus-tcp&#34;&gt;Modbus TCP&lt;/h2&gt;
+&lt;p&gt;  Modbus TCP协议是在RTU协议前面添加MBAP报文头，由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码。&lt;br&gt;
+MBAP报文头： &lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;事务处理标识&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;协议标识&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;长度&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;单元标识符&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2字节&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2字节&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2字节&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1字节&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;备注标识： &lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;报文头&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;备注&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;事务处理标识&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;可以理解为报文的序列号，一般每次通信之后就要加1以区别不同的通信数据报文&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;协议标识符&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 00表示ModbusTCP协议&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;长度&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;表示接下来的数据长度，单位为字节&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;单元标识符&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;可以理解为设备地址&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 读取
+发：00 00 00 00 00 06 00 03 00 20 00 01 
+回：00 00 00 00 00 05 00 03 02 00 00 
+
+发：00 00 00 00 00 06 00 04 00 30 00 01
+回：00 00 00 00 00 05 00 04 02 00 08 
+
+ 
+# 写入
+发：00 00 00 00 00 09 00 10 00 20 00 01 02 00 00
+回：00 00 00 00 00 06 00 10 00 20 00 01
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;rtu和tcp对比16进制发送&#34;&gt;RTU和TCP对比(16进制发送)&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;读指令对比(例：0x04)&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;MBAP报文头&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;地址码&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;功能码&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;寄存器地址&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;寄存器数量&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;CRC校验&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Modbus RTU&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;无&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;01&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;04&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 00&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 16&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;71 C4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Modbus TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 00 00 00 00 06 01&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;04&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 00&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 16&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;无&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;写指令对比(例：0x10)&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;MBAP报文头&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;地址码&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;功能码&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;寄存器地址&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;寄存器数量&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;数据长度&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;正文&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;CRC校验&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Modbus RTU&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;无&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;10&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 20&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 01&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;02&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 00&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;AC A0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Modbus TCP&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 00 00 00 00 09 00&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;10&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 20&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 01&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;02&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;00 00&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;无&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+            
+            
+            
+            
+            
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="/blog/categories/modbus/" term="Modbus" label="Modbus" />
+                            
+                        
+                            
+                            
+                            
+                                <category scheme="/blog/categories/rtu/" term="RTU" label="RTU" />
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="/blog/tags/modbus/" term="Modbus" label="Modbus" />
+                            
+                        
+                    
+                
+            
+        </entry>
+    
+        <entry>
             <title type="text">Tidb探究 Mysql迁入TiDB</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-mysql-to-tidb/" />
             <id>/blog/posts/tidb/tidb-mysql-to-tidb/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2022-08-01T17:32:01&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -187,7 +435,7 @@ pd-addr = &amp;quot;172.16.1.73:2379&amp;quot;
             <title type="text">TiDB建库建用户及授权</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-user-password/" />
             <id>/blog/posts/tidb/tidb-user-password/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2022-08-01T16:01:08&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -251,7 +499,7 @@ grant all privileges on tidb.* to &#39;tidb&#39;@&#39;%&#39; identified by &#39;
             <title type="text">Tidb Offline Setup</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-offline-setup/" />
             <id>/blog/posts/tidb/tidb-offline-setup/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2022-07-13T08:41:51&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -634,7 +882,7 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(三) Kubernetes-Dashboard安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-three/" />
             <id>/blog/posts/docker-desktop-three/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2021-12-04T13:35:05&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -703,7 +951,7 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(二) Kubernetes</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-two/" />
             <id>/blog/posts/docker-desktop-two/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2021-12-03T14:24:09&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -926,7 +1174,7 @@ kubectl rollout restart {your_deployment_name}
             <title type="text">Docker_Desktop学习(一) 环境安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-one/" />
             <id>/blog/posts/docker-desktop-one/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2021-12-03T10:11:26&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1212,7 +1460,7 @@ docker rm mysql
             <title type="text">elasticsearch 安装教程</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-setup/" />
             <id>/blog/posts/elasticsearch-setup/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2021-01-21T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1284,7 +1532,7 @@ set JAVA_TYPE=bundled jdk
             <title type="text">Docker学习(六) 自定义tomcat镜像</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-six-custom-image/" />
             <id>/blog/posts/docker-six-custom-image/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2020-12-10T14:09:32&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1395,7 +1643,7 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
             <title type="text">Docker学习(五) 安装Jenkins实现自动化部署</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-five-jenkins/" />
             <id>/blog/posts/docker-five-jenkins/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-12-11T09:41:13&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1620,7 +1868,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(四) 远程部署springboot项目</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-four-springboot/" />
             <id>/blog/posts/docker-four-springboot/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-12-05T09:10:20&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1733,7 +1981,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(三) Docker安装mysql</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-three-mysql/" />
             <id>/blog/posts/docker-three-mysql/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-12-04T11:17:31&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1807,7 +2055,7 @@ run           运行一个容器&lt;br&gt;
             <title type="text">Docker学习(二) Docker安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-two-docker/" />
             <id>/blog/posts/docker-two-docker/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-12-03T15:31:56&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1892,7 +2140,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
             <title type="text">Docker学习(一) Centos7环境</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-one-centos/" />
             <id>/blog/posts/docker-one-centos/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-12-03T10:11:50&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1995,7 +2243,7 @@ ifconfig&lt;br&gt;
             <title type="text">elasticsearh-rest-client</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearh-rest-client/" />
             <id>/blog/posts/elasticsearh-rest-client/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-11-22T10:51:38&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2126,7 +2374,7 @@ public class EsConfig {
             <title type="text">zookeeper知识点(三)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-three/" />
             <id>/blog/posts/zookeeper-three/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2185,7 +2433,7 @@ api入口。&lt;/p&gt;
             <title type="text">zookeeper知识点(二)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-two/" />
             <id>/blog/posts/zookeeper-two/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2291,7 +2539,7 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
             <title type="text">elasticsearch-bulk</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-bulk/" />
             <id>/blog/posts/elasticsearch-bulk/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-11-18T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2377,7 +2625,7 @@ high level rest client
             <title type="text">umi搭建dva</title>
             <link rel="alternate" type="text/html" href="/blog/posts/umi-dva/" />
             <id>/blog/posts/umi-dva/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-10-22T18:00:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2474,7 +2722,7 @@ high level rest client
             <title type="text">redis集群</title>
             <link rel="alternate" type="text/html" href="/blog/posts/redis%E9%9B%86%E7%BE%A4/" />
             <id>/blog/posts/redis%E9%9B%86%E7%BE%A4/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-10-17T09:02:40&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2587,7 +2835,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
             <title type="text">zookeeper知识点(一)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-one/" />
             <id>/blog/posts/zookeeper-one/</id>
-            <updated>2022-08-03T02:19:15&#43;00:00</updated>
+            <updated>2022-08-05T02:09:28&#43;00:00</updated>
             <published>2019-08-09T19:43:03&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
