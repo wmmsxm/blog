@@ -23,7 +23,7 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Fri, 05 Aug 2022 02:09:30 &#43;0000</lastBuildDate>
+        <lastBuildDate>Fri, 05 Aug 2022 06:05:36 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
@@ -40,7 +40,7 @@
                 
                     <description>&lt;h1 id=&#34;centermodbus-rtu与modbus-tcp的区别center&#34;&gt;&lt;center&gt;Modbus RTU与Modbus TCP的区别&lt;/center&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;modbus简介&#34;&gt;Modbus简介&lt;/h2&gt;
-&lt;p&gt;  Modbus通信协议具有多个变种，支持串口（主要是RS-485总线），以太网多个版本，其中最著名的是Modbus RTU,Modbus ASCII和Modbus TCP三种。
+&lt;p&gt;  Modbus通信协议具有多个变种，支持串口（主要是RS-485总线），以太网多个版本，其中最著名的是Modbus RTU,Modbus ASCII和Modbus TCP三种。
 在工业现场一般都是采用Modbus RTU协议，一般而言，大家说的基于串口通信的Modbus通信协议都是指Modbus RTU通信协议。与Modbus RTU协议相比较，Modbus TCP协议则是在RTU协议上加一个MBAP报文头，并且由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码的，所以就常用一句比较通俗的话来说：Modbus TCP协议就是Modbus RTU协议在前面加上五个0以及一个6，然后去掉两个CRC校验码字节就OK。&lt;/p&gt;
 &lt;h2 id=&#34;modbus功能码&#34;&gt;Modbus功能码&lt;/h2&gt;
 &lt;table&gt;
@@ -86,7 +86,7 @@
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h2 id=&#34;modbus-rtu&#34;&gt;Modbus RTU&lt;/h2&gt;
-&lt;p&gt;  RTU协议中的指令由地址码(一个字节），功能码（一个字节），起始地址（两个字节），数据（N个字节），校验码（两个字节）五个部分组成。数据由数据长度（两个字节，表示的是寄存器个数，假定为M）和数据正文（M乘以2个字节）组成。&lt;/p&gt;
+&lt;p&gt;  RTU协议中的指令由地址码(一个字节），功能码（一个字节），起始地址（两个字节），数据（N个字节），校验码（两个字节）五个部分组成。数据由数据长度（两个字节，表示的是寄存器个数，假定为M）和数据正文（M乘以2个字节）组成。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 读（0x03），从寄存器地址01 8E 开始读，读4个寄存器00 04
 发：01 03 01 8E 00 04 25 DE  
 # 08表示数据长度  ，00 01 00 01 00 01 00 01读到的数据
@@ -98,7 +98,7 @@
 回：00 10 00 20 00 01 01 D2
 
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;modbus-tcp&#34;&gt;Modbus TCP&lt;/h2&gt;
-&lt;p&gt;  Modbus TCP协议是在RTU协议前面添加MBAP报文头，由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码。&lt;br&gt;
+&lt;p&gt;  Modbus TCP协议是在RTU协议前面添加MBAP报文头，由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码。&lt;br&gt;
 MBAP报文头： &lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;

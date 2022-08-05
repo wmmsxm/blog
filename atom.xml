@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">公子玄襄BLOG</title>
     <subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle>
-    <updated>2022-08-05T02:09:30&#43;00:00</updated>
+    <updated>2022-08-05T06:05:36&#43;00:00</updated>
     <id>/blog/</id>
     <link rel="alternate" type="text/html" href="/blog/" />
     <link rel="self" type="application/atom&#43;xml" href="/blog/atom.xml" />
@@ -20,18 +20,18 @@
             <title type="text">Modbus RTU与Modbus TCP的区别</title>
             <link rel="alternate" type="text/html" href="/blog/posts/modbus/tcp-rtu/" />
             <id>/blog/posts/modbus/tcp-rtu/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2022-08-05T08:54:30&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Modbus RTU与Modbus TCP的区别 Modbus简介 Modbus通信协议具有多个变种，支持串口（主要是RS-485总……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Modbus RTU与Modbus TCP的区别 Modbus简介 Modbus通信协议具有多个变种，支持串口（主要是RS-485总线），以太网多个版本，其中最著名的是Modbu……</summary>
             
                 <content type="html">&lt;h1 id=&#34;centermodbus-rtu与modbus-tcp的区别center&#34;&gt;&lt;center&gt;Modbus RTU与Modbus TCP的区别&lt;/center&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;modbus简介&#34;&gt;Modbus简介&lt;/h2&gt;
-&lt;p&gt;  Modbus通信协议具有多个变种，支持串口（主要是RS-485总线），以太网多个版本，其中最著名的是Modbus RTU,Modbus ASCII和Modbus TCP三种。
+&lt;p&gt;  Modbus通信协议具有多个变种，支持串口（主要是RS-485总线），以太网多个版本，其中最著名的是Modbus RTU,Modbus ASCII和Modbus TCP三种。
 在工业现场一般都是采用Modbus RTU协议，一般而言，大家说的基于串口通信的Modbus通信协议都是指Modbus RTU通信协议。与Modbus RTU协议相比较，Modbus TCP协议则是在RTU协议上加一个MBAP报文头，并且由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码的，所以就常用一句比较通俗的话来说：Modbus TCP协议就是Modbus RTU协议在前面加上五个0以及一个6，然后去掉两个CRC校验码字节就OK。&lt;/p&gt;
 &lt;h2 id=&#34;modbus功能码&#34;&gt;Modbus功能码&lt;/h2&gt;
 &lt;table&gt;
@@ -77,7 +77,7 @@
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h2 id=&#34;modbus-rtu&#34;&gt;Modbus RTU&lt;/h2&gt;
-&lt;p&gt;  RTU协议中的指令由地址码(一个字节），功能码（一个字节），起始地址（两个字节），数据（N个字节），校验码（两个字节）五个部分组成。数据由数据长度（两个字节，表示的是寄存器个数，假定为M）和数据正文（M乘以2个字节）组成。&lt;/p&gt;
+&lt;p&gt;  RTU协议中的指令由地址码(一个字节），功能码（一个字节），起始地址（两个字节），数据（N个字节），校验码（两个字节）五个部分组成。数据由数据长度（两个字节，表示的是寄存器个数，假定为M）和数据正文（M乘以2个字节）组成。&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 读（0x03），从寄存器地址01 8E 开始读，读4个寄存器00 04
 发：01 03 01 8E 00 04 25 DE  
 # 08表示数据长度  ，00 01 00 01 00 01 00 01读到的数据
@@ -89,7 +89,7 @@
 回：00 10 00 20 00 01 01 D2
 
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;modbus-tcp&#34;&gt;Modbus TCP&lt;/h2&gt;
-&lt;p&gt;  Modbus TCP协议是在RTU协议前面添加MBAP报文头，由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码。&lt;br&gt;
+&lt;p&gt;  Modbus TCP协议是在RTU协议前面添加MBAP报文头，由于TCP是基于可靠连接的服务，RTU协议中的CRC校验码就不再需要，所以在Modbus TCP协议中是没有CRC校验码。&lt;br&gt;
 MBAP报文头： &lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -268,14 +268,14 @@ MBAP报文头： &lt;/p&gt;
             <title type="text">Tidb探究 Mysql迁入TiDB</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-mysql-to-tidb/" />
             <id>/blog/posts/tidb/tidb-mysql-to-tidb/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2022-08-01T17:32:01&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Tidb探究 Mysql迁入TiDB TiDB是一个分布式关系型数据库，可以无缝对接 MySQL。考虑到产品数据量大的情……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Tidb探究 Mysql迁入TiDB TiDB是一个分布式关系型数据库，可以无缝对接 MySQL。考虑到产品数据量大的情况下，单机MySQL可能无法支撑，而无缝切换到……</summary>
             
                 <content type="html">&lt;h1 id=&#34;centertidb探究-mysql迁入tidbcenter&#34;&gt;&lt;center&gt;Tidb探究 Mysql迁入TiDB&lt;/center&gt;&lt;/h1&gt;
 &lt;p&gt;TiDB是一个分布式关系型数据库，可以无缝对接 MySQL。考虑到产品数据量大的情况下，单机MySQL可能无法支撑，而无缝切换到TiDB集群也比较方便。&lt;br&gt;
@@ -435,14 +435,14 @@ pd-addr = &amp;quot;172.16.1.73:2379&amp;quot;
             <title type="text">TiDB建库建用户及授权</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-user-password/" />
             <id>/blog/posts/tidb/tidb-user-password/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2022-08-01T16:01:08&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">TiDB建库建用户及授权 TiDB初始化账号 TiDB部署完之后，会生成一个密码，可以用来登录数据库并进行修改。 密码验……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">TiDB建库建用户及授权 TiDB初始化账号 TiDB部署完之后，会生成一个密码，可以用来登录数据库并进行修改。 密码验证长度修改 set global validate_password_length=3; root授权远程访问 ALTER USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY……</summary>
             
                 <content type="html">&lt;h1 id=&#34;centertidb建库建用户及授权center&#34;&gt;&lt;center&gt;TiDB建库建用户及授权&lt;/center&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;tidb初始化账号&#34;&gt;TiDB初始化账号&lt;/h2&gt;
@@ -499,14 +499,14 @@ grant all privileges on tidb.* to &#39;tidb&#39;@&#39;%&#39; identified by &#39;
             <title type="text">Tidb Offline Setup</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-offline-setup/" />
             <id>/blog/posts/tidb/tidb-offline-setup/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2022-07-13T08:41:51&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">离线安装部署 TiDB，单机模拟集群环境 TiDB介绍 什么是TiDB TiDB 是 PingCAP 公司自主设计、研发的开源分布式关系型数据库，……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">离线安装部署 TiDB，单机模拟集群环境 TiDB介绍 什么是TiDB TiDB 是 PingCAP 公司自主设计、研发的开源分布式关系型数据库，是一款同时支持在线事务处理与在线分析处理 (Hybrid Transactional and……</summary>
             
                 <content type="html">&lt;h1 id=&#34;center离线安装部署-tidb单机模拟集群环境center&#34;&gt;&lt;center&gt;离线安装部署 TiDB，单机模拟集群环境&lt;/center&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;tidb介绍&#34;&gt;TiDB介绍&lt;/h2&gt;
@@ -882,14 +882,14 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(三) Kubernetes-Dashboard安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-three/" />
             <id>/blog/posts/docker-desktop-three/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2021-12-04T13:35:05&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker_Desktop学习(三) Kubernetes-Dashboard安装 创建kubernetes-das……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker_Desktop学习(三) Kubernetes-Dashboard安装 创建kubernetes-dashboard服务和对应的pod kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml 如果发现……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker_desktop学习三-kubernetes-dashboard安装center&#34;&gt;&lt;center&gt;Docker_Desktop学习(三) Kubernetes-Dashboard安装&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;创建kubernetes-dashboard服务和对应的pod&#34;&gt;创建kubernetes-dashboard服务和对应的pod&lt;/h3&gt;
@@ -951,14 +951,14 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(二) Kubernetes</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-two/" />
             <id>/blog/posts/docker-desktop-two/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2021-12-03T14:24:09&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker_Desktop学习(二) Kubernetes docker_desktop安装Kubernetes 使用docker des……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker_Desktop学习(二) Kubernetes docker_desktop安装Kubernetes 使用docker desktop安装kubernetes，打开sett……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker_desktop学习二-kubernetescenter&#34;&gt;&lt;center&gt;Docker_Desktop学习(二) Kubernetes&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;docker_desktop安装kubernetes&#34;&gt;docker_desktop安装Kubernetes&lt;/h3&gt;
@@ -1174,14 +1174,14 @@ kubectl rollout restart {your_deployment_name}
             <title type="text">Docker_Desktop学习(一) 环境安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-one/" />
             <id>/blog/posts/docker-desktop-one/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2021-12-03T10:11:26&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker_Desktop学习(一) 环境安装 windows安装docker_desktop 1、我们先去官网下载安……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker_Desktop学习(一) 环境安装 windows安装docker_desktop 1、我们先去官网下载安装包2、打开安装包加载一会后一般会弹出两个选项……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker_desktop学习一-环境安装center&#34;&gt;&lt;center&gt;Docker_Desktop学习(一) 环境安装&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;windows安装docker_desktop&#34;&gt;windows安装docker_desktop&lt;/h3&gt;
@@ -1460,14 +1460,14 @@ docker rm mysql
             <title type="text">elasticsearch 安装教程</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-setup/" />
             <id>/blog/posts/elasticsearch-setup/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2021-01-21T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">elasticsearch 安装教程 elasticsearch安装使用版本是7.8.1, 鉴于封装rest_client的版本最高支持8，向下……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">elasticsearch 安装教程 elasticsearch安装使用版本是7.8.1, 鉴于封装rest_client的版本最高支持8，向下兼容的； 8之后api接口路径调整,可以选择6,……</summary>
             
                 <content type="html">&lt;h3 id=&#34;elasticsearch-安装教程&#34;&gt;elasticsearch 安装教程&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;elasticsearch安装使用版本是7.8.1, 鉴于封装rest_client的版本最高支持8，向下兼容的； 8之后api接口路径调整,可以选择6,7，考虑到项目稳定和技术支持这里选择版本7.
@@ -1532,14 +1532,14 @@ set JAVA_TYPE=bundled jdk
             <title type="text">Docker学习(六) 自定义tomcat镜像</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-six-custom-image/" />
             <id>/blog/posts/docker-six-custom-image/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2020-12-10T14:09:32&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(六) 自定义tomcat镜像 前期准备 1、tomcat: tomcat版本选择的是apache-tom……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(六) 自定义tomcat镜像 前期准备 1、tomcat: tomcat版本选择的是apache-tomcat-8.5.61， 文件名：apache-t……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker学习六-自定义tomcat镜像center&#34;&gt;&lt;center&gt;Docker学习(六) 自定义tomcat镜像&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;前期准备&#34;&gt;前期准备&lt;/h3&gt;
@@ -1643,14 +1643,14 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
             <title type="text">Docker学习(五) 安装Jenkins实现自动化部署</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-five-jenkins/" />
             <id>/blog/posts/docker-five-jenkins/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-12-11T09:41:13&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(五) 安装Jenkins实现自动化部署项目 安装Jenkins 玄襄这里为了方便省事，直接使用dock……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(五) 安装Jenkins实现自动化部署项目 安装Jenkins 玄襄这里为了方便省事，直接使用docker安装Jenkins。 # 下载镜像 docker pull jenkins/jenkins:latest # 准备……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker学习五-安装jenkins实现自动化部署项目center&#34;&gt;&lt;center&gt;Docker学习(五) 安装Jenkins实现自动化部署项目&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;安装jenkins&#34;&gt;安装Jenkins&lt;/h3&gt;
@@ -1868,14 +1868,14 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(四) 远程部署springboot项目</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-four-springboot/" />
             <id>/blog/posts/docker-four-springboot/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-12-05T09:10:20&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(四) 远程部署springboot项目 远程部署简述 Docker远程部署项目使用的是DockerFi……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(四) 远程部署springboot项目 远程部署简述 Docker远程部署项目使用的是DockerFile方式，使用IDEA集成Docker进行发布……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker学习四-远程部署springboot项目center&#34;&gt;&lt;center&gt;Docker学习(四) 远程部署springboot项目&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;远程部署简述&#34;&gt;远程部署简述&lt;/h3&gt;
@@ -1981,14 +1981,14 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(三) Docker安装mysql</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-three-mysql/" />
             <id>/blog/posts/docker-three-mysql/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-12-04T11:17:31&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(三) Docker安装mysql 安装mysql简述 Docker安装mysql比较方便，主要是以下步……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(三) Docker安装mysql 安装mysql简述 Docker安装mysql比较方便，主要是以下步骤： 确认安装mysql的版本 访问Mysql的版……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker学习三-docker安装mysqlcenter&#34;&gt;&lt;center&gt;Docker学习(三) Docker安装mysql&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;安装mysql简述&#34;&gt;安装mysql简述&lt;/h3&gt;
@@ -2055,14 +2055,14 @@ run           运行一个容器&lt;br&gt;
             <title type="text">Docker学习(二) Docker安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-two-docker/" />
             <id>/blog/posts/docker-two-docker/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-12-03T15:31:56&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(二) Docker安装 Docker安装前提准备 为了操作方便，玄襄这里直接使用root用户执行。do……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(二) Docker安装 Docker安装前提准备 为了操作方便，玄襄这里直接使用root用户执行。docker支持Centos系统的内核版本要高于3……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker学习二-docker安装center&#34;&gt;&lt;center&gt;Docker学习(二) Docker安装&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;docker安装前提准备&#34;&gt;Docker安装前提准备&lt;/h3&gt;
@@ -2140,14 +2140,14 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
             <title type="text">Docker学习(一) Centos7环境</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-one-centos/" />
             <id>/blog/posts/docker-one-centos/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-12-03T10:11:50&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(一) Centos7环境 虚拟机VMware安装 玄襄的电脑是windows系统，所以为了模拟线上环境……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">Docker学习(一) Centos7环境 虚拟机VMware安装 玄襄的电脑是windows系统，所以为了模拟线上环境，使用VMware虚拟机创建Centos系统。……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerdocker学习一-centos7环境center&#34;&gt;&lt;center&gt;Docker学习(一) Centos7环境&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;虚拟机vmware安装&#34;&gt;虚拟机VMware安装&lt;/h3&gt;
@@ -2243,14 +2243,14 @@ ifconfig&lt;br&gt;
             <title type="text">elasticsearh-rest-client</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearh-rest-client/" />
             <id>/blog/posts/elasticsearh-rest-client/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-11-22T10:51:38&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">elasticsearch rest client(一) low level rest client使用和问题 low client使用 low level rest client使用http与elastic……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">elasticsearch rest client(一) low level rest client使用和问题 low client使用 low level rest client使用http与elasticsearch进行通信，不会对请求进行编码和响应……</summary>
             
                 <content type="html">&lt;h2 id=&#34;centerelasticsearch-rest-client一center&#34;&gt;&lt;center&gt;elasticsearch rest client(一)&lt;/center&gt;&lt;/h2&gt;
 &lt;h3 id=&#34;low-level-rest-client使用和问题&#34;&gt;low level rest client使用和问题&lt;/h3&gt;
@@ -2374,14 +2374,14 @@ public class EsConfig {
             <title type="text">zookeeper知识点(三)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-three/" />
             <id>/blog/posts/zookeeper-three/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">zookeeper做一级缓存测试 因公司项目需求，准备做一级缓存，然后就想到了zookeeper，都说它性能不错，特……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">zookeeper做一级缓存测试 因公司项目需求，准备做一级缓存，然后就想到了zookeeper，都说它性能不错，特地做个测试看下是否可以用于生产。 封装完成使用g……</summary>
             
                 <content type="html">&lt;h3 id=&#34;zookeeper做一级缓存测试&#34;&gt;zookeeper做一级缓存测试&lt;/h3&gt;
 &lt;p&gt;因公司项目需求，准备做一级缓存，然后就想到了zookeeper，都说它性能不错，特地做个测试看下是否可以用于生产。
@@ -2433,14 +2433,14 @@ api入口。&lt;/p&gt;
             <title type="text">zookeeper知识点(二)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-two/" />
             <id>/blog/posts/zookeeper-two/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">zookeeper知识点(二) zookeeper集群 zookeeper是由多个server组成的集群，一个lead……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">zookeeper知识点(二) zookeeper集群 zookeeper是由多个server组成的集群，一个leader，一个follower。 leader为客户……</summary>
             
                 <content type="html">&lt;h3 id=&#34;zookeeper知识点二&#34;&gt;zookeeper知识点(二)&lt;/h3&gt;
 &lt;h4 id=&#34;zookeeper集群&#34;&gt;zookeeper集群&lt;/h4&gt;
@@ -2539,14 +2539,14 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
             <title type="text">elasticsearch-bulk</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-bulk/" />
             <id>/blog/posts/elasticsearch-bulk/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-11-18T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">elasticsearch 使用rest-client进行批量操作性能测试 之前做交易所项目， 大量实时数据存储在mongodb中，导致在查询账……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">elasticsearch 使用rest-client进行批量操作性能测试 之前做交易所项目， 大量实时数据存储在mongodb中，导致在查询账单、K线会出现查询慢的情况。在优化mongod……</summary>
             
                 <content type="html">&lt;h3 id=&#34;elasticsearch-使用rest-client进行批量操作性能测试&#34;&gt;elasticsearch 使用rest-client进行批量操作性能测试&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;之前做交易所项目， 大量实时数据存储在mongodb中，导致在查询账单、K线会出现查询慢的情况。在优化mongodb的同时，寻找其他
@@ -2625,14 +2625,14 @@ high level rest client
             <title type="text">umi搭建dva</title>
             <link rel="alternate" type="text/html" href="/blog/posts/umi-dva/" />
             <id>/blog/posts/umi-dva/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-10-22T18:00:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">umi搭建dva 使用umiJs搭建后台管理页面，集成dav、ant，一些react需要的插件不需要手动添加，按需加……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">umi搭建dva 使用umiJs搭建后台管理页面，集成dav、ant，一些react需要的插件不需要手动添加，按需加载即可。 此处记录安装流程和走过的坑！！ 安装步骤……</summary>
             
                 <content type="html">&lt;h3 id=&#34;umi搭建dva&#34;&gt;umi搭建dva&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;使用umiJs搭建后台管理页面，集成dav、ant，一些react需要的插件不需要手动添加，按需加载即可。  
@@ -2722,14 +2722,14 @@ high level rest client
             <title type="text">redis集群</title>
             <link rel="alternate" type="text/html" href="/blog/posts/redis%E9%9B%86%E7%BE%A4/" />
             <id>/blog/posts/redis%E9%9B%86%E7%BE%A4/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-10-17T09:02:40&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">windows搭建redis集群 操作系统：win10 64位 redis版本：3.2.100 x64 ruby版本：2.5.1……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">windows搭建redis集群 操作系统：win10 64位 redis版本：3.2.100 x64 ruby版本：2.5.1 x64 rubygems版本：2.7.6 开场白 昨天同……</summary>
             
                 <content type="html">&lt;meta name=&#34;referrer&#34; content=&#34;no-referrer&#34; /&gt;
 &lt;h3 id=&#34;windows搭建redis集群&#34;&gt;windows搭建redis集群&lt;/h3&gt;
@@ -2835,14 +2835,14 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
             <title type="text">zookeeper知识点(一)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-one/" />
             <id>/blog/posts/zookeeper-one/</id>
-            <updated>2022-08-05T02:09:28&#43;00:00</updated>
+            <updated>2022-08-05T06:05:34&#43;00:00</updated>
             <published>2019-08-09T19:43:03&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
                     <uri>https://io-oi.me/</uri>
                     <email>wmmsxm@163.com</email>
                     </author>
-            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">zookeeper知识点(一) zookeeper简介 zookeeper是一个分布式的，开放源码的分布式应用程序协调……</summary>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">zookeeper知识点(一) zookeeper简介 zookeeper是一个分布式的，开放源码的分布式应用程序协调服务，它可以在分布式系统中协作多个任务。整个Z……</summary>
             
                 <content type="html">&lt;h3 id=&#34;zookeeper知识点一&#34;&gt;zookeeper知识点(一)&lt;/h3&gt;
 &lt;h4 id=&#34;zookeeper简介&#34;&gt;zookeeper简介&lt;/h4&gt;
