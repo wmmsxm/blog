@@ -22,7 +22,7 @@ defaultContentLanguageInSubdir = false
 pluralizeListTitles = false
 
 # 摘要的字数限制
-summaryLength = 57
+summaryLength = 80
 
 # 是否开启 GitHub 风格的 Emoji 书写方式
 enableEmoji = false
@@ -711,7 +711,7 @@ uglyURLs = false
     # 注意：只支持 HSL 颜色值
 
     # 文章的内容宽度
-    postWidth = 36
+    postWidth = 62
     # 说明：如果留空（""），则用 42 作为默认值
     #      单位：em
 
