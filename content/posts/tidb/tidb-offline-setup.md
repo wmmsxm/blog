@@ -181,6 +181,12 @@ tiup cluster reload tidb-vmware -R pd
 
 # 删除集群
 tiup cluster destroy tidb-vmware --force
+
+# 修改配置
+tiup cluster edit-config tidb-vmware 
+
+# 重启tidb
+tiup cluster reload tidb-vmware 
 ````
 
 部署输出如下：
