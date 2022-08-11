@@ -23,7 +23,7 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Thu, 11 Aug 2022 07:31:56 &#43;0000</lastBuildDate>
+        <lastBuildDate>Thu, 11 Aug 2022 09:39:13 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
@@ -731,6 +731,12 @@ tiup cluster reload tidb-vmware -R pd
 
 # 删除集群
 tiup cluster destroy tidb-vmware --force
+
+# 修改配置
+tiup cluster edit-config tidb-vmware 
+
+# 重启tidb
+tiup cluster reload tidb-vmware 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;部署输出如下：&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[tidb@localhost ~]$ tiup cluster deploy tidb-vmware v6.1.0 topology.yaml --user tidb -p
 tiup is checking updates for component cluster ...
