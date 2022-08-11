@@ -23,10 +23,60 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Fri, 05 Aug 2022 06:05:36 &#43;0000</lastBuildDate>
+        <lastBuildDate>Thu, 11 Aug 2022 07:31:56 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
+        
+            <item>
+                <title>Tidb Lightning Question</title>
+                <link>/blog/posts/tidb/tidb-lightning-question/</link>
+                <guid isPermaLink="true">/blog/posts/tidb/tidb-lightning-question/</guid>
+                <pubDate>Thu, 11 Aug 2022 15:11:07 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h1 id=&#34;centertidb探究-迁移后问题center&#34;&gt;&lt;center&gt;Tidb探究 迁移后问题&lt;/center&gt;&lt;/h1&gt;
+&lt;h4 id=&#34;1the-isolation-level-serializable-is-not-supported-set-tidb_skip_isolation_level_check1-to-skip-this-error&#34;&gt;1、The isolation level &#39;SERIALIZABLE&#39; is not supported. Set tidb_skip_isolation_level_check=1 to skip this error&lt;/h4&gt;
+&lt;p&gt;通过navicat连接数据库，使用命令列界面执行下面命令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-纯文本&#34; data-lang=&#34;纯文本&#34;&gt;set global tidb_skip_isolation_level_check=1;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;TiDB 不支持 SERIALIZABLE 隔离级别，设置 tidb_skip_isolation_level_check 只是将报错信息变成了 warning ，实际上设置 SERIALIZABLE 还是不生效的。  &lt;/p&gt;
+&lt;p&gt;设置了 tidb_skip_isolation_level_check=1 还是会报错是因为你是会话级别设置了这个参数，只对当前会话生效。要全局生效的话，可以 set global tidb_skip_isolation_level_check=1;&lt;/p&gt;
+&lt;h4 id=&#34;2group-by不支持问题&#34;&gt;2、group by不支持问题&lt;/h4&gt;
+&lt;p&gt;TiDB 支持 SQL 模式 &lt;code&gt;ONLY_FULL_GROUP_BY&lt;/code&gt;，当启用该模式时，TiDB 拒绝不明确的非聚合列的查询。目前，TiDB 默认开启 SQL 模式 &lt;code&gt;ONLY_FULL_GROUP_BY&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;通过navicat连接数据库，使用命令列界面执行下面命令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-纯文本&#34; data-lang=&#34;纯文本&#34;&gt;# 更新全局  对全局作用域变量的更改将作用于集群中的其它服务器，并且重启后更改依然有效。
+set @@global.sql_mode=&#39;STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION&#39;;
+# 更新当前会话
+set @@sql_mode=&#39;STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION&#39;; 
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-纯文本&#34; data-lang=&#34;纯文本&#34;&gt;select a, b, sum(c) from t group by a;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;会报下面的错误：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-纯文本&#34; data-lang=&#34;纯文本&#34;&gt;ERROR 1055 (42000): Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column &#39;b&#39; which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;3tidb-sql兼容适配max_allowed_packet&#34;&gt;3、tidb sql兼容适配max_allowed_packet&lt;/h4&gt;
+&lt;p&gt;批量插入数量过多时，会出现下面得错误：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (70,199,179 &amp;gt; 67,108,864). You can change this value on the server by setting the ‘max_allowed_packet’ variable.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;执行下面命令解决：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;默认 67108864 (64 MB)
+set @@global.max_allowed_packet=134217728;   （ 134217728 = 128M ）
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;&lt;font color=red size=3 &gt;注意：这个虽然是持久化的，但是不会对已连接的会话产生影响，只对新连接的会话产生影响。所以需要重启相应得服务。&lt;/font&gt;&lt;/em&gt;&lt;/p&gt;
+</description>
+                
+                
+                
+                
+                
+                    
+                        
+                    
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>Modbus RTU与Modbus TCP的区别</title>
