@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">公子玄襄BLOG</title>
     <subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle>
-    <updated>2022-08-11T09:39:13&#43;00:00</updated>
+    <updated>2022-08-12T09:43:55&#43;00:00</updated>
     <id>/blog/</id>
     <link rel="alternate" type="text/html" href="/blog/" />
     <link rel="self" type="application/atom&#43;xml" href="/blog/atom.xml" />
@@ -20,7 +20,7 @@
             <title type="text">Tidb Lightning Question</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-lightning-question/" />
             <id>/blog/posts/tidb/tidb-lightning-question/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2022-08-11T15:11:07&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -55,7 +55,19 @@ set @@sql_mode=&#39;STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_D
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;默认 67108864 (64 MB)
 set @@global.max_allowed_packet=134217728;   （ 134217728 = 128M ）
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;&lt;font color=red size=3 &gt;注意：这个虽然是持久化的，但是不会对已连接的会话产生影响，只对新连接的会话产生影响。所以需要重启相应得服务。&lt;/font&gt;&lt;/em&gt;&lt;/p&gt;
-</content>
+&lt;h4 id=&#34;4-tidb-transaction-is-too-large&#34;&gt;4、 tidb Transaction is too large&lt;/h4&gt;
+&lt;p&gt;TiDB限制了单条KV entry不超过6MB，可以修改配置文件中的txn-entry-size-limit配置项进行调整，最大可以修改到120MB。&lt;br&gt;
+分布式事务要做两阶段提交，而且底层还需要做 Raft 复制。如果一个事务非常大，提交过程会非常慢，事务写冲突概率会增加，而且事务失败后回滚会导致不必要的性能开销。所以我们设置了 key-value entry 的总大小默认不超过100MB。如果业务需要使用大事务，可以修改配置文件中的txn-total-size-limit 配置项进行调整，最大可以修改到 10G。实际的大小限制还受机器的物理内存影响。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tiup cluster edit-config tidb-fhzh
+
+修改相应配置
+server_configs:
+  tidb:
+    performance.txn-total-size-limit: 1073741824    1073741824(1G)，改成10G 目前已完成
+
+
+tiup cluster reload tidb-fhzh -R tidb
+&lt;/code&gt;&lt;/pre&gt;</content>
             
             
             
@@ -73,7 +85,7 @@ set @@global.max_allowed_packet=134217728;   （ 134217728 = 128M ）
             <title type="text">Modbus RTU与Modbus TCP的区别</title>
             <link rel="alternate" type="text/html" href="/blog/posts/modbus/tcp-rtu/" />
             <id>/blog/posts/modbus/tcp-rtu/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2022-08-05T08:54:30&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -321,7 +333,7 @@ MBAP报文头： &lt;/p&gt;
             <title type="text">Tidb探究 Mysql迁入TiDB</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-mysql-to-tidb/" />
             <id>/blog/posts/tidb/tidb-mysql-to-tidb/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2022-08-01T17:32:01&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -488,7 +500,7 @@ pd-addr = &amp;quot;172.16.1.73:2379&amp;quot;
             <title type="text">TiDB建库建用户及授权</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-user-password/" />
             <id>/blog/posts/tidb/tidb-user-password/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2022-08-01T16:01:08&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -552,7 +564,7 @@ grant all privileges on tidb.* to &#39;tidb&#39;@&#39;%&#39; identified by &#39;
             <title type="text">Tidb Offline Setup</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-offline-setup/" />
             <id>/blog/posts/tidb/tidb-offline-setup/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2022-07-13T08:41:51&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -941,7 +953,7 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(三) Kubernetes-Dashboard安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-three/" />
             <id>/blog/posts/docker-desktop-three/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2021-12-04T13:35:05&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1010,7 +1022,7 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(二) Kubernetes</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-two/" />
             <id>/blog/posts/docker-desktop-two/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2021-12-03T14:24:09&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1233,7 +1245,7 @@ kubectl rollout restart {your_deployment_name}
             <title type="text">Docker_Desktop学习(一) 环境安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-one/" />
             <id>/blog/posts/docker-desktop-one/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2021-12-03T10:11:26&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1519,7 +1531,7 @@ docker rm mysql
             <title type="text">elasticsearch 安装教程</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-setup/" />
             <id>/blog/posts/elasticsearch-setup/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2021-01-21T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1591,7 +1603,7 @@ set JAVA_TYPE=bundled jdk
             <title type="text">Docker学习(六) 自定义tomcat镜像</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-six-custom-image/" />
             <id>/blog/posts/docker-six-custom-image/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2020-12-10T14:09:32&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1702,7 +1714,7 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
             <title type="text">Docker学习(五) 安装Jenkins实现自动化部署</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-five-jenkins/" />
             <id>/blog/posts/docker-five-jenkins/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-12-11T09:41:13&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1927,7 +1939,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(四) 远程部署springboot项目</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-four-springboot/" />
             <id>/blog/posts/docker-four-springboot/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-12-05T09:10:20&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2040,7 +2052,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(三) Docker安装mysql</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-three-mysql/" />
             <id>/blog/posts/docker-three-mysql/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-12-04T11:17:31&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2114,7 +2126,7 @@ run           运行一个容器&lt;br&gt;
             <title type="text">Docker学习(二) Docker安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-two-docker/" />
             <id>/blog/posts/docker-two-docker/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-12-03T15:31:56&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2199,7 +2211,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
             <title type="text">Docker学习(一) Centos7环境</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-one-centos/" />
             <id>/blog/posts/docker-one-centos/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-12-03T10:11:50&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2302,7 +2314,7 @@ ifconfig&lt;br&gt;
             <title type="text">elasticsearh-rest-client</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearh-rest-client/" />
             <id>/blog/posts/elasticsearh-rest-client/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-11-22T10:51:38&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2433,7 +2445,7 @@ public class EsConfig {
             <title type="text">zookeeper知识点(三)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-three/" />
             <id>/blog/posts/zookeeper-three/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2492,7 +2504,7 @@ api入口。&lt;/p&gt;
             <title type="text">zookeeper知识点(二)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-two/" />
             <id>/blog/posts/zookeeper-two/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2598,7 +2610,7 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
             <title type="text">elasticsearch-bulk</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-bulk/" />
             <id>/blog/posts/elasticsearch-bulk/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-11-18T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2684,7 +2696,7 @@ high level rest client
             <title type="text">umi搭建dva</title>
             <link rel="alternate" type="text/html" href="/blog/posts/umi-dva/" />
             <id>/blog/posts/umi-dva/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-10-22T18:00:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2781,7 +2793,7 @@ high level rest client
             <title type="text">redis集群</title>
             <link rel="alternate" type="text/html" href="/blog/posts/redis%E9%9B%86%E7%BE%A4/" />
             <id>/blog/posts/redis%E9%9B%86%E7%BE%A4/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-10-17T09:02:40&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2894,7 +2906,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
             <title type="text">zookeeper知识点(一)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-one/" />
             <id>/blog/posts/zookeeper-one/</id>
-            <updated>2022-08-11T09:39:10&#43;00:00</updated>
+            <updated>2022-08-12T09:43:53&#43;00:00</updated>
             <published>2019-08-09T19:43:03&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
