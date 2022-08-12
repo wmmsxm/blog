@@ -54,3 +54,18 @@ com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too larg
 set @@global.max_allowed_packet=134217728;   （ 134217728 = 128M ）
 ````
 *<font color=red size=3 >注意：这个虽然是持久化的，但是不会对已连接的会话产生影响，只对新连接的会话产生影响。所以需要重启相应得服务。</font>*
+
+#### 4、 tidb Transaction is too large
+TiDB限制了单条KV entry不超过6MB，可以修改配置文件中的txn-entry-size-limit配置项进行调整，最大可以修改到120MB。  
+分布式事务要做两阶段提交，而且底层还需要做 Raft 复制。如果一个事务非常大，提交过程会非常慢，事务写冲突概率会增加，而且事务失败后回滚会导致不必要的性能开销。所以我们设置了 key-value entry 的总大小默认不超过100MB。如果业务需要使用大事务，可以修改配置文件中的txn-total-size-limit 配置项进行调整，最大可以修改到 10G。实际的大小限制还受机器的物理内存影响。
+````
+tiup cluster edit-config tidb-fhzh
+
+修改相应配置
+server_configs:
+  tidb:
+    performance.txn-total-size-limit: 1073741824    1073741824(1G)，改成10G 目前已完成
+
+
+tiup cluster reload tidb-fhzh -R tidb
+````
