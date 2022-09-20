@@ -1,6 +1,8 @@
 ---
 title: "Tidb Lightning Question"
 date: 2022-08-11T15:11:07+08:00
+tags: ["TiDB"]
+categories: ["TiDB"]
 draft: false
 ---
 # <center>Tidb探究 迁移后问题</center>
@@ -69,3 +71,38 @@ server_configs:
 
 tiup cluster reload tidb-fhzh -R tidb
 ````
+
+#### 5、单条sql处理出现Out of Memory Quota问题
+使用系统变量tidb_mem_quota_query 来配置一条 SQL 执行过程中的内存使用阈值，单位为字节。
+
+````
+# 查看配置
+select @@tidb_mem_quota_query;
+
+# 配置8G 下面两条命令有待验证
+set global tidb_mem_quota_query=8589934592;
+SET @@global.tidb_mem_quota_query = 8589934592;
+````
+
+
+
+#### distinct聚合函数优化(有待验证)
+
+session会话中可以先执行下面得命令进行优化测试：
+````
+set session tidb_opt_distinct_agg_push_down = 1;
+````
+
+全局优化，需要重新配置tidb得配置
+````
+tiup cluster edit-config tidb-fhzh
+
+修改相应配置
+server_configs:
+  tidb:
+    distinct-agg-push-down: true    
+
+
+tiup cluster reload tidb-fhzh -R tidb
+````
+
