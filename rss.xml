@@ -23,10 +23,85 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Fri, 12 Aug 2022 09:43:55 &#43;0000</lastBuildDate>
+        <lastBuildDate>Tue, 20 Sep 2022 06:20:33 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
+        
+            <item>
+                <title>Tidb探究 Tidb性能调优</title>
+                <link>/blog/posts/tidb/tidb-majorization/</link>
+                <guid isPermaLink="true">/blog/posts/tidb/tidb-majorization/</guid>
+                <pubDate>Thu, 15 Sep 2022 15:00:14 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h1 id=&#34;centertidb探究-tidb性能调优center&#34;&gt;&lt;center&gt;Tidb探究 Tidb性能调优&lt;/center&gt;&lt;/h1&gt;
+&lt;h4 id=&#34;设置-scan-操作的并发度默认是15&#34;&gt;设置 scan 操作的并发度,默认是15&lt;/h4&gt;
+&lt;p&gt;通过navicat连接数据库，使用命令列界面执行下面命令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 查询session的当前值
+select @@tidb_distsql_scan_concurrency;
+# 查询global的当前值
+select @@global.tidb_distsql_scan_concurrency;
+ 
+# 全局
+set global tidb_distsql_scan_concurrency=30;
+# session
+set session tidb_distsql_scan_concurrency=30;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;索引添加&#34;&gt;索引添加&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 查询索引
+show index from tableName
+
+# 添加索引
+CREATE INDEX indeKey ON tableName (字段1, 字段2);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;单条sql只能使用一个索引，开始索引合并测试不生效。需要后续测试&lt;/p&gt;
+&lt;p&gt;使用索引时，需要注意一下情况无法使用索引：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;避免总是 SELECT * 查询所有列的语句&lt;/li&gt;
+&lt;li&gt;查询条件使用 !=，NOT IN 时，无法使用索引。&lt;/li&gt;
+&lt;li&gt;使用 LIKE 时如果条件是以通配符 % 开头，也无法使用索引。&lt;/li&gt;
+&lt;li&gt;查询条件使用 IN 表达式时，后面匹配的条件数量建议不要超过 300 个，否则执行效率会较差。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;使用tiflash&#34;&gt;使用TiFlash&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# count 表示副本数，0 表示删除。
+ALTER TABLE table_name SET TIFLASH REPLICA count;
+
+
+# 查看表同步进度
+# AVAILABLE 字段表示该表的 TiFlash 副本是否可用。1 代表可用，0 代表不可用。副本
+# PROGRESS 字段代表同步进度，在 0.0~1.0 之间，1 代表至少 1 个副本已经完成同步
+SELECT * FROM information_schema.tiflash_replica WHERE TABLE_SCHEMA = &#39;&amp;lt;db_name&amp;gt;&#39; and TABLE_NAME = &#39;&amp;lt;table_name&amp;gt;&#39;;
+&lt;/code&gt;&lt;/pre&gt;</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>Tidb Lightning Question</title>
@@ -76,6 +151,27 @@ server_configs:
 
 
 tiup cluster reload tidb-fhzh -R tidb
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;5单条sql处理出现out-of-memory-quota问题&#34;&gt;5、单条sql处理出现Out of Memory Quota问题&lt;/h4&gt;
+&lt;p&gt;使用系统变量tidb_mem_quota_query 来配置一条 SQL 执行过程中的内存使用阈值，单位为字节。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 查看配置
+select @@tidb_mem_quota_query;
+
+# 配置8G 下面两条命令有待验证
+set global tidb_mem_quota_query=8589934592;
+SET @@global.tidb_mem_quota_query = 8589934592;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;distinct聚合函数优化有待验证&#34;&gt;distinct聚合函数优化(有待验证)&lt;/h4&gt;
+&lt;p&gt;session会话中可以先执行下面得命令进行优化测试：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;set session tidb_opt_distinct_agg_push_down = 1;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;全局优化，需要重新配置tidb得配置&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tiup cluster edit-config tidb-fhzh
+
+修改相应配置
+server_configs:
+  tidb:
+    distinct-agg-push-down: true    
+
+
+tiup cluster reload tidb-fhzh -R tidb
 &lt;/code&gt;&lt;/pre&gt;</description>
                 
                 
@@ -84,7 +180,23 @@ tiup cluster reload tidb-fhzh -R tidb
                 
                     
                         
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/tidb/">TiDB</category>
+                                
+                            
+                        
                     
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/tidb/">TiDB</category>
+                                
+                            
                         
                     
                 
