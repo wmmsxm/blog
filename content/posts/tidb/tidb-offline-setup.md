@@ -5,7 +5,7 @@ tags: ["TiDB"]
 categories: ["TiDB"]
 draft: false
 ---
-# <center>离线安装部署 TiDB，单机模拟集群环境</center>
+# <center>离线安装部署TiDB，单机模拟集群环境</center>
 
 ## TiDB介绍
 ### 什么是TiDB
