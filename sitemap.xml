@@ -3,159 +3,162 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/blog/categories/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
-  </url><url>
-    <loc>/blog/tags/k8s/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
-  </url><url>
-    <loc>/blog/categories/k8s/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
-  </url><url>
-    <loc>/blog/posts/k8s/offline-docker-nfs-harbor/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
-  </url><url>
-    <loc>/blog/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
-  </url><url>
-    <loc>/blog/posts/k8s/offline-setup/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
-  </url><url>
-    <loc>/blog/posts/k8s/offline-pre-source/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/tidb/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/tidb/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
+  </url><url>
+    <loc>/blog/</loc>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
+  </url><url>
+    <loc>/blog/posts/tidb/tidb-haproxy/</loc>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
+  </url><url>
+    <loc>/blog/tags/k8s/</loc>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
+  </url><url>
+    <loc>/blog/categories/k8s/</loc>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
+  </url><url>
+    <loc>/blog/posts/k8s/offline-docker-nfs-harbor/</loc>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
+  </url><url>
+    <loc>/blog/posts/k8s/offline-setup/</loc>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
+  </url><url>
+    <loc>/blog/posts/k8s/offline-pre-source/</loc>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/tidb/tidb-majorization/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/tidb/tidb-lightning-question/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/modbus/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/modbus/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/modbus/tcp-rtu/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/rtu/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/tidb/tidb-mysql-to-tidb/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/tidb/tidb-user-password/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/tidb/tidb-offline-setup/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/about/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/docker/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/docker-desktop/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/docker-desktop/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-desktop-three/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-desktop-two/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-desktop-one/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/elasticsearch/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/elasticsearch/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/elasticsearch-setup/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/docker/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-six-custom-image/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/learn/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-five-jenkins/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-four-springboot/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-three-mysql/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-two-docker/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/docker-one-centos/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/elasticsearh-rest-client/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/zookeeper/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/zookeeper/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/zookeeper-three/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/zookeeper-two/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/elasticsearch-bulk/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/react/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/react/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/umi/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/umi-dva/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/tags/redis/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/categories/redis/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/redis%E9%9B%86%E7%BE%A4/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url><url>
     <loc>/blog/posts/zookeeper-one/</loc>
-    <lastmod>2022-09-22T06:30:22+00:00</lastmod>
+    <lastmod>2022-09-22T08:02:21+00:00</lastmod>
   </url>
 </urlset>

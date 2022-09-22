@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8" />
+
+    <meta name="generator" content="Hugo 0.90.1" /><meta name="theme-color" content="#fff" />
+    <meta name="color-scheme" content="light dark">
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
+    
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <title>离线安装部署TiDB-Haproxy负载 | 公子玄襄BLOG</title>
+
+    <link rel="stylesheet" href="/blog/css/meme.min.a57af3adceeb7f602d38c33cba2541b4da056a088be786cfbb6369494cdfba71.css"/>
+
+    
+    
+        <script src="/blog/js/meme.min.38f3a2c8005b8d1e9d347e887fd0bc0973fda111364c8ae611f0bf06428eed3e.js"></script>
+
+    
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB&#43;Garamond:ital,wght@0,400;0,500;0,700;1,400;1,700&amp;family=Noto&#43;Serif&#43;SC:wght@400;500;700&amp;family=Source&#43;Code&#43;Pro:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" media="print" onload="this.media='all'" />
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB&#43;Garamond:ital,wght@0,400;0,500;0,700;1,400;1,700&amp;family=Noto&#43;Serif&#43;SC:wght@400;500;700&amp;family=Source&#43;Code&#43;Pro:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" /></noscript>
+
+    <meta name="author" content="wmmsxm" /><meta name="description" content="离线安装部署TiDB-Haproxy负载 HAProxy 简介 HAProxy 是由 C 语言编写的自由开放源码的软件，为基于 TCP 和 HTTP 协议的应用程序提供高可用性、负载均衡和代理服务。因为 HAProxy 能够快速、……" />
+
+    <link rel="shortcut icon" href="/blog/favicon.ico" type="image/x-icon" />
+    <link rel="mask-icon" href="/blog/icons/safari-pinned-tab.svg" color="#2a6df4" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/blog/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="公子玄襄BLOG" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="公子玄襄BLOG" />
+    <meta name="msapplication-starturl" content="../../../../" />
+    <meta name="msapplication-TileColor" content="#fff" />
+    <meta name="msapplication-TileImage" content="../../../../icons/mstile-150x150.png" />
+    <link rel="manifest" href="/blog/manifest.json" />
+
+    
+    
+
+    
+    <link rel="canonical" href="/blog/posts/tidb/tidb-haproxy/" />
+    
+
+    
+    
+
+    
+    
+
+    
+</head>
+
+    <body>
+        <div class="container">
+            
+    <header class="header">
+        
+            <div class="header-wrapper">
+                <div class="header-inner single">
+                    
+    <div class="site-brand">
+        
+            <a href="/blog/" class="brand">公子玄襄BLOG</a>
+        
+    </div>
+
+                    <nav class="nav">
+    <ul class="menu" id="menu">
+        
+            
+        
+        
+        
+        
+            
+                <li class="menu-item active"><a href="/blog/posts/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon archive"><path d="M32 448c0 17.7 14.3 32 32 32h384c17.7 0 32-14.3 32-32V160H32v288zm160-212c0-6.6 5.4-12 12-12h104c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-8zM480 32H32C14.3 32 0 46.3 0 64v48c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V64c0-17.7-14.3-32-32-32z"/></svg><span class="menu-item-name">文章</span></a>
+                </li>
+            
+        
+            
+                <li class="menu-item"><a href="/blog/categories/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon th"><path d="M149.333 56v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zm181.334 240v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm32-240v80c0 13.255 10.745 24 24 24H488c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24zm-32 80V56c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm-205.334 56H24c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24zM0 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 24zm386.667-56H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zm0 160H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zM181.333 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24z"/></svg><span class="menu-item-name">分类</span></a>
+                </li>
+            
+        
+            
+                <li class="menu-item"><a href="/blog/tags/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="icon tags"><path d="M497.941 225.941L286.059 14.059A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v204.118a48 48 0 0 0 14.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882 0l204.118-204.118c18.745-18.745 18.745-49.137 0-67.882zM112 160c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882 0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397 0h48.721a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882z"/></svg><span class="menu-item-name">标签</span></a>
+                </li>
+            
+        
+            
+                <li class="menu-item"><a href="/blog/about/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon user-circle"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg><span class="menu-item-name">关于</span></a>
+                </li>
+            
+        
+            
+                
+                    
+                    
+                        <li class="menu-item">
+                            <a id="theme-switcher" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon theme-icon-light"><path d="M193.2 104.5l48.8-97.5a18 18 0 0128 0l48.8 97.5 103.4 -34.5a18 18 0 0119.8 19.8l-34.5 103.4l97.5 48.8a18 18 0 010 28l-97.5 48.8 34.5 103.4a18 18 0 01-19.8 19.8l-103.4-34.5-48.8 97.5a18 18 0 01-28 0l-48.8-97.5l-103.4 34.5a18 18 0 01-19.8-19.8l34.5-103.4-97.5-48.8a18 18 0 010-28l97.5-48.8-34.5-103.4a18 18 0 0119.8-19.8zM256 128a128 128 0 10.01 0M256 160a96 96 0 10.01 0"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon theme-icon-dark"><path d="M27 412a256 256 0 10154-407a11.5 11.5 0 00-5 20a201.5 201.5 0 01-134 374a11.5 11.5 0 00-15 13"/></svg></a>
+                        </li>
+                    
+                
+            
+        
+            
+                
+            
+        
+            
+                
+            
+        
+    </ul>
+</nav>
+
+                    
+                </div>
+            </div>
+            
+    <input type="checkbox" id="nav-toggle" aria-hidden="true" />
+    <label for="nav-toggle" class="nav-toggle"></label>
+    <label for="nav-toggle" class="nav-curtain"></label>
+
+
+        
+    </header>
+
+
+
+
+            
+            
+    <main class="main single" id="main">
+    <div class="main-inner">
+
+        
+
+        <article class="content post h-entry" data-align="justify" data-type="posts" data-toc-num="true">
+
+            <h1 class="post-title p-name">离线安装部署TiDB-Haproxy负载</h1>
+
+            
+
+            
+                
+            
+
+            
+                
+
+<div class="post-meta">
+    
+        
+        <time datetime="2022-09-22T14:35:35&#43;08:00" class="post-meta-item published dt-published"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon post-meta-icon"><path d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"/></svg>&nbsp;2022.9.22</time>
+    
+    
+        
+        <time datetime="2022-09-22T08:02:21&#43;00:00" class="post-meta-item modified dt-updated"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon post-meta-icon"><path d="M400 64h-48V12c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v52H160V12c0-6.627-5.373-12-12-12h-40c-6.627 0-12 5.373-12 12v52H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm-6 400H54a6 6 0 0 1-6-6V160h352v298a6 6 0 0 1-6 6zm-52.849-200.65L198.842 404.519c-4.705 4.667-12.303 4.637-16.971-.068l-75.091-75.699c-4.667-4.705-4.637-12.303.068-16.971l22.719-22.536c4.705-4.667 12.303-4.637 16.97.069l44.104 44.461 111.072-110.181c4.705-4.667 12.303-4.637 16.971.068l22.536 22.718c4.667 4.705 4.636 12.303-.069 16.97z"/></svg>&nbsp;2022.9.22</time>
+    
+    
+    
+        
+        
+        
+            
+                <span class="post-meta-item category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon post-meta-icon"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>&nbsp;<a href="/blog/categories/tidb/" class="category-link p-category">TiDB</a></span>
+            
+        
+    
+    
+        
+        <span class="post-meta-item wordcount"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon post-meta-icon"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;2138</span>
+    
+    
+        
+        <span class="post-meta-item reading-time"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon post-meta-icon"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;5&nbsp;分钟</span>
+    
+    
+    
+</div>
+
+            
+
+            <div class="post-body e-content">
+                <h1 id="center离线安装部署tidb-haproxy负载center"><a href="#center离线安装部署tidb-haproxy负载center" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><center>离线安装部署TiDB-Haproxy负载</center></h1>
+<h4 id="haproxy-简介"><a href="#haproxy-简介" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>HAProxy 简介</h4>
+<p>HAProxy 是由 C 语言编写的自由开放源码的软件，为基于 TCP 和 HTTP 协议的应用程序提供高可用性、负载均衡和代理服务。因为 HAProxy 能够快速、高效使用 CPU 和内存，所以目前使用非常广泛，许多知名网站诸如 GitHub、Bitbucket、Stack Overflow、Reddit、Tumblr、Twitter 和 Tuenti 以及亚马逊网络服务系统都在使用 HAProxy。<br>
+HAProxy 由 Linux 内核的核心贡献者 Willy Tarreau 于 2000 年编写，他现在仍然负责该项目的维护，并在开源社区免费提供版本迭代。本文示例使用 HAProxy 2.5.0。</p>
+<h4 id="haproxy-部分核心功能介绍"><a href="#haproxy-部分核心功能介绍" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>HAProxy 部分核心功能介绍</h4>
+<ul>
+<li>高可用性：HAProxy 提供优雅关闭服务和无缝切换的高可用功能；</li>
+<li>负载均衡：L4 (TCP) 和 L7 (HTTP) 两种负载均衡模式，至少 9 类均衡算法，比如 roundrobin，leastconn，random 等；</li>
+<li>健康检查：对 HAProxy 配置的 HTTP 或者 TCP 模式状态进行检查；</li>
+<li>会话保持：在应用程序没有提供会话保持功能的情况下，HAProxy 可以提供该项功能；</li>
+<li>SSL：支持 HTTPS 通信和解析；</li>
+<li>监控与统计：通过 web 页面可以实时监控服务状态以及具体的流量信息。</li>
+</ul>
+<h4 id="安装包"><a href="#安装包" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>安装包</h4>
+<p>1、离线安装下载</p>
+<pre tabindex="0"><code>yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    haproxy
+</code></pre><p>2、然后复制到root文件夹</p>
+<pre tabindex="0"><code>rpm -ivh /root/haproxy-**.rpm --nodeps --force
+# 查看haproxy是否已安装
+which haproxy
+
+# 查看命令
+haproxy -help
+
+</code></pre><p>参数说明如下：</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-v</td>
+<td style="text-align:left">显示简略的版本信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">-vv</td>
+<td style="text-align:left">显示详细的版本信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">-d</td>
+<td style="text-align:left">开启 debug 模式。</td>
+</tr>
+<tr>
+<td style="text-align:center">-db</td>
+<td style="text-align:left">禁用后台模式和多进程模式。</td>
+</tr>
+<tr>
+<td style="text-align:center">-dM [<code>&lt;byte&gt;</code>]</td>
+<td style="text-align:left">执行分配内存。</td>
+</tr>
+<tr>
+<td style="text-align:center">-V</td>
+<td style="text-align:left">启动过程显示配置和轮询信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">-D</td>
+<td style="text-align:left">开启守护进程模式。</td>
+</tr>
+<tr>
+<td style="text-align:center">-C <code>&lt;dir&gt;</code></td>
+<td style="text-align:left">在加载配置文件之前更改目录位置至<code>&lt;dir&gt;</code>。</td>
+</tr>
+<tr>
+<td style="text-align:center">-W</td>
+<td style="text-align:left">主从模式。</td>
+</tr>
+<tr>
+<td style="text-align:center">-q</td>
+<td style="text-align:left">静默模式，不输出信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">-c</td>
+<td style="text-align:left">只检查配置文件并在尝试绑定之前退出。</td>
+</tr>
+<tr>
+<td style="text-align:center">-n &lt;<code>limit</code>&gt;</td>
+<td style="text-align:left">设置每个进程的最大总连接数为 &lt;<code>limit</code>&gt;。</td>
+</tr>
+<tr>
+<td style="text-align:center">-m &lt;<code>limit</code>&gt;</td>
+<td style="text-align:left">设置所有进程的最大可用内存为 &lt;<code>limit</code>&gt;（单位：MB）。</td>
+</tr>
+<tr>
+<td style="text-align:center">-N &lt;<code>limit</code>&gt;</td>
+<td style="text-align:left">设置单点最大连接数为 &lt;<code>limit</code>&gt;，默认为 2000。</td>
+</tr>
+<tr>
+<td style="text-align:center">-L &lt;<code>name</code>&gt;</td>
+<td style="text-align:left">将本地实例对等名称改为 &lt;<code>name</code>&gt;，默认为本地主机名。</td>
+</tr>
+<tr>
+<td style="text-align:center">-p &lt;<code>file</code>&gt;</td>
+<td style="text-align:left">将 HAProxy 所有子进程的 PID 信息写入 &lt;<code>file</code>&gt;。</td>
+</tr>
+<tr>
+<td style="text-align:center">-de</td>
+<td style="text-align:left">禁止使用 epoll(7)，epoll(7) 仅在 Linux 2.6 和某些定制的 Linux 2.4 系统上可用。</td>
+</tr>
+<tr>
+<td style="text-align:center">-dp</td>
+<td style="text-align:left">禁止使用 epoll(2)，可改用 select(2)。</td>
+</tr>
+<tr>
+<td style="text-align:center">-dS</td>
+<td style="text-align:left">禁止使用 splice(2)，splice(2) 在一些旧版 Linux 内核上不可用。</td>
+</tr>
+<tr>
+<td style="text-align:center">-dR</td>
+<td style="text-align:left">禁止使用 SO_REUSEPORT。</td>
+</tr>
+<tr>
+<td style="text-align:center">-dr</td>
+<td style="text-align:left">忽略服务器地址解析失败。</td>
+</tr>
+<tr>
+<td style="text-align:center">-dV</td>
+<td style="text-align:left">禁止在服务器端使用 SSL。</td>
+</tr>
+<tr>
+<td style="text-align:center">-sf &lt;<code>pidlist</code>&gt;</td>
+<td style="text-align:left">启动后，向 pidlist 中的 PID 发送 finish 信号，收到此信号的进程在退出之前将等待所有会话完成，即优雅停止服务。此选项必须最后指定，后跟任意数量的 PID。从技术上讲，SIGTTOU 和 SIGUSR1 都被发送。</td>
+</tr>
+<tr>
+<td style="text-align:center">-st &lt;<code>pidlist</code>&gt;</td>
+<td style="text-align:left">启动后，向 pidlist 中的 PID 发送 terminate 信号，收到此信号的进程将立即终止，关闭所有活动会话。此选项必须最后指定，后跟任意数量的 PID。从技术上讲，SIGTTOU 和 SIGTERM 都被发送。</td>
+</tr>
+<tr>
+<td style="text-align:center">-x &lt;<code>unix_socket</code>&gt;</td>
+<td style="text-align:left">连接指定的 socket 并从旧进程中获取所有 listening socket，然后，使用这些 socket 而不是绑定新的。</td>
+</tr>
+<tr>
+<td style="text-align:center">-S &lt;<code>bind</code>&gt;[,&lt;bind_options&gt;...]</td>
+<td style="text-align:left">主从模式下，创建绑定到主进程的 socket，此 socket 可访问每个子进程的 socket。</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="haproxy配置文件"><a href="#haproxy配置文件" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>HAProxy配置文件</h4>
+<p>使用<code>vi /etc/haproxy/haproxy.cfg</code>命令编辑内容如下：</p>
+<pre tabindex="0"><code>global                                     # 全局配置。
+   log         127.0.0.1 local2            # 定义全局的 syslog 服务器，最多可以定义两个。
+   chroot      /var/lib/haproxy            # 更改当前目录并为启动进程设置超级用户权限，从而提高安全性。
+   pidfile     /var/run/haproxy.pid        # 将 HAProxy 进程的 PID 写入 pidfile。
+   maxconn     4096                        # 单个 HAProxy 进程可接受的最大并发连接数，等价于命令行参数 &quot;-n&quot;。
+   nbthread    48                          # 最大线程数。线程数的上限与 CPU 数量相同。
+   user        haproxy                     # 同 UID 参数。
+   group       haproxy                     # 同 GID 参数，建议使用专用用户组。
+   daemon                                  # 让 HAProxy 以守护进程的方式工作于后台，等同于命令行参数“-D”的功能。当然，也可以在命令行中用“-db”参数将其禁用。
+   stats socket /var/lib/haproxy/stats     # 统计信息保存位置。
+
+defaults                                   # 默认配置。
+   log global                              # 日志继承全局配置段的设置。
+   retries 2                               # 向上游服务器尝试连接的最大次数，超过此值便认为后端服务器不可用。
+   timeout connect  2s                     # HAProxy 与后端服务器连接超时时间。如果在同一个局域网内，可设置成较短的时间。
+   timeout client 30000s                   # 客户端与 HAProxy 连接后，数据传输完毕，即非活动连接的超时时间。
+   timeout server 30000s                   # 服务器端非活动连接的超时时间。
+
+listen admin_stats                         # frontend 和 backend 的组合体，此监控组的名称可按需进行自定义。
+   bind 0.0.0.0:8080                       # 监听端口。
+   mode http                               # 监控运行的模式，此处为 `http` 模式。
+   option httplog                          # 开始启用记录 HTTP 请求的日志功能。
+   maxconn 10                              # 最大并发连接数。
+   stats refresh 30s                       # 每隔 30 秒自动刷新监控页面。
+   stats uri /haproxy                      # 监控页面的 URL。
+   stats realm HAProxy                     # 监控页面的提示信息。
+   stats auth admin:pingcap123             # 监控页面的用户和密码，可设置多个用户名。
+   stats hide-version                      # 隐藏监控页面上的 HAProxy 版本信息。
+   stats  admin if TRUE                    # 手工启用或禁用后端服务器（HAProxy 1.4.9 及之后版本开始支持）。
+
+listen tidb-cluster                        # 配置 database 负载均衡。
+   bind 0.0.0.0:3390                       # 浮动 IP 和 监听端口。
+   mode tcp                                # HAProxy 要使用第 4 层的传输层。
+   balance leastconn                       # 连接数最少的服务器优先接收连接。`leastconn` 建议用于长会话服务，例如 LDAP、SQL、TSE 等，而不是短会话协议，如 HTTP。该算法是动态的，对于启动慢的服务器，服务器权重会在运行中作调整。
+   server tidb-1 10.9.18.229:4000 check inter 2000 rise 2 fall 3       # 检测 4000 端口，检测频率为每 2000 毫秒一次。如果 2 次检测为成功，则认为服务器可用；如果 3 次检测为失败，则认为服务器不可用。
+   server tidb-2 10.9.39.208:4000 check inter 2000 rise 2 fall 3
+   server tidb-3 10.9.64.166:4000 check inter 2000 rise 2 fall 3
+</code></pre><h4 id="启动haproxy"><a href="#启动haproxy" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>启动HAProxy</h4>
+<pre tabindex="0"><code>haproxy -f /etc/haproxy/haproxy.cfg
+</code></pre><h4 id="停止haproxy"><a href="#停止haproxy" class="anchor-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a>停止HAProxy</h4>
+<pre tabindex="0"><code>ps -ef | grep haproxy
+kill -9 ${haproxy.pid}
+
+</code></pre>
+            </div>
+
+            
+    
+    
+        <ul class="post-copyright">
+            <li class="copyright-item author"><span class="copyright-item-text">作者</span>：<a href="https://io-oi.me/" class="p-author h-card" target="_blank" rel="noopener">wmmsxm</a></li>
+            
+                
+                
+                
+                
+                <li class="copyright-item link"><span class="copyright-item-text">链接</span>：<a href="/blog/posts/tidb/tidb-haproxy/" target="_blank" rel="noopener">/blog/posts/tidb/tidb-haproxy/</a></li>
+            
+            <li class="copyright-item license"><span class="copyright-item-text">许可</span>：Copyright © 2022 WuMengMeng</li>
+            
+        </ul>
+    
+
+
+
+        </article>
+
+        
+
+        
+    <div class="updated-badge-container">
+        <span title="Updated @ 2022-09-22 08:02:21 UTC" style="cursor:help">
+
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="20" class="updated-badge"><linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="a"><rect width="130" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#a)"><path class="updated-badge-left" d="M0 0h55v20H0z"/><path class="updated-badge-right" d="M55 0h75v20H55z"/><path fill="url(#b)" d="M0 0h130v20H0z"/></g><g fill="#fff" text-anchor="middle" font-size="110"><text x="285" y="150" fill="#010101" fill-opacity=".3" textLength="450" transform="scale(.1)">updated</text><text x="285" y="140" textLength="450" transform="scale(.1)">updated</text><text x="915" y="150" fill="#010101" fill-opacity=".3" textLength="650" transform="scale(.1)">2022-09-22</text><text x="915" y="140" textLength="650" transform="scale(.1)">2022-09-22</text></g></svg>
+        </span></div>
+
+
+
+        
+
+
+        
+
+
+        
+    
+    
+        <div class="related-posts">
+            <h2 class="related-title">相关文章：<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon related-icon"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"/></svg></h2>
+            <ul class="related-list">
+                
+                    <li class="related-item">
+                        <a href="/blog/posts/tidb/tidb-majorization/" class="related-link">Tidb探究 Tidb性能调优</a>
+                    </li>
+                
+                    <li class="related-item">
+                        <a href="/blog/posts/tidb/tidb-lightning-question/" class="related-link">Tidb Lightning Question</a>
+                    </li>
+                
+                    <li class="related-item">
+                        <a href="/blog/posts/tidb/tidb-mysql-to-tidb/" class="related-link">Tidb探究 Mysql迁入TiDB</a>
+                    </li>
+                
+                    <li class="related-item">
+                        <a href="/blog/posts/tidb/tidb-user-password/" class="related-link">TiDB建库建用户及授权</a>
+                    </li>
+                
+                    <li class="related-item">
+                        <a href="/blog/posts/tidb/tidb-offline-setup/" class="related-link">Tidb Offline Setup</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+
+
+        
+    
+        <div class="post-tags">
+            
+                
+                
+                
+                
+                    
+                    <a href="/blog/tags/tidb/" rel="tag" class="post-tags-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon tag-icon"><path d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"/></svg>TiDB</a>
+                
+            
+        </div>
+    
+
+
+
+        
+
+
+        
+
+
+        
+    
+        
+        
+    
+    
+    
+    
+        <ul class="post-nav">
+            
+            
+                <li class="post-nav-next">
+                    <a href="/blog/posts/k8s/offline-docker-nfs-harbor/" rel="next">K8s离线部署-NFS-Docker-Harbor &gt;</a>
+                </li>
+            
+        </ul>
+    
+
+
+
+        
+
+
+    </div>
+</main>
+
+
+            
+    <div id="back-to-top" class="back-to-top">
+        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon arrow-up"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg></a>
+    </div>
+
+
+            
+    <footer id="footer" class="footer">
+        <div class="footer-inner">
+            <div class="site-info">©&nbsp;1969–2022&nbsp;<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon footer-icon"><path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/></svg>&nbsp;wmmsxm</div><div class="site-copyright">Copyright © 2022 WuMengMeng</div>
+                <div class="busuanzi-site-uv-and-pv">
+                    <span id="busuanzi_container_site_uv">本站访客数&nbsp;<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon busuanzi-site-uv"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>&nbsp;<span id="busuanzi_value_site_uv"></span></span>&nbsp;|&nbsp;<span id="busuanzi_container_site_pv">本站访问量&nbsp;<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="icon busuanzi-site-pv"><path d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/></svg>&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+                </div>
+
+            
+    
+        <ul class="socials"><li class="socials-item">
+                    <a href="mailto:wmmsxm@163.com" target="_blank" rel="external noopener" title="Email"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon social-icon"><path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm0 48v40.805c-22.422 18.259-58.168 46.651-134.587 106.49-16.841 13.247-50.201 45.072-73.413 44.701-23.208.375-56.579-31.459-73.413-44.701C106.18 199.465 70.425 171.067 48 152.805V112h416zM48 400V214.398c22.914 18.251 55.409 43.862 104.938 82.646 21.857 17.205 60.134 55.186 103.062 54.955 42.717.231 80.509-37.199 103.053-54.947 49.528-38.783 82.032-64.401 104.947-82.653V400H48z"/></svg></a>
+                </li><li class="socials-item">
+                    <a href="https://gitee.com/wmmsxm" target="_blank" rel="external noopener" title="Gitee"><svg   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon social-icon"><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.593.593 0 0 0-.592-.593h-4.15a.592.592 0 0 1-.592-.592v-1.482a.593.593 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4 4 0 0 1-4 4H5.926a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.445-4.444h8.296Z"/></svg></a>
+                </li><li class="socials-item">
+                    <a href="https://github.com/w344283185" target="_blank" rel="external noopener" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon social-icon"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+                </li></ul>
+    
+
+
+
+            
+        </div>
+    </footer>
+
+
+        </div>
+        
+
+        
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css">
+<script>
+    if (typeof renderMathInElement === 'undefined') {
+        const getScript = (options) => {
+            const script = document.createElement('script');
+            script.defer = true;
+            script.crossOrigin = 'anonymous';
+            Object.keys(options).forEach((key) => {
+                script[key] = options[key];
+            });
+            document.body.appendChild(script);
+        };
+        getScript({
+            src: 'https:\/\/cdn.jsdelivr.net\/npm\/katex@0.13.0\/dist\/katex.min.js',
+            onload: () => {
+                getScript({
+                    src: 'https:\/\/cdn.jsdelivr.net\/npm\/katex@0.13.0\/dist\/contrib\/mhchem.min.js',
+                    onload: () => {
+                        getScript({
+                            src: 'https:\/\/cdn.jsdelivr.net\/npm\/katex@0.13.0\/dist\/contrib\/auto-render.min.js',
+                            onload: () => {
+                                renderKaTex();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    } else {
+        renderKaTex();
+    }
+    function renderKaTex() {
+        renderMathInElement(
+            document.body,
+            {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            }
+        );
+    }
+</script>
+
+
+
+
+    <script>
+    if (typeof MathJax === 'undefined') {
+        window.MathJax = {
+            loader: {
+                load: ['[tex]/mhchem']
+            },
+            
+            tex: {
+                inlineMath: {'[+]': [['$', '$']]},
+                tags: 'ams',
+                packages: {'[+]': ['mhchem']}
+            }
+        };
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https:\/\/cdn.jsdelivr.net\/npm\/mathjax@3.1.2\/es5\/tex-mml-chtml.js';
+            script.defer = true;
+            document.head.appendChild(script);
+        })();
+    } else {
+        MathJax.texReset();
+        MathJax.typeset();
+    }
+</script>
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom@latest/dist/medium-zoom.min.js"></script>
+
+<script>
+    let imgNodes = document.querySelectorAll('div.post-body img');
+    imgNodes = Array.from(imgNodes).filter(node => node.parentNode.tagName !== "A");
+
+    mediumZoom(imgNodes, {
+        background: 'hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)'
+    })
+</script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/instant.page@5.1.0/instantpage.min.js" type="module" defer></script>
+
+
+
+    
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+
+    </body>
+</html>
