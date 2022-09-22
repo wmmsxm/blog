@@ -23,10 +23,563 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Tue, 20 Sep 2022 06:20:33 &#43;0000</lastBuildDate>
+        <lastBuildDate>Thu, 22 Sep 2022 06:30:24 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
+        
+            <item>
+                <title>K8s离线部署-NFS-Docker-Harbor</title>
+                <link>/blog/posts/k8s/offline-docker-nfs-harbor/</link>
+                <guid isPermaLink="true">/blog/posts/k8s/offline-docker-nfs-harbor/</guid>
+                <pubDate>Thu, 22 Sep 2022 13:50:26 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h2 id=&#34;centerk8s离线部署-nfs-docker-harborcenter&#34;&gt;&lt;center&gt;K8s离线部署-NFS-Docker-Harbor&lt;/center&gt;&lt;/h2&gt;
+&lt;h4 id=&#34;站点服务器安装nfs服务&#34;&gt;站点服务器安装nfs服务&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 执行命令准备nfs离线资源
+yum -y install nfs-utils --downloadonly --downloaddir /root/nfs
+打包nfs.tar并执行下面操作：
+1、先将文件copy到服务器root目录下
+2、tar -xvf nfs.tar
+3、切换到packages包下  先将依赖包全部安装  rpm -ivh * --nodeps --force
+4、执行下面步骤：
+    #创建nfs目录
+    mkdir -p /nfs/data/
+
+    #修改权限
+    chmod -R 777 /nfs/data
+
+    #编辑export文件
+    vi /etc/exports
+    /nfs/data 192.168.0.0/24(rw,no_root_squash,sync)  （“*“代表所有人都能连接，建议换成具体ip或ip段，如192.168.20.0/24）
+
+    #配置生效
+    exportfs -r
+    #查看生效
+    exportfs
+
+    #启动rpcbind、nfs服务
+    systemctl restart rpcbind &amp;amp;&amp;amp; systemctl enable rpcbind
+    systemctl restart nfs &amp;amp;&amp;amp; systemctl enable nfs
+
+    #查看 RPC 服务的注册状况
+    rpcinfo -p localhost
+
+    #showmount测试
+    showmount -e 192.168.92.56
+    # 关闭 防火墙  否则其他服务不能访问
+    systemctl stop firewalld
+    systemctl disable firewalld
+
+    #所有node节点安装客户端 执行1、2、3
+
+5、为申请PV划分磁盘
+    #创建pv卷对应的目录
+    mkdir -p /nfs/data/pv001
+    mkdir -p /nfs/data/pv002
+
+    #配置exportrs
+    vi /etc/exports
+    /nfs/data 192.168.0.0/24(rw,no_root_squash,sync)
+    /nfs/data/pv001 192.168.0.0/24(rw,no_root_squash,sync)
+    /nfs/data/pv002 192.168.0.0/24(rw,no_root_squash,sync)
+
+    #配置生效
+    exportfs -r
+    #重启rpcbind、nfs服务
+    systemctl restart rpcbind &amp;amp;&amp;amp; systemctl restart nfs
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;harbor离线安装&#34;&gt;harbor离线安装&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;需要提前安装docker。&lt;br&gt;
+docker-19.03.9.tgz离线包下载地址&lt;a href=&#34;https://download.docker.com/linux/static/stable/x86_64/docker-19.03.9.tgz&#34;&gt;https://download.docker.com/linux/static/stable/x86_64/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;harbor离线包下载地址&lt;a href=&#34;https://github.com/goharbor/harbor/releases&#34;&gt;https://github.com/goharbor/harbor/releases&lt;/a&gt;，这里选择的harbor-offline-installer-v1.10.10.tgz为例。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;安装步骤如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1、先安装docker  tar -zxvf docker-19.03.9.tgz
+2、将解压docker文件夹全部移动到/usr/bin  cp -p docker/* /usr/bin
+3、将docker注册为系统服务
+    （1）在/usr/lib/systemd/system/目录下，创建docker.service文件
+    （2）编辑docker.service文件    vi /usr/lib/systemd/system/docker.service
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+ 
+[Service]
+Type=notify
+ExecStart=/usr/bin/dockerd
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=infinity
+LimitNPROC=infinity
+TimeoutStartSec=0
+Delegate=yes
+KillMode=process
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+ 
+[Install]
+WantedBy=multi-user.target			
+
+4、重启生效
+    systemctl daemon-reload
+    systemctl start docker
+5、查看docker状态  systemctl status docker
+6、设置开机启动   systemctl enable docker   查看版本 docker version
+6.1、# vi /etc/docker/daemon.json
+    {
+    &amp;quot;insecure-registries&amp;quot;: [&amp;quot;192.168.229.148:8080&amp;quot;]
+    }
+	systemctl restart docker
+7、安装docker-compose
+    (1) mv /root/docker-compose-Linux-x86_64 /usr/bin/docker-compose
+    (2) chmod +x /usr/bin/docker-compose
+    (3) docker-compose - v
+8、安装Harbor
+    (1) tar -zxvf harbor-offline-installer-v1.10.10\(最新版2022-02-21\).tgz
+    (2) cd /harbor   cp harbor.yml harbor.yml.tmpl
+    (3) 编辑harbor.yml   vi ./harbor.yml
+    (4) # 修改成你的ip
+        hostname: 192.168.211.99
+        # 修改端口号
+        http:
+            port: 8080
+        # 如果不需要https，请注释掉https相关
+        #https:
+        #  port: 443
+        #  certificate: /your/certificate/path
+        #  private_key: /your/private/key/path
+        # 配置密码，将 Harbor12345换成你自己的密码
+        harbor_admin_password: Fhzh@zkah!@#123
+    （5）执行setenforce 0 
+    (6) ./install.sh  即可安装成功  http://192.168.211.99:8080 即可访问
+    (7) 常用命令
+        # 回到harbor文件夹下 启动harbor  
+        setenforce 0
+        docker-compose up -d
+        # 关闭harbor
+        docker-compose down
+9、 k8s配置镜像私库密钥
+    kubectl create secret docker-registry harbor-secret  --namespace=fhzh --docker-server=20.184.3.15:8080 --docker-username=admin --docker-password=Fhzh@zkah!@#123
+&lt;/code&gt;&lt;/pre&gt;</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                
+            </item>
+        
+            <item>
+                <title>K8s离线部署-离线部署</title>
+                <link>/blog/posts/k8s/offline-setup/</link>
+                <guid isPermaLink="true">/blog/posts/k8s/offline-setup/</guid>
+                <pubDate>Thu, 22 Sep 2022 11:15:35 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h2 id=&#34;centerk8s离线部署-离线部署center&#34;&gt;&lt;center&gt;K8s离线部署-离线部署&lt;/center&gt;&lt;/h2&gt;
+&lt;h4 id=&#34;环境&#34;&gt;环境&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;服务器&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;IP&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Master&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;192.168.174.128&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Node1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;192.168.174.129&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Node2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;192.168.174.130&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;将制作的离线安装包上传到各节点,解压到&lt;code&gt;/root/k8sOfflineSetup&lt;/code&gt;目录,&lt;font color=&#39;red&#39;&gt;&lt;em&gt;解压路径不能修改&lt;/em&gt;&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&#34;master节点安装&#34;&gt;Master节点安装&lt;/h4&gt;
+&lt;p&gt;在&lt;code&gt;master&lt;/code&gt;节点执行下面操作:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1、先将文件copy到服务器root目录下
+2、tar -xvf k8sOfflineSetup.tar
+3、切换到packages包下  先将依赖包全部安装  rpm -ivh * --nodeps --force
+4、创建环境变量
+    # master节点的主机名
+	export HOSTNAME=k8s-master
+    # kubernetes apiserver的主机地址
+	export APISERVER_NAME=apiserver.k8s.com
+    # 集群中master节点的ip地址
+	export MASTER_IP=192.168.174.128
+    # Pod 使用的网段
+	export POD_SUBNET=10.11.10.0/16
+5、回到k8sOfflineSetup文件夹
+   执行./setup_master.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;执行完毕后，执行下面操作获取加入master的参数&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 在 master 节点执行
+kubeadm token create --print-join-command
+
+# 得到token和cert，这两个参数在2个小时内可以重复使用，超过以后就得再次生成
+kubeadm join apiserver.k8s.com --token mpfjma.4vjjg8flqihor4vt     --discovery-token-ca-cert-hash sha256:6f7a8e40a810323672de5eee6f4d19aa2dbdb38411845a1bf5dd63485c43d303
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;node节点安装&#34;&gt;Node节点安装&lt;/h4&gt;
+&lt;p&gt;在每个node节点执行下面操作：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1、先将文件copy到服务器root目录下
+2、tar -xvf k8sOfflineSetup.tar
+3、切换到packages包下  先将依赖包全部安装  rpm -ivh * --nodeps --force
+4、创建环境变量
+    # node节点的主机名
+    export HOSTNAME=node1
+    # kubernetes apiserver的主机地址
+    export APISERVER_NAME=apiserver.k8s.com
+    # 集群中master节点的ip地址
+    export MASTER_IP=192.168.174.128
+    # 加入master的token
+    export TOKEN=mpfjma.4vjjg8flqihor4vt
+    # 加入master的证书
+    export CERT=sha256:6f7a8e40a810323672de5eee6f4d19aa2dbdb38411845a1bf5dd63485c43d303
+5、回到k8sOfflineSetup文件夹，执行./setup_worker.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;每个node节点之后完之后，就已经部署完成了。可执行&lt;code&gt;kubectl get nodes&lt;/code&gt;看所有节点的情况。&lt;/p&gt;
+&lt;h4 id=&#34;访问kuboard&#34;&gt;访问Kuboard&lt;/h4&gt;
+&lt;p&gt;Kuboard是一个非常方便的web管理界面，安装完以后可以通过&lt;a href=&#34;http://xn--ip-dh3cr99d42rrmy:32567/&#34;&gt;http://任意节点IP:32567/&lt;/a&gt;访问。&lt;/p&gt;
+&lt;h5 id=&#34;获取登录token&#34;&gt;获取登录token&lt;/h5&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 在 Master 节点上执行此命令
+kubectl -n kube-system get secret $(kubectl -n kube-system get secret | grep kuboard-user | awk &#39;{print $1}&#39;) -o go-template=&#39;{{.data.token}}&#39; | base64 -d
+&lt;/code&gt;&lt;/pre&gt;</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                
+            </item>
+        
+            <item>
+                <title>K8s离线部署-资源准备</title>
+                <link>/blog/posts/k8s/offline-pre-source/</link>
+                <guid isPermaLink="true">/blog/posts/k8s/offline-pre-source/</guid>
+                <pubDate>Thu, 22 Sep 2022 09:58:40 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h2 id=&#34;centerk8s离线部署-资源准备center&#34;&gt;&lt;center&gt;K8s离线部署-资源准备&lt;/center&gt;&lt;/h2&gt;
+&lt;h4 id=&#34;背景&#34;&gt;背景&lt;/h4&gt;
+&lt;p&gt;因当前客户提供服务器均为局域网，不能访问外网，固需要进行离线部署k8s。&lt;/p&gt;
+&lt;h4 id=&#34;版本管理&#34;&gt;版本管理&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;软件&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;版本&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Docker&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;19.03.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Kubernetes&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1.17.1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id=&#34;获取yum的环境依赖&#34;&gt;获取yum的环境依赖&lt;/h4&gt;
+&lt;p&gt;在一个可以联网的系统下载依赖包，注意这个系统要跟服务器的一致，并且是全新安装的，防止出现yum已安装过一些软件，导致依赖包可能不完整的问题。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;这里提供阿里源的[CentOS-7-x86_64-DVD-2009]下载地址(&lt;a href=&#34;http://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/CentOS-7-x86_64-DVD-2009.iso?spm=a2c6h.25603864.0.0.5e776aearg27RG&#34;&gt;http://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/CentOS-7-x86_64-DVD-2009.iso?spm=a2c6h.25603864.0.0.5e776aearg27RG&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;依赖包下载到&lt;code&gt;/root/k8sOfflineSetup/packages&lt;/code&gt;目录。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 使用阿里云镜像源
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
+# 创建本地仓库包
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    createrepo
+
+# 实用工具
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    yum-utils \
+    nfs-utils \
+    wget
+
+# docker 依赖包
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    device-mapper-persistent-data \
+    lvm2
+
+# 添加阿里云Docker源
+yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+# docker
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    docker-ce-19.03.5 \
+    docker-ce-cli-19.03.5 \
+    containerd.io
+
+# 时间同步
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    chrony
+
+# HAProxy 和 KeepAlived
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    haproxy \
+    keepalived
+
+# 配置K8S的yum源
+cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+       http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+# kubelet
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    kubelet-1.17.1 \
+    kubeadm-1.17.1 \
+    kubectl-1.17.1
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;获取kubeadm依赖镜像&#34;&gt;获取kubeadm依赖镜像&lt;/h4&gt;
+&lt;p&gt;获取kubeadm用到的镜像列表，这步操作要在一台安装好Docker环境的计算机上进行，拉取完成后打包复制到资源包&lt;code&gt;/root/k8sOfflineSetup/images&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubeadm config images list
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;得到的结果是以下这些镜像，因为镜像的服务器都在国外，下载速度慢或者根本无法下载。所以，我们先在阿里云上获取镜像后再改名放到资源包中。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;k8s.gcr.io/kube-apiserver:v1.17.1&lt;/li&gt;
+&lt;li&gt;k8s.gcr.io/kube-controller-manager:v1.17.1&lt;/li&gt;
+&lt;li&gt;k8s.gcr.io/kube-scheduler:v1.17.1&lt;/li&gt;
+&lt;li&gt;k8s.gcr.io/kube-proxy:v1.17.1&lt;/li&gt;
+&lt;li&gt;k8s.gcr.io/pause:3.1&lt;/li&gt;
+&lt;li&gt;k8s.gcr.io/etcd:3.4.3-0&lt;/li&gt;
+&lt;li&gt;k8s.gcr.io/coredns:1.6.5&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 从阿里云拉取镜像
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.17.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.17.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.17.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.17.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.4.3-0
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.5
+
+# 重新tag镜像
+docker images \
+    | grep registry.cn-hangzhou.aliyuncs.com/google_containers \
+    | sed &#39;s/registry.cn-hangzhou.aliyuncs.com\/google_containers/k8s.gcr.io/&#39; \
+    | awk &#39;{print &amp;quot;docker tag &amp;quot; $3 &amp;quot; &amp;quot; $1 &amp;quot;:&amp;quot; $2}&#39; \
+    | sh
+
+# 删除旧镜像
+docker images \
+    | grep registry.cn-hangzhou.aliyuncs.com/google_containers \
+    | awk &#39;{print &amp;quot;docker rmi &amp;quot; $1 &amp;quot;:&amp;quot; $2}&#39; \
+    | sh
+
+# 在当前目录导出镜像为压缩包
+docker save -o kube-controller-manager-v1.17.1.tar k8s.gcr.io/kube-controller-manager:v1.17.1
+docker save -o kube-apiserver-v1.17.1.tar k8s.gcr.io/kube-apiserver:v1.17.1
+docker save -o kube-scheduler-v1.17.1.tar k8s.gcr.io/kube-scheduler:v1.17.1
+docker save -o kube-proxy-v1.17.1.tar k8s.gcr.io/kube-proxy:v1.17.1
+docker save -o coredns-1.6.5.tar k8s.gcr.io/coredns:1.6.5
+docker save -o etcd-3.4.3-0.tar k8s.gcr.io/etcd:3.4.3-0
+docker save -o pause-3.1.tar k8s.gcr.io/pause:3.1
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;calico网络插件依赖镜像&#34;&gt;calico网络插件依赖镜像&lt;/h4&gt;
+&lt;p&gt;从&lt;a href=&#34;https://docs.projectcalico.org/v3.10/getting-started/kubernetes/&#34;&gt;Quickstart for Calico on Kubernetes&lt;/a&gt;找到calico.yaml文件，命名为&lt;code&gt;calico-v3.10.3.yaml&lt;/code&gt;保存到资源包&lt;code&gt;/root/k8sOfflineSetup/plugins&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cat calico-v3.10.3.yaml | grep image: | awk &#39;{print $2}&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;从文件中搜索&lt;code&gt;image&lt;/code&gt;关键字找到如下依赖镜像。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;calico/cni:v3.10.3&lt;/li&gt;
+&lt;li&gt;calico/pod2daemon-flexvol:v3.10.3&lt;/li&gt;
+&lt;li&gt;calico/node:v3.10.3&lt;/li&gt;
+&lt;li&gt;calico/kube-controllers:v3.10.3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 拉取全部镜像
+cat calico-v3.10.3.yaml \
+    | grep image: \
+    | awk &#39;{print &amp;quot;docker pull &amp;quot; $2}&#39; \
+    | sh
+
+# 在当前目录导出镜像为压缩包
+docker save -o calico-cni-v3.10.3.tar calico/cni:v3.10.3
+docker save -o calico-pod2daemon-flexvol-v3.10.3.tar calico/pod2daemon-flexvol:v3.10.3
+docker save -o calico-node-v3.10.3.tar calico/node:v3.10.3
+docker save -o calico-kube-controllers-v3.10.3.tar calico/kube-controllers:v3.10.3
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;同样拉取完成后打包复制到资源包&lt;code&gt;/root/k8sOfflineSetup/images&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;h4 id=&#34;kubernetes-dashboard&#34;&gt;kubernetes dashboard&lt;/h4&gt;
+&lt;p&gt;从GitHub上找到Dashboard最新版本部署文件。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dashboard版本发布地址：&lt;a href=&#34;https://github.com/kubernetes/dashboard/releases&#34;&gt;https://github.com/kubernetes/dashboard/releases&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下载&lt;a href=&#34;https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml&#34;&gt;v2.0.0-rc5&lt;/a&gt;，命名为&lt;code&gt;dashboard-v2.0.0-rc5.yaml&lt;/code&gt;保存到资源包&lt;code&gt;/root/k8sOfflineSetup/plugins&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;p&gt;修改&lt;code&gt;dashboard-v2.0.0-rc5.yaml&lt;/code&gt;的imagePullPolicy,默认是&lt;code&gt;Always&lt;/code&gt;，注释掉。否则即使本地已有镜像dashboard启动时还是要从网上拉取。为了内网能正常运行，所以禁止每次运行都重新pull image。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;找出镜像列表&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cat dashboard-v2.0.0-rc5.yaml | grep image: | awk &#39;{print $2}&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;得到着两个镜像名称&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;kubernetesui/dashboard:v2.0.0-rc5&lt;/li&gt;
+&lt;li&gt;kubernetesui/metrics-scraper:v1.0.3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;拉取镜像&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cat dashboard-v2.0.0-rc5.yaml \
+    | grep image: \
+    | awk &#39;{print &amp;quot;docker pull &amp;quot; $2}&#39; \
+    | sh
+
+# 在当前目录导出镜像为压缩包
+docker save -o kubernetesui-dashboard-v2.0.0-rc5.tar kubernetesui/dashboard:v2.0.0-rc5
+docker save -o kubernetesui-metrics-scraper-v1.0.3.tar kubernetesui/metrics-scraper:v1.0.3
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;同样拉取完成后打包复制到资源包&lt;code&gt;/root/k8sOfflineSetup/images&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;h4 id=&#34;kuboard&#34;&gt;Kuboard&lt;/h4&gt;
+&lt;p&gt;查看Kuboard官网安装文档，从中获取到需要&lt;code&gt;kuboard.yaml&lt;/code&gt;和&lt;code&gt;metrics-server.yaml&lt;/code&gt;两个部署文件，中需要使用以下两个镜像，还是按前面到方法拉下来保存起来。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;eipwork/kuboard:latest&lt;/li&gt;
+&lt;li&gt;registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server-amd64:v0.3.6&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;
+# 拉取镜像
+docker pull eipwork/kuboard:latest
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server-amd64:v0.3.6
+
+# 在当前目录导出镜像为压缩包
+docker save -o kuboard-latest.tar eipwork/kuboard:latest
+docker save -o kuboard-metrics-server-amd64-v0.3.6.tar registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server-amd64:v0.3.6
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;同样拉取完成后打包复制到资源包&lt;code&gt;/root/k8sOfflineSetup/images&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;h4 id=&#34;nginx-ingress-controller&#34;&gt;NGINX Ingress Controller&lt;/h4&gt;
+&lt;p&gt;同样在官方网站找到部署yaml文件，并获取镜像列。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://kubernetes.github.io/ingress-nginx/deploy/&#34;&gt;https://kubernetes.github.io/ingress-nginx/deploy/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这里下载&lt;a href=&#34;https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.29.0/deploy/static/mandatory.yaml&#34;&gt;ingress-nginx-v0.29.0&lt;/a&gt;，命名为&lt;code&gt;ingress-nginx-v0.29.0.yaml&lt;/code&gt;保存到资源包&lt;code&gt;/root/k8sOfflineSetup/plugins&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;找出镜像列表&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cat ingress-nginx-v0.29.0.yaml | grep image: | awk &#39;{print $2}&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;得到如下镜像&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.29.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;拉取镜像&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cat ingress-nginx-v0.29.0.yaml \
+    | grep image: \
+    | awk &#39;{print &amp;quot;docker pull &amp;quot; $2}&#39; \
+    | sh
+
+# 如果网络原因拉取速度太慢可从这儿拉取再重新tag
+# docker pull quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.29.0
+# docker tag quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.29.0 quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.29.0
+# docker rim quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.29.0
+
+# 在当前目录导出镜像为压缩包
+docker save -o nginx-ingress-controller-0.29.0.tar quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.29.0
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;同样拉取完成后打包复制到资源包&lt;code&gt;/root/k8sOfflineSetup/images&lt;/code&gt;目录中。&lt;/p&gt;
+&lt;h4 id=&#34;资源包打包&#34;&gt;资源包打包&lt;/h4&gt;
+&lt;p&gt;将下载到&lt;code&gt;packages&lt;/code&gt;、&lt;code&gt;images&lt;/code&gt;与&lt;a href=&#34;https://github.com/scfido/k8s-offline-setup&#34;&gt;https://github.com/scfido/k8s-offline-setup&lt;/a&gt;仓库的文件合并，最后的目录应该是这样的。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;📁k8sOfflineSetup
+├── 📁gpg
+├── 📁plugins
+├── 📁repos
+├── 📁scripts
+├── 📁packages
+├── 📁images
+├── 📃setup_master.sh
+└── 📃setup_worker.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;压缩资源包&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cd /root/k8sOfflineSetup
+tar -czf k8sOfflineSetup.tar.gz *
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;现在就完成了可以离线安装到Kubernetes单节点Master集群到资源包。&lt;/p&gt;
+</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>Tidb探究 Tidb性能调优</title>
