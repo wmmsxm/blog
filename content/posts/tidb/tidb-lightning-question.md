@@ -1,11 +1,11 @@
 ---
-title: "Tidb Lightning Question"
+title: "Tidb探究 mysql迁移问题"
 date: 2022-08-11T15:11:07+08:00
 tags: ["TiDB"]
 categories: ["TiDB"]
 draft: false
 ---
-# <center>Tidb探究 迁移后问题</center>
+# <center>Tidb探究 mysql迁移问题</center>
 #### 1、The isolation level 'SERIALIZABLE' is not supported. Set tidb\_skip\_isolation\_level\_check=1 to skip this error
 
 通过navicat连接数据库，使用命令列界面执行下面命令：

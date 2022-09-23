@@ -1,11 +1,11 @@
 ---
-title: "Tidb Offline Setup"
+title: "Tidb探究 离线安装"
 date: 2022-07-13T08:41:51+08:00
 tags: ["TiDB"]
 categories: ["TiDB"]
 draft: false
 ---
-# <center>离线安装部署TiDB，单机模拟集群环境</center>
+# <center>Tidb探究 离线安装</center>
 
 ## TiDB介绍
 ### 什么是TiDB

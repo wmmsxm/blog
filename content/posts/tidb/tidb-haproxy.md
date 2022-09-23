@@ -1,11 +1,11 @@
 ---
-title: "离线安装部署TiDB-Haproxy负载"
+title: "Tidb探究 Haproxy负载"
 date: 2022-09-22T14:35:35+08:00
 tags: ["TiDB"]
 categories: ["TiDB"]
 draft: false
 ---
-# <center>离线安装部署TiDB-Haproxy负载</center>
+# <center>Tidb探究 Haproxy负载</center>
 
 #### HAProxy 简介
 HAProxy 是由 C 语言编写的自由开放源码的软件，为基于 TCP 和 HTTP 协议的应用程序提供高可用性、负载均衡和代理服务。因为 HAProxy 能够快速、高效使用 CPU 和内存，所以目前使用非常广泛，许多知名网站诸如 GitHub、Bitbucket、Stack Overflow、Reddit、Tumblr、Twitter 和 Tuenti 以及亚马逊网络服务系统都在使用 HAProxy。  
