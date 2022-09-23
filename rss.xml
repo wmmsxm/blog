@@ -23,13 +23,187 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Thu, 22 Sep 2022 08:02:23 &#43;0000</lastBuildDate>
+        <lastBuildDate>Fri, 23 Sep 2022 07:24:47 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
         
             <item>
-                <title>离线安装部署TiDB-Haproxy负载</title>
+                <title>Tidb探究 扩容缩容</title>
+                <link>/blog/posts/tidb/tidb-scale/</link>
+                <guid isPermaLink="true">/blog/posts/tidb/tidb-scale/</guid>
+                <pubDate>Fri, 23 Sep 2022 10:03:35 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h1 id=&#34;centertidb探究-扩容缩容center&#34;&gt;&lt;center&gt;Tidb探究 扩容缩容&lt;/center&gt;&lt;/h1&gt;
+&lt;h3 id=&#34;查看当前tidb配置&#34;&gt;查看当前tidb配置&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 查看tidb信息
+tiup cluster list
+
+# 查看cluster的配置
+tiup cluster edit-config &amp;lt;cluster-name&amp;gt;
+
+# 查看集群状态
+tiup cluster display &amp;lt;cluster-name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;扩容tidbpdtikv节点&#34;&gt;扩容TiDB/PD/TiKV节点&lt;/h4&gt;
+&lt;p&gt;添加节点ip地址为192.168.174.128，可按照如下步骤进行操作。&lt;/p&gt;
+&lt;h5 id=&#34;1编写扩容拓扑配置&#34;&gt;1.编写扩容拓扑配置&lt;/h5&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚠️&lt;strong&gt;注意&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;默认情况下，可以不填写端口以及目录信息。但在单机多实例场景下，则需要分配不同的端口以及目录，如果有端口或目录冲突，会在部署或扩容时提醒。&lt;/li&gt;
+&lt;li&gt;从 TiUP v1.0.0 开始，扩容配置会继承原集群配置的 global 部分。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;创建scale-out.yaml文件添加扩容拓扑配置&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vi scale-out.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;TiDB配置文件参考：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tidb_servers:
+  - host: 192.168.174.128
+    ssh_port: 22
+    port: 4000
+    status_port: 10080
+    # 文件存储地址，可参考edit-config
+    deploy_dir: /tidb-deploy/tidb-4000
+    log_dir: /tidb-deploy/tidb-4000/log
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;TiKV配置文件参考：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tikv_servers:
+  - host: 192.168.174.128
+    ssh_port: 22
+    port: 20160
+    status_port: 20180
+    # 文件存储地址，可参考edit-config
+    deploy_dir: /tidb-deploy/tikv-20160
+    data_dir: /tidb-data/tikv-20160
+    log_dir: /tidb-deploy/tikv-20160/log
+    config:
+      server.labels:
+        host: 192.168.174.128
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;PD配置文件参考：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;pd_servers:
+  - host: 192.168.174.128
+    ssh_port: 22
+    name: pd-192.168.174.128-2379
+    client_port: 2379
+    peer_port: 2380
+    # 文件存储地址，可参考edit-config
+    deploy_dir: /tidb-deploy/pd-2379
+    data_dir: /tidb-data/pd-2379
+    log_dir: /tidb-deploy/pd-2379/log
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;2执行扩容命令&#34;&gt;2.执行扩容命令&lt;/h5&gt;
+&lt;p&gt;执行&lt;code&gt;scale-out&lt;/code&gt;命令前，先使用&lt;code&gt;check&lt;/code&gt;及&lt;code&gt;check --apply&lt;/code&gt;命令，检查和自动修复集群存在的潜在风险：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1.检查集群存在的潜在风险
+tiup cluster check &amp;lt;cluster-name&amp;gt; scale-out.yaml --cluster --user tidb [-p] [-i /home/root/.ssh/gcp_rsa]
+
+2.自动修复集群存在的潜在风险
+tiup cluster check &amp;lt;cluster-name&amp;gt; scale-out.yaml --cluster --apply --user tidb [-p] [-i /home/root/.ssh/gcp_rsa]
+
+3.执行`scale-out`命令扩容TiDB集群
+tiup cluster scale-out &amp;lt;cluster-name&amp;gt; scale-out.yaml [-p] [-i /home/root/.ssh/gcp_rsa]
+
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;扩容配置文件为 scale-out.yaml。&lt;/li&gt;
+&lt;li&gt;--user tidb 表示通过 tidb 用户登录到目标主机完成集群部署，该用户需要有 ssh 到目标机器的权限，并且在目标机器有 sudo 权限。也可以用其他有 ssh 和 sudo 权限的用户完成部署。&lt;/li&gt;
+&lt;li&gt;[-i] 及 [-p] 为可选项，如果已经配置免密登录目标机，则不需填写。否则选择其一即可，[-i] 为可登录到目标机的 root 用户（或 --user 指定的其他用户）的私钥，也可使用 [-p] 交互式输入该用户的密码。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;预期日志结尾输出 Scaled cluster &lt;code&gt;&amp;lt;cluster-name&amp;gt;&lt;/code&gt; out successfully 信息，表示扩容操作成功。&lt;/p&gt;
+&lt;h4 id=&#34;缩容tidbpdtikv节点&#34;&gt;缩容TiDB/PD/TiKV节点&lt;/h4&gt;
+&lt;p&gt;添加节点ip地址为192.168.174.128，可按照如下步骤进行操作。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;注意&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;移除 TiDB、PD 节点和移除 TiKV 节点的步骤类似。&lt;/li&gt;
+&lt;li&gt;由于 TiKV、TiFlash 和 TiDB Binlog 组件是异步下线的，且下线过程耗时较长，所以 TiUP 对 TiKV、TiFlash 和 TiDB Binlog 组件做了特殊处理，详情参考&lt;a href=&#34;https://docs.pingcap.com/zh/tidb/stable/tiup-component-cluster-scale-in#%E4%B8%8B%E7%BA%BF%E7%89%B9%E6%AE%8A%E5%A4%84%E7%90%86&#34;&gt;下线特殊处理&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;注意&lt;/strong&gt;&lt;br&gt;
+TiKV 中的 PD Client 会缓存 PD 节点的列表。当前版本的 TiKV 有定期自动更新 PD 节点的机制，可以降低 TiKV 缓存的 PD 节点列表过旧这一问题出现的概率。但你应尽量避免在扩容新 PD 后直接一次性缩容所有扩容前就已经存在的 PD 节点。如果需要，请确保在下线所有之前存在的 PD 节点前将 PD 的 leader 切换至新扩容的 PD 节点。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;1查看节点id信息&#34;&gt;1.查看节点ID信息&lt;/h5&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tiup cluster display &amp;lt;cluster-name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Starting /root/.tiup/components/cluster/v1.10.0/cluster display &amp;lt;cluster-name&amp;gt;
+
+TiDB Cluster: &amp;lt;cluster-name&amp;gt;
+
+TiDB Version: v6.1.0
+
+ID       Role         Host    Ports                            Status  Data Dir        Deploy Dir
+
+--       ----         ----      -----                            ------  --------        ----------
+
+10.0.1.3:8300  cdc          10.0.1.3    8300                            Up      data/cdc-8300      deploy/cdc-8300
+
+10.0.1.4:8300  cdc          10.0.1.4    8300                            Up      data/cdc-8300      deploy/cdc-8300
+
+10.0.1.4:2379  pd           10.0.1.4    2379/2380                        Healthy data/pd-2379      deploy/pd-2379
+
+10.0.1.1:20160 tikv         10.0.1.1    20160/20180                      Up      data/tikv-20160     deploy/tikv-20160
+
+10.0.1.2:20160 tikv         10.0.1.2    20160/20180                      Up      data/tikv-20160     deploy/tikv-20160
+
+10.0.1.5:20160 tikv        10.0.1.5    20160/20180                     Up      data/tikv-20160     deploy/tikv-20160
+
+10.0.1.3:4000  tidb        10.0.1.3    4000/10080                      Up      -                 deploy/tidb-4000
+
+10.0.1.4:4000  tidb        10.0.1.4    4000/10080                      Up      -                 deploy/tidb-4000
+
+10.0.1.5:4000  tidb         10.0.1.5    4000/10080                       Up      -            deploy/tidb-4000
+
+10.0.1.3:9000   tiflash      10.0.1.3    9000/8123/3930/20170/20292/8234  Up      data/tiflash-9000       deploy/tiflash-9000
+
+10.0.1.4:9000   tiflash      10.0.1.4    9000/8123/3930/20170/20292/8234  Up      data/tiflash-9000       deploy/tiflash-9000
+
+10.0.1.5:9090  prometheus   10.0.1.5    9090                             Up      data/prometheus-9090  deploy/prometheus-9090
+
+10.0.1.5:3000  grafana      10.0.1.5    3000                             Up      -            deploy/grafana-3000
+
+10.0.1.5:9093  alertmanager 10.0.1.5    9093/9094                        Up      data/alertmanager-9093 deploy/alertmanager-9093
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;2执行缩容操作&#34;&gt;2.执行缩容操作&lt;/h5&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tiup cluster scale-in &amp;lt;cluster-name&amp;gt; --node 10.0.1.5:20160
+
+
+# tidb 端口是 4000
+# tikv 端口是 20160
+# pc 端口是 2379
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中 --node 参数为需要下线节点的 ID。&lt;br&gt;
+预期输出 Scaled cluster &lt;code&gt;&amp;lt;cluster-name&amp;gt;&lt;/code&gt; in successfully 信息，表示缩容操作成功。&lt;br&gt;
+下线需要一定时间，下线节点的状态变为 Tombstone 就说明下线成功。&lt;/p&gt;
+</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/tidb/">TiDB</category>
+                                
+                            
+                        
+                    
+                
+            </item>
+        
+            <item>
+                <title>Tidb探究 Haproxy负载</title>
                 <link>/blog/posts/tidb/tidb-haproxy/</link>
                 <guid isPermaLink="true">/blog/posts/tidb/tidb-haproxy/</guid>
                 <pubDate>Thu, 22 Sep 2022 14:35:35 &#43;0800</pubDate>
@@ -38,7 +212,7 @@
                 
                 <copyright>Copyright © 2022 WuMengMeng</copyright>
                 
-                    <description>&lt;h1 id=&#34;center离线安装部署tidb-haproxy负载center&#34;&gt;&lt;center&gt;离线安装部署TiDB-Haproxy负载&lt;/center&gt;&lt;/h1&gt;
+                    <description>&lt;h1 id=&#34;centertidb探究-haproxy负载center&#34;&gt;&lt;center&gt;Tidb探究 Haproxy负载&lt;/center&gt;&lt;/h1&gt;
 &lt;h4 id=&#34;haproxy-简介&#34;&gt;HAProxy 简介&lt;/h4&gt;
 &lt;p&gt;HAProxy 是由 C 语言编写的自由开放源码的软件，为基于 TCP 和 HTTP 协议的应用程序提供高可用性、负载均衡和代理服务。因为 HAProxy 能够快速、高效使用 CPU 和内存，所以目前使用非常广泛，许多知名网站诸如 GitHub、Bitbucket、Stack Overflow、Reddit、Tumblr、Twitter 和 Tuenti 以及亚马逊网络服务系统都在使用 HAProxy。&lt;br&gt;
 HAProxy 由 Linux 内核的核心贡献者 Willy Tarreau 于 2000 年编写，他现在仍然负责该项目的维护，并在开源社区免费提供版本迭代。本文示例使用 HAProxy 2.5.0。&lt;/p&gt;
@@ -882,7 +1056,7 @@ SELECT * FROM information_schema.tiflash_replica WHERE TABLE_SCHEMA = &#39;&amp;
             </item>
         
             <item>
-                <title>Tidb Lightning Question</title>
+                <title>Tidb探究 mysql迁移问题</title>
                 <link>/blog/posts/tidb/tidb-lightning-question/</link>
                 <guid isPermaLink="true">/blog/posts/tidb/tidb-lightning-question/</guid>
                 <pubDate>Thu, 11 Aug 2022 15:11:07 &#43;0800</pubDate>
@@ -891,7 +1065,7 @@ SELECT * FROM information_schema.tiflash_replica WHERE TABLE_SCHEMA = &#39;&amp;
                 
                 <copyright>Copyright © 2022 WuMengMeng</copyright>
                 
-                    <description>&lt;h1 id=&#34;centertidb探究-迁移后问题center&#34;&gt;&lt;center&gt;Tidb探究 迁移后问题&lt;/center&gt;&lt;/h1&gt;
+                    <description>&lt;h1 id=&#34;centertidb探究-mysql迁移问题center&#34;&gt;&lt;center&gt;Tidb探究 mysql迁移问题&lt;/center&gt;&lt;/h1&gt;
 &lt;h4 id=&#34;1the-isolation-level-serializable-is-not-supported-set-tidb_skip_isolation_level_check1-to-skip-this-error&#34;&gt;1、The isolation level &#39;SERIALIZABLE&#39; is not supported. Set tidb_skip_isolation_level_check=1 to skip this error&lt;/h4&gt;
 &lt;p&gt;通过navicat连接数据库，使用命令列界面执行下面命令：&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-纯文本&#34; data-lang=&#34;纯文本&#34;&gt;set global tidb_skip_isolation_level_check=1;
@@ -1451,7 +1625,7 @@ grant all privileges on tidb.* to &#39;tidb&#39;@&#39;%&#39; identified by &#39;
             </item>
         
             <item>
-                <title>Tidb Offline Setup</title>
+                <title>Tidb探究 离线安装</title>
                 <link>/blog/posts/tidb/tidb-offline-setup/</link>
                 <guid isPermaLink="true">/blog/posts/tidb/tidb-offline-setup/</guid>
                 <pubDate>Wed, 13 Jul 2022 08:41:51 &#43;0800</pubDate>
@@ -1460,7 +1634,7 @@ grant all privileges on tidb.* to &#39;tidb&#39;@&#39;%&#39; identified by &#39;
                 
                 <copyright>Copyright © 2022 WuMengMeng</copyright>
                 
-                    <description>&lt;h1 id=&#34;center离线安装部署tidb单机模拟集群环境center&#34;&gt;&lt;center&gt;离线安装部署TiDB，单机模拟集群环境&lt;/center&gt;&lt;/h1&gt;
+                    <description>&lt;h1 id=&#34;centertidb探究-离线安装center&#34;&gt;&lt;center&gt;Tidb探究 离线安装&lt;/center&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;tidb介绍&#34;&gt;TiDB介绍&lt;/h2&gt;
 &lt;h3 id=&#34;什么是tidb&#34;&gt;什么是TiDB&lt;/h3&gt;
 &lt;p&gt;TiDB 是 PingCAP 公司自主设计、研发的开源分布式关系型数据库，是一款同时支持在线事务处理与在线分析处理 (Hybrid Transactional and Analytical Processing, HTAP）的融合型分布式数据库产品，具备水平扩容或者缩容、金融级高可用、实时 HTAP、云原生的分布式数据库、兼容 MySQL 5.7 协议和 MySQL 生态等重要特性。目标是为用户提供一站式 OLTP (Online Transactional Processing)、OLAP (Online Analytical Processing)、HTAP 解决方案。TiDB 适合高可用、强一致要求较高、数据规模较大等各种应用场景。&lt;/p&gt;
