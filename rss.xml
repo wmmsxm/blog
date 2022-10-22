@@ -23,10 +23,109 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Fri, 23 Sep 2022 07:24:47 &#43;0000</lastBuildDate>
+        <lastBuildDate>Sat, 22 Oct 2022 12:04:40 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
+        
+            <item>
+                <title>Centos Python3</title>
+                <link>/blog/posts/centos/centos-python3/</link>
+                <guid isPermaLink="true">/blog/posts/centos/centos-python3/</guid>
+                <pubDate>Sat, 22 Oct 2022 16:40:33 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h2 id=&#34;centercentos环境-python升级python3center&#34;&gt;&lt;center&gt;Centos环境 python升级python3&lt;/center&gt;&lt;/h2&gt;
+&lt;h4 id=&#34;查看系统远python版本&#34;&gt;查看系统远python版本&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[root@localhost ~]# python
+// 默认是2.7.5
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;下载python380&#34;&gt;下载Python3.8.0&lt;/h4&gt;
+&lt;p&gt;Python3.8.0&lt;a href=&#34;https://www.python.org/ftp/python/3.8.0/&#34;&gt;下载地址&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;依赖环境gcczlib&#34;&gt;依赖环境gcc、zlib&lt;/h4&gt;
+&lt;p&gt;查看gcc是否安装&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;whereis gcc  或者
+gcc --version
+
+# 没有安装的话需要制作离线安装包
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    gcc-c++
+# 将下载的包打包并上传到服务器，并执行下面命令：
+rpm -ivh * --nodeps --force
+
+# 如果再make install报错 zlib not available时，安装下面zlib包
+yum install --downloadonly --downloaddir=/root/k8sOfflineSetup/packages \
+    zlib \
+    zlib-devel
+yum install -y 
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;安装python3&#34;&gt;安装python3&lt;/h4&gt;
+&lt;p&gt;安装步骤：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1、解压安装宝
+tar -zxvf Python-3.8.0.tgz
+2、进入解压后的文件夹
+./configure --prefix=/usr/local/python3
+# 编译
+make
+# 安装
+make install
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;替换默认python2&#34;&gt;替换默认python2&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ll /usr/bin/ | grep python
+# 可以看到python指向python2
+
+#修改名称再添加python3的软连接
+mv /usr/bin/python /usr/bin/old_python
+ln -s /usr/local/python3/bin/python3.8 /usr/bin/python
+
+# pip更换
+mv /usr/bin/pip /usr/bin/old_pip
+ln -s /usr/local/python3/bin/pip3 /usr/bin/pip
+
+# 查看版本
+pip --version
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;python运行依赖包&#34;&gt;python运行依赖包&lt;/h4&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 从网上下载 whl 包或在有网的环境通过pip下载
+pip download xxx
+# 将 whl 包下载后放至某文件夹，如 /root/pip-packages
+pip install --no-index --find-links=/root/pip-packages &amp;lt;软件名&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/centos/">centos</category>
+                                
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/python/">python</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/centos/">centos</category>
+                                
+                            
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>Tidb探究 扩容缩容</title>
