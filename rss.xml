@@ -23,10 +23,143 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Sat, 22 Oct 2022 12:04:40 &#43;0000</lastBuildDate>
+        <lastBuildDate>Mon, 24 Oct 2022 09:41:09 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
+        
+            <item>
+                <title>K8s离线部署-内网使用https</title>
+                <link>/blog/posts/k8s/offline-https/</link>
+                <guid isPermaLink="true">/blog/posts/k8s/offline-https/</guid>
+                <pubDate>Mon, 24 Oct 2022 17:01:14 &#43;0800</pubDate>
+                
+                    <author>wmmsxm@163.com (wmmsxm)</author>
+                
+                <copyright>Copyright © 2022 WuMengMeng</copyright>
+                
+                    <description>&lt;h2 id=&#34;centerk8s离线部署-内网使用httpscenter&#34;&gt;&lt;center&gt;K8s离线部署-内网使用https&lt;/center&gt;&lt;/h2&gt;
+&lt;h4 id=&#34;证书生成&#34;&gt;证书生成&lt;/h4&gt;
+&lt;h5 id=&#34;生成证书请求文件&#34;&gt;生成证书请求文件&lt;/h5&gt;
+&lt;p&gt;单独在一个文件夹iphttps新建openssl.cnf，内容如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+
+[req_distinguished_name]
+countryName = Country Name (2 letter code)
+countryName_default = CH
+stateOrProvinceName = State or Province Name (full name)
+stateOrProvinceName_default = GD
+localityName = Locality Name (eg, city)
+localityName_default = ShenZhen
+organizationalUnitName  = Organizational Unit Name (eg, section)
+organizationalUnitName_default  = organizationalUnitName
+commonName = Internet Widgits Ltd
+commonName_max  = 64
+
+[ v3_req ]
+# Extensions to add to a certificate request
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+
+# 改成自己的域名
+#DNS.1 = kb.example.com
+#DNS.2 = helpdesk.example.org
+#DNS.3 = systems.example.net
+
+# 改成自己的ip
+IP.1 = 172.16.1.71
+IP.2 = 172.16.1.72
+IP.3 = 172.16.1.73
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;生成私钥&#34;&gt;生成私钥&lt;/h5&gt;
+&lt;p&gt;san_domain_com 为最终生成得文件名，一般以服务器命名，可自行更改。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;openssl genrsa -out san_domain_com.key 2048
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;创建csr文件&#34;&gt;创建CSR文件&lt;/h5&gt;
+&lt;p&gt;创建csr文件命令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;openssl req -new -out san_domain_com.csr -key san_domain_com.key -config openssl.cnf
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;自签名并创建证书&#34;&gt;自签名并创建证书、&lt;/h5&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;openssl x509 -req -days 3650 -in san_domain_com.csr -signkey san_domain_com.key -out san_domain_com.crt -extensions v3_req -extfile openssl.cnf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;至此，使用openssl生成得证书已完成，可看到目录下又三个文件&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;san_domain_com.crt
+
+san_domain_com.csr
+
+san_domain_com.key
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;创建secret资源&#34;&gt;创建secret资源&lt;/h4&gt;
+&lt;p&gt;直接使用kubectl命令创建&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cd /root/iphttps
+kubectl create secret tls iphttps-secret --key san_domain_com.key --cert san_domain_com.crt -n fhzh
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;创建ingress资源&#34;&gt;创建ingress资源&lt;/h4&gt;
+&lt;p&gt;创建ing资源，增加一个tls字段：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: iphttps
+  namespace: fhzh
+spec:
+  tls:
+    - hosts:
+        # 域名
+        - www.iphttpsfhzh.com
+      secretName: iphttps-secret
+  rules:
+      # 域名
+    - host: www.iphttpsfhzh.com
+      http:
+        paths:
+          - backend:
+              # service的名称
+              serviceName: fhzh-web-svc
+              # service的内部端口
+              servicePort: 80
+    # 默认访问，解决内网ip无法访问的问题(弊端：不支持多个服务，后面考虑使用路径解析)
+    - http:
+        paths:
+          - backend:
+              serviceName: fhzh-web-svc
+              servicePort: 80
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;https访问&#34;&gt;https访问&lt;/h4&gt;
+&lt;p&gt;内网使用域名访问的话，需要在客户端修改hosts，这里并不推荐。&lt;br&gt;
+先查询ingress的暴露的端口&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 查看
+kubectl get svc -n ingress-nginx
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;/blog/blog/images/k8s/ingress.png&#34; alt=&#34;配置&#34;&gt;&lt;br&gt;
+可以看出 80映射为 30865；443映射 31287&lt;br&gt;
+至此访问路径 https://172.16.1.71:31287即可看到系统&lt;/p&gt;
+</description>
+                
+                
+                
+                
+                
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/categories/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                        
+                            
+                                
+                                
+                                
+                                    <category domain="/blog/tags/k8s/">k8s</category>
+                                
+                            
+                        
+                    
+                
+            </item>
         
             <item>
                 <title>Centos Python3</title>

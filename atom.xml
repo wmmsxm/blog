@@ -4,7 +4,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
     <title type="text">公子玄襄BLOG</title>
     <subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle>
-    <updated>2022-10-22T12:04:40&#43;00:00</updated>
+    <updated>2022-10-24T09:41:09&#43;00:00</updated>
     <id>/blog/</id>
     <link rel="alternate" type="text/html" href="/blog/" />
     <link rel="self" type="application/atom&#43;xml" href="/blog/atom.xml" />
@@ -17,10 +17,146 @@
     <rights>Copyright © 2022 WuMengMeng</rights>
     <generator uri="https://gohugo.io/" version="0.90.1">Hugo</generator>
         <entry>
+            <title type="text">K8s离线部署-内网使用https</title>
+            <link rel="alternate" type="text/html" href="/blog/posts/k8s/offline-https/" />
+            <id>/blog/posts/k8s/offline-https/</id>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
+            <published>2022-10-24T17:01:14&#43;08:00</published>
+            <author>
+                    <name>wmmsxm</name>
+                    <uri>https://io-oi.me/</uri>
+                    <email>wmmsxm@163.com</email>
+                    </author>
+            <rights>Copyright © 2022 WuMengMeng</rights><summary type="html">K8s离线部署-内网使用https 证书生成 生成证书请求文件 单独在一个文件夹iphttps新建openssl.cnf，内容如下： [req] distinguished_name = req_distinguished_name req_extensions = v3_req [req_distinguished_name] countryName = Country Name (2 letter code) countryName_default =……</summary>
+            
+                <content type="html">&lt;h2 id=&#34;centerk8s离线部署-内网使用httpscenter&#34;&gt;&lt;center&gt;K8s离线部署-内网使用https&lt;/center&gt;&lt;/h2&gt;
+&lt;h4 id=&#34;证书生成&#34;&gt;证书生成&lt;/h4&gt;
+&lt;h5 id=&#34;生成证书请求文件&#34;&gt;生成证书请求文件&lt;/h5&gt;
+&lt;p&gt;单独在一个文件夹iphttps新建openssl.cnf，内容如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+
+[req_distinguished_name]
+countryName = Country Name (2 letter code)
+countryName_default = CH
+stateOrProvinceName = State or Province Name (full name)
+stateOrProvinceName_default = GD
+localityName = Locality Name (eg, city)
+localityName_default = ShenZhen
+organizationalUnitName  = Organizational Unit Name (eg, section)
+organizationalUnitName_default  = organizationalUnitName
+commonName = Internet Widgits Ltd
+commonName_max  = 64
+
+[ v3_req ]
+# Extensions to add to a certificate request
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+
+# 改成自己的域名
+#DNS.1 = kb.example.com
+#DNS.2 = helpdesk.example.org
+#DNS.3 = systems.example.net
+
+# 改成自己的ip
+IP.1 = 172.16.1.71
+IP.2 = 172.16.1.72
+IP.3 = 172.16.1.73
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;生成私钥&#34;&gt;生成私钥&lt;/h5&gt;
+&lt;p&gt;san_domain_com 为最终生成得文件名，一般以服务器命名，可自行更改。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;openssl genrsa -out san_domain_com.key 2048
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;创建csr文件&#34;&gt;创建CSR文件&lt;/h5&gt;
+&lt;p&gt;创建csr文件命令：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;openssl req -new -out san_domain_com.csr -key san_domain_com.key -config openssl.cnf
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;自签名并创建证书&#34;&gt;自签名并创建证书、&lt;/h5&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;openssl x509 -req -days 3650 -in san_domain_com.csr -signkey san_domain_com.key -out san_domain_com.crt -extensions v3_req -extfile openssl.cnf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;至此，使用openssl生成得证书已完成，可看到目录下又三个文件&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;san_domain_com.crt
+
+san_domain_com.csr
+
+san_domain_com.key
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;创建secret资源&#34;&gt;创建secret资源&lt;/h4&gt;
+&lt;p&gt;直接使用kubectl命令创建&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cd /root/iphttps
+kubectl create secret tls iphttps-secret --key san_domain_com.key --cert san_domain_com.crt -n fhzh
+
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;创建ingress资源&#34;&gt;创建ingress资源&lt;/h4&gt;
+&lt;p&gt;创建ing资源，增加一个tls字段：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: iphttps
+  namespace: fhzh
+spec:
+  tls:
+    - hosts:
+        # 域名
+        - www.iphttpsfhzh.com
+      secretName: iphttps-secret
+  rules:
+      # 域名
+    - host: www.iphttpsfhzh.com
+      http:
+        paths:
+          - backend:
+              # service的名称
+              serviceName: fhzh-web-svc
+              # service的内部端口
+              servicePort: 80
+    # 默认访问，解决内网ip无法访问的问题(弊端：不支持多个服务，后面考虑使用路径解析)
+    - http:
+        paths:
+          - backend:
+              serviceName: fhzh-web-svc
+              servicePort: 80
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;https访问&#34;&gt;https访问&lt;/h4&gt;
+&lt;p&gt;内网使用域名访问的话，需要在客户端修改hosts，这里并不推荐。&lt;br&gt;
+先查询ingress的暴露的端口&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 查看
+kubectl get svc -n ingress-nginx
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;/blog/blog/images/k8s/ingress.png&#34; alt=&#34;配置&#34;&gt;&lt;br&gt;
+可以看出 80映射为 30865；443映射 31287&lt;br&gt;
+至此访问路径 https://172.16.1.71:31287即可看到系统&lt;/p&gt;
+</content>
+            
+            
+            
+            
+            
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="/blog/categories/k8s/" term="k8s" label="k8s" />
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                            
+                            
+                                <category scheme="/blog/tags/k8s/" term="k8s" label="k8s" />
+                            
+                        
+                    
+                
+            
+        </entry>
+    
+        <entry>
             <title type="text">Centos Python3</title>
             <link rel="alternate" type="text/html" href="/blog/posts/centos/centos-python3/" />
             <id>/blog/posts/centos/centos-python3/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-10-22T16:40:33&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -122,7 +258,7 @@ pip install --no-index --find-links=/root/pip-packages &amp;lt;软件名&amp;gt;
             <title type="text">Tidb探究 扩容缩容</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-scale/" />
             <id>/blog/posts/tidb/tidb-scale/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-09-23T10:03:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -299,7 +435,7 @@ ID       Role         Host    Ports                            Status  Data Dir 
             <title type="text">Tidb探究 Haproxy负载</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-haproxy/" />
             <id>/blog/posts/tidb/tidb-haproxy/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-09-22T14:35:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -527,7 +663,7 @@ kill -9 ${haproxy.pid}
             <title type="text">K8s离线部署-NFS-Docker-Harbor</title>
             <link rel="alternate" type="text/html" href="/blog/posts/k8s/offline-docker-nfs-harbor/" />
             <id>/blog/posts/k8s/offline-docker-nfs-harbor/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-09-22T13:50:26&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -698,7 +834,7 @@ WantedBy=multi-user.target
             <title type="text">K8s离线部署-离线部署</title>
             <link rel="alternate" type="text/html" href="/blog/posts/k8s/offline-setup/" />
             <id>/blog/posts/k8s/offline-setup/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-09-22T11:15:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -811,7 +947,7 @@ kubectl -n kube-system get secret $(kubectl -n kube-system get secret | grep kub
             <title type="text">K8s离线部署-资源准备</title>
             <link rel="alternate" type="text/html" href="/blog/posts/k8s/offline-pre-source/" />
             <id>/blog/posts/k8s/offline-pre-source/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-09-22T09:58:40&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1089,7 +1225,7 @@ tar -czf k8sOfflineSetup.tar.gz *
             <title type="text">Tidb探究 Tidb性能调优</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-majorization/" />
             <id>/blog/posts/tidb/tidb-majorization/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-09-15T15:00:14&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1167,7 +1303,7 @@ SELECT * FROM information_schema.tiflash_replica WHERE TABLE_SCHEMA = &#39;&amp;
             <title type="text">Tidb探究 mysql迁移问题</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-lightning-question/" />
             <id>/blog/posts/tidb/tidb-lightning-question/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-08-11T15:11:07&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1269,7 +1405,7 @@ tiup cluster reload tidb-fhzh -R tidb
             <title type="text">Modbus RTU与Modbus TCP的区别</title>
             <link rel="alternate" type="text/html" href="/blog/posts/modbus/tcp-rtu/" />
             <id>/blog/posts/modbus/tcp-rtu/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-08-05T08:54:30&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1517,7 +1653,7 @@ MBAP报文头： &lt;/p&gt;
             <title type="text">Tidb探究 Mysql迁入TiDB</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-mysql-to-tidb/" />
             <id>/blog/posts/tidb/tidb-mysql-to-tidb/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-08-01T17:32:01&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1684,7 +1820,7 @@ pd-addr = &amp;quot;172.16.1.73:2379&amp;quot;
             <title type="text">TiDB建库建用户及授权</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-user-password/" />
             <id>/blog/posts/tidb/tidb-user-password/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-08-01T16:01:08&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -1748,7 +1884,7 @@ grant all privileges on tidb.* to &#39;tidb&#39;@&#39;%&#39; identified by &#39;
             <title type="text">Tidb探究 离线安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/tidb/tidb-offline-setup/" />
             <id>/blog/posts/tidb/tidb-offline-setup/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2022-07-13T08:41:51&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2137,7 +2273,7 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(三) Kubernetes-Dashboard安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-three/" />
             <id>/blog/posts/docker-desktop-three/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2021-12-04T13:35:05&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2206,7 +2342,7 @@ Cluster `tidb-vmware` deployed successfully, you can start it with command: `tiu
             <title type="text">Docker_Desktop学习(二) Kubernetes</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-two/" />
             <id>/blog/posts/docker-desktop-two/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2021-12-03T14:24:09&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2429,7 +2565,7 @@ kubectl rollout restart {your_deployment_name}
             <title type="text">Docker_Desktop学习(一) 环境安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-desktop-one/" />
             <id>/blog/posts/docker-desktop-one/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2021-12-03T10:11:26&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2715,7 +2851,7 @@ docker rm mysql
             <title type="text">elasticsearch 安装教程</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-setup/" />
             <id>/blog/posts/elasticsearch-setup/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2021-01-21T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2787,7 +2923,7 @@ set JAVA_TYPE=bundled jdk
             <title type="text">Docker学习(六) 自定义tomcat镜像</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-six-custom-image/" />
             <id>/blog/posts/docker-six-custom-image/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2020-12-10T14:09:32&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -2898,7 +3034,7 @@ ENTRYPOINT [&amp;quot;/usr/tomcat/apache-tomcat-8.5.61/bin/catalina.sh&amp;quot;
             <title type="text">Docker学习(五) 安装Jenkins实现自动化部署</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-five-jenkins/" />
             <id>/blog/posts/docker-five-jenkins/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-12-11T09:41:13&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3123,7 +3259,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(四) 远程部署springboot项目</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-four-springboot/" />
             <id>/blog/posts/docker-four-springboot/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-12-05T09:10:20&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3236,7 +3372,7 @@ setsid nohup java -jar  -Xmx512m -Xms512m yobtc-finance-service.jar  &amp;gt; yo
             <title type="text">Docker学习(三) Docker安装mysql</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-three-mysql/" />
             <id>/blog/posts/docker-three-mysql/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-12-04T11:17:31&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3310,7 +3446,7 @@ run           运行一个容器&lt;br&gt;
             <title type="text">Docker学习(二) Docker安装</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-two-docker/" />
             <id>/blog/posts/docker-two-docker/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-12-03T15:31:56&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3395,7 +3531,7 @@ Centos7满足Docker环境需求，可以继续安装Docker(可能无法正常运
             <title type="text">Docker学习(一) Centos7环境</title>
             <link rel="alternate" type="text/html" href="/blog/posts/docker-one-centos/" />
             <id>/blog/posts/docker-one-centos/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-12-03T10:11:50&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3498,7 +3634,7 @@ ifconfig&lt;br&gt;
             <title type="text">elasticsearh-rest-client</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearh-rest-client/" />
             <id>/blog/posts/elasticsearh-rest-client/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-11-22T10:51:38&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3629,7 +3765,7 @@ public class EsConfig {
             <title type="text">zookeeper知识点(三)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-three/" />
             <id>/blog/posts/zookeeper-three/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3688,7 +3824,7 @@ api入口。&lt;/p&gt;
             <title type="text">zookeeper知识点(二)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-two/" />
             <id>/blog/posts/zookeeper-two/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-11-20T09:25:10&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3794,7 +3930,7 @@ zookeeper将所有数据存储在内存中，树形存储，每个节点会保�
             <title type="text">elasticsearch-bulk</title>
             <link rel="alternate" type="text/html" href="/blog/posts/elasticsearch-bulk/" />
             <id>/blog/posts/elasticsearch-bulk/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-11-18T10:56:59&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3880,7 +4016,7 @@ high level rest client
             <title type="text">umi搭建dva</title>
             <link rel="alternate" type="text/html" href="/blog/posts/umi-dva/" />
             <id>/blog/posts/umi-dva/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-10-22T18:00:35&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -3977,7 +4113,7 @@ high level rest client
             <title type="text">redis集群</title>
             <link rel="alternate" type="text/html" href="/blog/posts/redis%E9%9B%86%E7%BE%A4/" />
             <id>/blog/posts/redis%E9%9B%86%E7%BE%A4/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-10-17T09:02:40&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
@@ -4090,7 +4226,7 @@ redis的集群需要ruby环境，所以需要使用下载的rebyinstaller，基�
             <title type="text">zookeeper知识点(一)</title>
             <link rel="alternate" type="text/html" href="/blog/posts/zookeeper-one/" />
             <id>/blog/posts/zookeeper-one/</id>
-            <updated>2022-10-22T12:04:36&#43;00:00</updated>
+            <updated>2022-10-24T09:41:08&#43;00:00</updated>
             <published>2019-08-09T19:43:03&#43;08:00</published>
             <author>
                     <name>wmmsxm</name>
