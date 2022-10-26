@@ -68,8 +68,11 @@ pip --version
 
 #### python运行依赖包
 ```
-# 从网上下载 whl 包或在有网的环境通过pip下载
-pip download xxx
+# 将已安装的依赖包导出
+pip freeze > requirements.txt
+# 离线文件导出
+pip download -r requestments.txt -d ./pip_packages
+
 # 将 whl 包下载后放至某文件夹，如 /root/pip-packages
 pip install --no-index --find-links=/root/pip-packages <软件名>
 ```
