@@ -23,7 +23,7 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Mon, 24 Oct 2022 09:41:09 &#43;0000</lastBuildDate>
+        <lastBuildDate>Wed, 26 Oct 2022 09:00:34 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
@@ -220,8 +220,11 @@ ln -s /usr/local/python3/bin/pip3 /usr/bin/pip
 # 查看版本
 pip --version
 &lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;python运行依赖包&#34;&gt;python运行依赖包&lt;/h4&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 从网上下载 whl 包或在有网的环境通过pip下载
-pip download xxx
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 将已安装的依赖包导出
+pip freeze &amp;gt; requirements.txt
+# 离线文件导出
+pip download -r requestments.txt -d ./pip_packages
+
 # 将 whl 包下载后放至某文件夹，如 /root/pip-packages
 pip install --no-index --find-links=/root/pip-packages &amp;lt;软件名&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;</description>
