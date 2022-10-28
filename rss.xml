@@ -23,7 +23,7 @@
         
             <copyright>Copyright © 2022 WuMengMeng</copyright>
         
-        <lastBuildDate>Wed, 26 Oct 2022 09:00:34 &#43;0000</lastBuildDate>
+        <lastBuildDate>Fri, 28 Oct 2022 03:40:05 &#43;0000</lastBuildDate>
         
             <atom:link rel="self" type="application/rss&#43;xml" href="/blog/rss.xml" />
         
@@ -227,6 +227,10 @@ pip download -r requestments.txt -d ./pip_packages
 
 # 将 whl 包下载后放至某文件夹，如 /root/pip-packages
 pip install --no-index --find-links=/root/pip-packages &amp;lt;软件名&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;升级pip&#34;&gt;升级pip&lt;/h4&gt;
+&lt;p&gt;在离线环境下，pip安装离线包时有时候会报错，首先看下下载依赖包的pip版本和当前服务器版本是否一致&lt;br&gt;
+不一致的情况下，需要更新pip版本。 &lt;a href=&#34;https://pypi.org/project/pip/#files&#34;&gt;版本下载地址&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;python -m pip install --upgrade xxx(注意：pip轮子的文件名.whl，一定要有后缀)
 &lt;/code&gt;&lt;/pre&gt;</description>
                 
                 
