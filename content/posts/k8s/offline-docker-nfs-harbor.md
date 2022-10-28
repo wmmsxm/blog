@@ -137,3 +137,46 @@ WantedBy=multi-user.target
 9、 k8s配置镜像私库密钥
     kubectl create secret docker-registry harbor-secret  --namespace=fhzh --docker-server=20.184.3.15:8080 --docker-username=admin --docker-password=Fhzh@zkah!@#123
 ```
+
+#### Harbor自启动
+自启动前提，需要知道docker-compose的路径和harbor安装的路径
+```
+whereis docker-compose
+# 可以看到docker-compose的路径， 本服务路径是在/usr/bin/docker-compose
+
+
+# 查看harbor文件夹位置
+find / -name 'harbor' -type d
+# 返回文件夹
+```
+将harbor配置成systemd的service，添加配置文件`/usr/lib/systemd/system/harbor.service`,内容如下：
+```
+[Unit]
+Description=Harbor
+After=docker.service systemd-networkd.service systemd-resolved.service
+Requires=docker.service
+Documentation=http://github.com/vmware/harbor
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+ExecStart=/usr/bin/docker-compose -f /root/harbor/docker-compose.yml up
+ExecStop=/usr//bin/docker-compose -f /root/harbor/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+然后执行下面设置服务的命令：
+```
+sudo systemctl enable harbor
+sudo systemctl start harbor
+
+```
+
+查看harbor启动情况
+```
+docker ps -a
+```
