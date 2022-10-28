@@ -76,3 +76,11 @@ pip download -r requestments.txt -d ./pip_packages
 # 将 whl 包下载后放至某文件夹，如 /root/pip-packages
 pip install --no-index --find-links=/root/pip-packages <软件名>
 ```
+
+#### 升级pip
+
+在离线环境下，pip安装离线包时有时候会报错，首先看下下载依赖包的pip版本和当前服务器版本是否一致  
+不一致的情况下，需要更新pip版本。 [版本下载地址](https://pypi.org/project/pip/#files)
+```
+python -m pip install --upgrade xxx(注意：pip轮子的文件名.whl，一定要有后缀)
+```
